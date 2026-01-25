@@ -8,6 +8,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Force dark mode
+if (typeof document !== 'undefined') {
+  document.documentElement.classList.add('dark');
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -16,7 +21,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
