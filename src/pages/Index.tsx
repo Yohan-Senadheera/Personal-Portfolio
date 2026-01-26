@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import { useReveal } from "@/hooks/useReveal";
 import { Navigation } from "@/components/Navigation";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Hero } from "@/components/sections/Hero";
@@ -10,11 +11,10 @@ import { Experience } from "@/components/sections/Experience";
 import { Awards } from "@/components/sections/Awards";
 import { Certifications } from "@/components/sections/Certifications";
 import { Contact } from "@/components/sections/Contact";
+import { SectionShell } from "@/components/SectionShell";
 
-// Lazy load 3D components to avoid SSR issues
+// Lazy load 3D components
 const NetworkMeshCanvas = lazy(() => import("@/components/three/NetworkMesh"));
-// import NetworkMeshCanvas from "@/components/three/NetworkMesh";
-
 
 function NetworkMeshFallback() {
   return (
@@ -24,6 +24,9 @@ function NetworkMeshFallback() {
 
 export default function Index() {
   const { scrollY } = useSmoothScroll();
+
+  // 🔥 This adds life to every section that has data-reveal
+  useReveal();
 
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -40,14 +43,38 @@ export default function Index() {
 
       {/* Main content */}
       <main className="relative z-10">
-        <Hero />
-        <About />
-        <Projects />
-        <Skills />
-        <Experience />
-        <Awards />
-        <Certifications />
-        <Contact />
+        {/* Keep Hero special (no shell) */}
+        <div data-reveal>
+          <Hero />
+        </div>
+
+        <SectionShell id="about" variant="plain" stagger>
+          <About />
+        </SectionShell>
+
+        <SectionShell id="projects" variant="deep">
+          <Projects />
+        </SectionShell>
+
+        <SectionShell id="skills" variant="alt" stagger>
+          <Skills />
+        </SectionShell>
+
+        <SectionShell id="experience" variant="plain">
+          <Experience />
+        </SectionShell>
+
+        <SectionShell id="awards" variant="alt" stagger>
+          <Awards />
+        </SectionShell>
+
+        <SectionShell id="certifications" variant="plain" stagger>
+          <Certifications />
+        </SectionShell>
+
+        <SectionShell id="contact" variant="deep">
+          <Contact />
+        </SectionShell>
       </main>
     </div>
   );
