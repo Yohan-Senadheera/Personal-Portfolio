@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, easeInOut } from "framer-motion";
 import { profile } from "@/content/profile";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { TechTag } from "@/components/ui/TechTag";
@@ -12,6 +12,7 @@ import {
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,7 +28,7 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.55, ease: easeInOut },
   },
 };
 
@@ -41,7 +42,7 @@ function ProjectCard({
   index: number;
 }) {
   const prefersReduced = useReducedMotion();
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);      
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;

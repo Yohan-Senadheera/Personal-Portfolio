@@ -56,7 +56,7 @@ export default function Index() {
           <Projects />
         </SectionShell>
 
-        <SectionShell id="skills" variant="alt" stagger>
+        <SectionShell id="skills" variant="deep" stagger>
           <Skills />
         </SectionShell>
 

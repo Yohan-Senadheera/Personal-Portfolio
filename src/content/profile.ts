@@ -176,6 +176,7 @@ export const profile = {
       description: "Led marketing campaigns and coordinated international exchange programs across cross-functional teams.",
       type: "leadership",
       expandable: true,
+      details: "Managed brand identity and marketing strategy, facilitated international exchange opportunities, and led cross-functional teams to execute large-scale university events.",
     },
     {
       title: "Trainee",
