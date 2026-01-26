@@ -41,7 +41,7 @@ export function Hero() {
       {/* Hero content */}
       <motion.div
         className="w-full max-w-4xl lg:max-w-5xl xl:max-w-6xl z-10"
-        style={{ scale, opacity, y }}
+        style={{ scale, y, opacity }}
       >
         <GlassCard
           variant="glow"

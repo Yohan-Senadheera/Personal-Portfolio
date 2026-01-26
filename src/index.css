@@ -332,3 +332,25 @@
     50% { transform: translateY(-10px); }
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+section[id] {
+  scroll-margin-top: 90px;
+}
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+  transform: translateY(0.5px);
+}
+:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.55);
+  outline-offset: 3px;
+  border-radius: 10px;
+}

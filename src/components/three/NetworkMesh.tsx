@@ -13,6 +13,8 @@ interface NetworkOrbProps {
   mouse: React.MutableRefObject<{ x: number; y: number }>;
   scrollY: number;
   maxScroll: number;
+  isVisible: React.MutableRefObject<boolean>;
+  prefersReducedMotion: React.MutableRefObject<boolean>;
 }
 
 const getSectionFactor = (scrollY: number) => {
@@ -27,6 +29,8 @@ function NetworkOrb({
   mouse,
   scrollY,
   maxScroll,
+  isVisible,
+  prefersReducedMotion,
 }: NetworkOrbProps) {
   const groupRef = useRef<THREE.Group>(null);
   const nodesRef = useRef<THREE.Points>(null);
@@ -116,8 +120,19 @@ function NetworkOrb({
     return { positions, colors, connections };
   }, [nodeCount, radius]);
 
+  // Calculate opacity based on scroll
+  const scrollOpacity = THREE.MathUtils.clamp(
+    1 - scrollY / Math.max(1, maxScroll * 0.35),
+    0,
+    1,
+  );
+
   useFrame((state, delta) => {
+    if (!isVisible.current) return;
     if (!groupRef.current) return;
+
+    // For reduced motion users, keep it mostly calm
+    const reduced = prefersReducedMotion.current;
 
     time.current += delta;
     const sectionFactor = getSectionFactor(scrollY);
@@ -132,22 +147,27 @@ function NetworkOrb({
       (targetX - groupRef.current.position.x) * 0.02;
 
     // Auto rotation (base)
-    groupRef.current.rotation.y += delta * (0.05 + sectionFactor * 0.12);
+    if (!reduced) {
+      groupRef.current.rotation.y += delta * (0.05 + sectionFactor * 0.12);
+    }
 
     // Mouse parallax (smooth)
     const targetRotationX = mouse.current.y * 0.15;
     const targetRotationZ = mouse.current.x * 0.15;
 
-    groupRef.current.rotation.x +=
-      (targetRotationX - groupRef.current.rotation.x) * 0.02;
-    groupRef.current.rotation.z +=
-      (targetRotationZ - groupRef.current.rotation.z) * 0.02;
+    if (!reduced) {
+      groupRef.current.rotation.x +=
+        (targetRotationX - groupRef.current.rotation.x) * 0.02;
+      groupRef.current.rotation.z +=
+        (targetRotationZ - groupRef.current.rotation.z) * 0.02;
+    }
 
     // Hover strength (smooth)
     const targetHover = Math.abs(mouse.current.x) + Math.abs(mouse.current.y);
-    hoverStrength.current += (targetHover - hoverStrength.current) * 0.05;
+    hoverStrength.current +=
+      (targetHover - hoverStrength.current) * (reduced ? 0.02 : 0.05);
 
-    // Scroll transforms (ONE system only)
+    // Scroll transforms
     const t = THREE.MathUtils.clamp((y - 100) / (600 - 100), 0, 1);
 
     groupRef.current.position.z = -2 - t * 2.8;
@@ -158,19 +178,12 @@ function NetworkOrb({
     groupRef.current.scale.setScalar(s);
 
     // Pulse nodes a bit
-    if (nodesRef.current) {
+    if (nodesRef.current && !reduced) {
       const pulse =
         1 + Math.sin(time.current * 0.5) * (0.015 + sectionFactor * 0.03);
       nodesRef.current.scale.setScalar(pulse);
     }
   });
-
-  // Calculate opacity based on scroll
-const scrollOpacity = THREE.MathUtils.clamp(
-  1 - scrollY / (maxScroll * 0.35),
-  0,
-  1,
-);
 
   return (
     <group ref={groupRef}>
@@ -199,7 +212,12 @@ const scrollOpacity = THREE.MathUtils.clamp(
         />
       ))}
 
-      <DataPackets connections={connections} scrollOpacity={scrollOpacity} />
+      <DataPackets
+        connections={connections}
+        scrollOpacity={scrollOpacity}
+        isVisible={isVisible}
+        prefersReducedMotion={prefersReducedMotion}
+      />
     </group>
   );
 }
@@ -223,9 +241,9 @@ function ConnectionLine({
   index,
   hover,
 }: ConnectionLineProps) {
-  const points = useMemo(() => [start, end], [start, end]);
+  // Freeze the line points (these are cloned at generation time)
+  const points = useMemo(() => [start, end], []);
 
-  // Gradient color for line
   const color = useMemo(() => {
     const hue = 0.7 + (index % 10) * 0.02; // Violet to blue range
     return new THREE.Color().setHSL(hue, 0.8, 0.6);
@@ -249,16 +267,24 @@ function ConnectionLine({
 interface DataPacketsProps {
   connections: [THREE.Vector3, THREE.Vector3][];
   scrollOpacity: number;
+  isVisible: React.MutableRefObject<boolean>;
+  prefersReducedMotion: React.MutableRefObject<boolean>;
 }
-function DataPackets({ connections, scrollOpacity }: DataPacketsProps) {
-  // ✅ If no connections, render nothing
+
+function DataPackets({
+  connections,
+  scrollOpacity,
+  isVisible,
+  prefersReducedMotion,
+}: DataPacketsProps) {
   if (connections.length === 0) return null;
 
-  const packetCount = Math.min(connections.length, 15);
+  const reduced = prefersReducedMotion.current;
+  const packetCount = Math.min(connections.length, reduced ? 6 : 15);
+
   const packetsRef = useRef<THREE.Points>(null);
   const progressRef = useRef<Float32Array>(new Float32Array(packetCount));
 
-  // Initialize random progress
   useEffect(() => {
     for (let i = 0; i < packetCount; i++) {
       progressRef.current[i] = Math.random();
@@ -271,23 +297,22 @@ function DataPackets({ connections, scrollOpacity }: DataPacketsProps) {
   );
 
   useFrame((state, delta) => {
+    if (!isVisible.current) return;
     if (!packetsRef.current) return;
 
     const posArray = packetsRef.current.geometry.attributes.position
       .array as Float32Array;
 
-    const speedBoost = 1 + scrollOpacity * 1.5;
+    const speedBoost = 1 + scrollOpacity * (reduced ? 0.6 : 1.5);
 
     for (let i = 0; i < packetCount; i++) {
-      // Update progress
-      progressRef.current[i] += delta * (0.08 + (i % 3) * 0.04) * speedBoost;
+      progressRef.current[i] +=
+        delta * (reduced ? 0.06 : 0.08 + (i % 3) * 0.04) * speedBoost;
       if (progressRef.current[i] > 1) progressRef.current[i] = 0;
 
-      // Get connection for this packet
       const connectionIndex = i % connections.length;
       const [start, end] = connections[connectionIndex];
 
-      // Interpolate position
       const t = progressRef.current[i];
       const i3 = i * 3;
       posArray[i3] = start.x + (end.x - start.x) * t;
@@ -313,7 +338,6 @@ function DataPackets({ connections, scrollOpacity }: DataPacketsProps) {
   );
 }
 
-
 // ============================================
 // OUTER PARTICLES - Ambient floating particles
 // ============================================
@@ -322,16 +346,23 @@ interface OuterParticlesProps {
   count: number;
   scrollY: number;
   maxScroll: number;
+  isVisible: React.MutableRefObject<boolean>;
+  prefersReducedMotion: React.MutableRefObject<boolean>;
 }
 
-function OuterParticles({ count, scrollY, maxScroll }: OuterParticlesProps) {
+function OuterParticles({
+  count,
+  scrollY,
+  maxScroll,
+  isVisible,
+  prefersReducedMotion,
+}: OuterParticlesProps) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      // Distribute in a large sphere around the orb
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       const r = 6 + Math.random() * 8;
@@ -344,18 +375,25 @@ function OuterParticles({ count, scrollY, maxScroll }: OuterParticlesProps) {
   }, [count]);
 
   useFrame((state) => {
+    if (!isVisible.current) return;
     if (!ref.current) return;
+
+    const reduced = prefersReducedMotion.current;
     const time = state.clock.getElapsedTime();
 
-    // Slow drift
-    ref.current.rotation.y = time * 0.01;
-    ref.current.rotation.x = Math.sin(time * 0.05) * 0.1;
+    if (!reduced) {
+      ref.current.rotation.y = time * 0.01;
+      ref.current.rotation.x = Math.sin(time * 0.05) * 0.1;
+    }
 
     // Parallax with scroll
     ref.current.position.y = scrollY * 0.002;
   });
 
-  const scrollOpacity = Math.max(0.1, 1 - scrollY / (maxScroll * 0.5));
+  const scrollOpacity = Math.max(
+    0.1,
+    1 - scrollY / Math.max(1, maxScroll * 0.5),
+  );
 
   return (
     <Points ref={ref} positions={positions}>
@@ -385,6 +423,24 @@ export function NetworkMeshCanvas({ scrollY }: NetworkMeshCanvasProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [maxScroll, setMaxScroll] = useState(3000);
 
+  // Pause when tab is hidden
+  const isVisible = useRef(true);
+  useEffect(() => {
+    const onVisibility = () => {
+      isVisible.current = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  // Respect reduced motion
+  const prefersReducedMotion = useRef(false);
+  useEffect(() => {
+    prefersReducedMotion.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+  }, []);
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -392,18 +448,31 @@ export function NetworkMeshCanvas({ scrollY }: NetworkMeshCanvasProps) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Keep maxScroll updated (resize + content height changes)
   useEffect(() => {
-    setMaxScroll(document.documentElement.scrollHeight - window.innerHeight);
+    const update = () => {
+      setMaxScroll(document.documentElement.scrollHeight - window.innerHeight);
+    };
+    update();
+
+    window.addEventListener("resize", update);
+
+    const ro = new ResizeObserver(() => update());
+    ro.observe(document.documentElement);
+
+    return () => {
+      window.removeEventListener("resize", update);
+      ro.disconnect();
+    };
   }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Normalize to -1 to 1
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
@@ -416,36 +485,37 @@ export function NetworkMeshCanvas({ scrollY }: NetworkMeshCanvasProps) {
     <div className="fixed inset-0 -z-0 pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 55 }}
-        dpr={[1, isMobile ? 1.5 : 2]}
+        // Slightly lower DPR for smoother FPS (no visible downgrade)
+        dpr={[1, isMobile ? 1.25 : 1.75]}
         gl={{
-          antialias: true,
+          antialias: !isMobile, // 🔥 disable on mobile only
           alpha: true,
           powerPreference: "high-performance",
         }}
         style={{ background: "transparent" }}
       >
-        {/* Fog for depth */}
         <fog attach="fog" args={["#0a0a12", 8, 25]} />
 
-        {/* Subtle ambient lighting */}
         <ambientLight intensity={0.3} />
         <pointLight position={[5, 5, 5]} intensity={0.5} color="#a78bfa" />
         <pointLight position={[-5, -5, 5]} intensity={0.3} color="#38bdf8" />
 
-        {/* Main Network Orb */}
         <NetworkOrb
           nodeCount={nodeCount}
           radius={orbRadius}
           mouse={mouse}
           scrollY={scrollY}
           maxScroll={maxScroll}
+          isVisible={isVisible}
+          prefersReducedMotion={prefersReducedMotion}
         />
 
-        {/* Outer ambient particles */}
         <OuterParticles
           count={outerParticleCount}
           scrollY={scrollY}
           maxScroll={maxScroll}
+          isVisible={isVisible}
+          prefersReducedMotion={prefersReducedMotion}
         />
       </Canvas>
     </div>

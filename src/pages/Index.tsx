@@ -12,6 +12,7 @@ import { Awards } from "@/components/sections/Awards";
 import { Certifications } from "@/components/sections/Certifications";
 import { Contact } from "@/components/sections/Contact";
 import { SectionShell } from "@/components/SectionShell";
+import { CursorGlow } from "@/components/CursorGlow";
 
 // Lazy load 3D components
 const NetworkMeshCanvas = lazy(() => import("@/components/three/NetworkMesh"));
@@ -34,7 +35,7 @@ export default function Index() {
       <Suspense fallback={<NetworkMeshFallback />}>
         <NetworkMeshCanvas scrollY={scrollY} />
       </Suspense>
-
+      <CursorGlow />
       {/* Ambient effects */}
       <AmbientBackground />
 
