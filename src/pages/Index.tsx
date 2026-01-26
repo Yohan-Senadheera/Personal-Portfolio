@@ -13,6 +13,8 @@ import { Contact } from "@/components/sections/Contact";
 
 // Lazy load 3D components to avoid SSR issues
 const NetworkMeshCanvas = lazy(() => import("@/components/three/NetworkMesh"));
+// import NetworkMeshCanvas from "@/components/three/NetworkMesh";
+
 
 function NetworkMeshFallback() {
   return (
