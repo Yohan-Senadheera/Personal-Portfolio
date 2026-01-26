@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { profile } from "@/content/profile";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Network, Cloud, Zap } from "lucide-react";
+import { ProfileCard } from "@/components/ui/ProfileCard";
+
 
 const icons = [Network, Cloud, Zap];
 
@@ -44,55 +46,65 @@ export function About() {
       </motion.h2>
 
       {/* Identity hook */}
-      <motion.p
-        variants={itemVariants}
-        className="text-muted-foreground mb-10 max-w-3xl leading-relaxed"
-      >
-        I’m a computer engineering undergraduate focused on building reliable
-        networking, cloud, and system-level solutions — from private 5G and edge
-        systems to containerized applications and automation workflows.
-      </motion.p>
+      <div className="grid lg:grid-cols-[1.4fr_0.6fr] gap-10 mb-14">
+        {/* LEFT — text */}
+        <div>
+          <motion.p
+            variants={itemVariants}
+            className="text-muted-foreground mb-10 max-w-3xl leading-relaxed"
+          >
+            I’m a computer engineering undergraduate focused on building
+            reliable networking, cloud, and system-level solutions — from
+            private 5G and edge systems to containerized applications and
+            automation workflows.
+          </motion.p>
 
-      {/* Core blocks */}
-      <div className="grid md:grid-cols-2 gap-8 mb-14">
-        {/* What I Build */}
-        <motion.div variants={itemVariants}>
-          <GlassCard className="h-full transition hover:border-primary/30">
-            <h3 className="text-lg font-semibold text-primary mb-3">
-              What I Build
-            </h3>
-            <ul className="space-y-3">
-              {profile.about.whatIBuild.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-muted-foreground"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </GlassCard>
-        </motion.div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* What I Build */}
+            <motion.div variants={itemVariants}>
+              <GlassCard className="h-full transition hover:border-primary/30">
+                <h3 className="text-lg font-semibold text-primary mb-3">
+                  What I Build
+                </h3>
+                <ul className="space-y-3">
+                  {profile.about.whatIBuild.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </GlassCard>
+            </motion.div>
 
-        {/* What I Care About */}
+            {/* What I Care About */}
+            <motion.div variants={itemVariants}>
+              <GlassCard className="h-full transition hover:border-secondary/30">
+                <h3 className="text-lg font-semibold text-secondary mb-3">
+                  What I Care About
+                </h3>
+                <ul className="space-y-3">
+                  {profile.about.whatICareAbout.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-muted-foreground"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* RIGHT — photo */}
         <motion.div variants={itemVariants}>
-          <GlassCard className="h-full transition hover:border-secondary/30">
-            <h3 className="text-lg font-semibold text-secondary mb-3">
-              What I Care About
-            </h3>
-            <ul className="space-y-3">
-              {profile.about.whatICareAbout.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-muted-foreground"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 flex-shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </GlassCard>
+          <ProfileCard />
         </motion.div>
       </div>
 
