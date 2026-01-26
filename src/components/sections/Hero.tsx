@@ -42,7 +42,14 @@ export function Hero() {
         initial="hidden"
         animate="visible"
       >
-        <GlassCard variant="glow" className="p-8 lg:p-12">
+        <GlassCard
+          variant="glow"
+          className="
+    p-8 lg:p-12
+    [mask-image:linear-gradient(to_right,black_70%,transparent)]
+    [-webkit-mask-image:linear-gradient(to_right,black_70%,transparent)]
+  "
+        >
           {/* Available badge */}
           <motion.div variants={itemVariants} className="mb-6">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary/40 text-secondary text-sm font-medium">
@@ -78,7 +85,7 @@ export function Hero() {
           {/* Summary */}
           <motion.p
             variants={itemVariants}
-            className="text-muted-foreground leading-relaxed mb-8"
+            className="text-muted-foreground leading-[1.75] mb-8 max-w-2xl"
           >
             Hands-on experience in 5G network deployment, containerization, and
             cloud infrastructure. Built edge UPF on Raspberry Pi, CI/CD

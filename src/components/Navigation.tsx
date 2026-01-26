@@ -71,7 +71,7 @@ export function Navigation() {
               onClick={() => scrollToSection("hero")}
               className="font-display font-bold text-lg hover:text-primary transition-colors"
             >
-              YS
+            Yohan Senadheera
             </button>
 
             {/* Desktop Navigation */}

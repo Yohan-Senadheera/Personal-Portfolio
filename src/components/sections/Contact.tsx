@@ -87,7 +87,7 @@ export function Contact() {
                 </a>
               </Button>
               
-              <Button
+              {/* <Button
                 size="lg"
                 variant="outline"
                 className="border-secondary/50 hover:bg-secondary/10 text-secondary hover:text-secondary"
@@ -97,7 +97,7 @@ export function Contact() {
                   <Download className="w-4 h-4 mr-2" />
                   Download CV
                 </a>
-              </Button>
+              </Button> */}
             </div>
           </GlassCard>
         </motion.div>
