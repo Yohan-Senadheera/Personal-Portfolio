@@ -22,7 +22,7 @@ export function ProfileCard() {
 
         <div className="relative rounded-xl overflow-hidden border border-white/10">
           <img
-            src="src\assets\me.jpg"
+            src="/me.jpg"
             alt="Yohan Senadheera"
             className="w-full h-56 object-cover  contrast-110"
           />
