@@ -57,31 +57,44 @@ My focus? **What happens after deployment:**
 
 ## 🧠 What Drives Me
 
-```mermaid
-mindmap
-  root((Yohan))
-    5G & Edge Computing
-      Private 5G Networks
-      Edge UPF on Raspberry Pi
-      Network Function Virtualization
-      Small-scale 5G Deployment
-    Cloud Native
-      Kubernetes Orchestration
-      Docker Containerization
-      AWS Infrastructure
-      CI/CD Pipelines
-    Networking
-      TCP/IP Deep Dive
-      VLANs & Switching
-      SDN with Open vSwitch
-      Network Security
-      Wireshark Analysis
-    SRE & Observability
-      Prometheus Metrics
-      Grafana Dashboards
-      Auto-recovery Systems
-      Production Monitoring
-```
+<table>
+<tr>
+<td width="50%">
+
+### 🌐 **5G & Edge Computing**
+- Private 5G Networks
+- Edge UPF on Raspberry Pi
+- Network Function Virtualization
+- Small-scale 5G Deployment
+- RAN Optimization
+
+### 📡 **Networking & Protocols**
+- TCP/IP Deep Dive
+- VLANs & Switching
+- SDN with Open vSwitch
+- Network Security
+- Wireshark Analysis
+
+</td>
+<td width="50%">
+
+### ☁️ **Cloud Native & K8s**
+- Kubernetes Orchestration
+- Docker Containerization
+- AWS Infrastructure
+- CI/CD Pipelines
+- GitOps Workflows
+
+### 📊 **SRE & Observability**
+- Prometheus Metrics
+- Grafana Dashboards
+- Auto-recovery Systems
+- Production Monitoring
+- Failure Analysis
+
+</td>
+</tr>
+</table>
 
 ---
 
