@@ -20,17 +20,18 @@
 
 ## 🚀 What I'm Building Right Now
 
+### 🌐 **Private 5G Network** (with SLTMobitel)
+Running a **production 5G edge network** with User Plane Functions on **Raspberry Pi**. Yes, 5G. On a Pi. At the edge.
+
+`Raspberry Pi` `Kubernetes` `SDN` `Open vSwitch` `5G Core`
+
+---
+
 ### ☁️ **Cloud-Native Platform with Auto-Recovery**
 Built a Kubernetes platform where **systems heal themselves**. Containers crash? Auto-restart. Database fails? Automatic failover. Everything monitored in real-time with Prometheus & Grafana.
 
 `Kubernetes` `Docker` `Prometheus` `Grafana` `Auto-Recovery` `Linux`
 
----
-
-### ☁️ **Cloud-Native Platform with Auto-Recovery**
-Kubernetes platform with **self-healing infrastructure** - containerized apps that automatically detect failures, trigger recovery, and expose everything through Prometheus & Grafana dashboards.
-
-`
 ---
 
 ### 🤖 **P-E-BO - AI Desk Companion**
