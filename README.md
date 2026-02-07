@@ -6,7 +6,8 @@
 
 <p align="center">
   <a href="https://yohan-senadheera.pages.dev/">🌐 Portfolio</a> •
-  <a href="https://github.com/Yohan-Senadheera">💻 GitHub</a>
+  <a href="https://www.linkedin.com/in/yohan-senadheera/">💼 LinkedIn</a>
+
 </p>
 
 ---
