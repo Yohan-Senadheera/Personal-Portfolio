@@ -27,11 +27,10 @@ Running a **production 5G edge network** with User Plane Functions on **Raspberr
 
 ---
 
-### ☁️ **Mini 5G Edge Testbed**
-Full cloud-native 5G deployment with containerized network functions, automated CI/CD, and real-time monitoring dashboards.
+### ☁️ **Cloud-Native Platform with Auto-Recovery**
+Kubernetes platform with **self-healing infrastructure** - containerized apps that automatically detect failures, trigger recovery, and expose everything through Prometheus & Grafana dashboards.
 
-`AWS` `Kubernetes` `Docker` `Prometheus` `Grafana` `5G NFV`
-
+`Kubernetes` `Docker` `Prometheus` `Grafana` `Auto-Recovery` `Observability`
 ---
 
 ### 🤖 **P-E-BO - AI Desk Companion**
