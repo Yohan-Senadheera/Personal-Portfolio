@@ -232,8 +232,8 @@ Share lessons from 5G, K8s, and SRE experiments
 
 <div align="center">
 
-<img height="170em" src="https://github-readme-stats.vercel.app/api?username=Yohan-Senadheera&show_icons=true&theme=radical&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117"/>
-<img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yohan-Senadheera&layout=compact&theme=radical&hide_border=true&bg_color=0d1117"/>
+<!-- <img height="170em" src="https://github-readme-stats.vercel.app/api?username=Yohan-Senadheera&show_icons=true&theme=radical&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117"/>
+<img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yohan-Senadheera&layout=compact&theme=radical&hide_border=true&bg_color=0d1117"/> -->
 
 [![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Yohan-Senadheera&theme=radical&hide_border=true&background=0d1117)](https://git.io/streak-stats)
 
