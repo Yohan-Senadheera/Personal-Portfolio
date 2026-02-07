@@ -42,6 +42,18 @@ export const profile = {
 
   projects: [
     {
+      title: "Cloud Reliability Platform",
+      subtitle: "Infrastructure Monitoring & Reliability",
+      type: "Individual Project",
+      timeframe: "Feb 2026 – Present",
+      description: "Cloud-native reliability platform with real-time monitoring, automated incident response, and comprehensive observability for distributed systems. Provides multi-cloud support with predictive analytics and SLA tracking.",
+      tech: ["Kubernetes", "Prometheus", "Grafana", "Docker", "AWS", "Terraform", "CI/CD"],
+      whatIDid: "Designed and implemented end-to-end reliability platform with monitoring dashboards, automated alerting, and infrastructure as code deployment",
+      result: "Production-ready platform ensuring 99.9% uptime with automated incident detection and response",
+      links: {},
+      featured: true,
+    },
+    {
       title: "Private 5G Network Implementation",
       subtitle: "Collaboration with SLTMobitel",
       type: "Group Project",
