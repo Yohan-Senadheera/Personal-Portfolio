@@ -1,7 +1,7 @@
 export const profile = {
   name: "Yohan Senadheera",
   headline: "Computer Engineering Undergraduate",
-  tagline: "Networking • Private 5G • DevOps • Edge",
+  tagline: "Networking • Private 5G • DevOps • SRE • Edge",
   location: "Colombo, Sri Lanka",
   university: "University of Peradeniya",
   website: "yohan-senadheera.pages.dev",
@@ -11,13 +11,13 @@ export const profile = {
   github: "https://github.com/yohan-senadheera",
   cvUrl: "/Yohan_Senadheera_CV.pdf",
 
-  summary: `Computer Engineering undergraduate with hands-on experience in 5G network deployment, containerization, and cloud infrastructure. Implemented edge UPF on Raspberry Pi, built CI/CD pipelines for containerized network functions on Kubernetes/AWS, and developed mobile applications with Firebase/AWS backends. Seeking DevOps, Software Engineering, or Networking internships that bridge infrastructure, automation, and development.`,
+  summary: `Computer Engineering undergraduate with hands-on experience in 5G network deployment, SRE practices, and cloud-native infrastructure. Implemented edge UPF on Raspberry Pi, built observability platforms with Prometheus/Grafana, and developed CI/CD pipelines for containerized network functions on Kubernetes/AWS. Seeking DevOps, Software Engineering, SRE, or Networking internships that bridge infrastructure, reliability, and development.`,
 
   about: {
     whatIBuild: [
       "Network systems and 5G infrastructure prototypes",
       "Cloud-native deployments with Kubernetes & AWS",
-      "Edge computing solutions on embedded hardware",
+      "SRE platforms with observability and reliability engineering",
     ],
     whatICareAbout: [
       "Reliability & high availability",
@@ -40,16 +40,39 @@ export const profile = {
     ],
   },
 
+  interestingFacts: [
+    {
+      title: "Adventure & Exploration",
+      description: "Active member of University Explorers' Club, organizing outdoor expeditions and adventure-based programs. Love hiking, trips, and discovering new places.",
+      icon: "compass",
+    },
+    {
+      title: "Photography & Video Editing",
+      description: "Passionate about capturing moments through photography and bringing stories to life through video editing.",
+      icon: "camera",
+    },
+    {
+      title: "Building & Creating",
+      description: "Enjoy hands-on building experiences — from hardware projects to digital solutions. Always excited to try new technologies and create meaningful things.",
+      icon: "tool",
+    },
+    {
+      title: "Sports & Precision",
+      description: "Team Captain of University Shooting Sports Association. Led team to championship in 2024 Inter-University Air Rifle Competition.",
+      icon: "target",
+    },
+  ],
+
   projects: [
     {
-      title: "Cloud Reliability Platform",
-      subtitle: "Infrastructure Monitoring & Reliability",
+      title: "Cloud Reliability Platform (SRE Lab)",
+      subtitle: "Production-Style Reliability Engineering",
       type: "Individual Project",
       timeframe: "Feb 2026 – Present",
-      description: "Cloud-native reliability platform with real-time monitoring, automated incident response, and comprehensive observability for distributed systems. Provides multi-cloud support with predictive analytics and SLA tracking.",
-      tech: ["Kubernetes", "Prometheus", "Grafana", "Docker", "AWS", "Terraform", "CI/CD"],
-      whatIDid: "Designed and implemented end-to-end reliability platform with monitoring dashboards, automated alerting, and infrastructure as code deployment",
-      result: "Production-ready platform ensuring 99.9% uptime with automated incident detection and response",
+      description: "Production-style reliability engineering lab: Kubernetes + FastAPI + PostgreSQL with full observability and incident runbooks. Features dependency-aware readiness (DB-aware), Prometheus metrics + Grafana Golden Signals dashboard, alerting rules (PrometheusRule/Alertmanager), and incident simulations with recovery validation (kill API pod, DB down scenarios).",
+      tech: ["SRE", "Kubernetes", "Prometheus", "Grafana", "Alerting", "FastAPI", "PostgreSQL", "Observability"],
+      whatIDid: "Designed and implemented end-to-end SRE platform with dependency-aware health checks, comprehensive monitoring dashboards, automated alerting, and incident simulation runbooks",
+      result: "Production-ready SRE platform with automated incident detection, response playbooks, and 99.9% uptime validation",
       links: {},
       featured: true,
     },
@@ -66,14 +89,14 @@ export const profile = {
       featured: true,
     },
     {
-      title: "Mini 5G Edge Network Testbed",
-      subtitle: "Cloud-Native Deployment",
+      title: "Mini 5G Edge Network Testbed (Cloud-Native Networking)",
+      subtitle: "5G-Inspired Edge Networking",
       type: "Individual Project",
       timeframe: "Jan 2026 – Present",
-      description: "Mini 5G edge network testbed with containerized network functions, automated CI/CD deployment, and real-time network monitoring dashboard.",
-      tech: ["Kubernetes", "AWS", "Docker", "CI/CD", "Monitoring"],
-      whatIDid: "Designed and implemented entire cloud-native architecture with automated deployment pipelines",
-      result: "Fully automated 5G testbed environment",
+      description: "5G-inspired, cloud-native edge networking testbed with containerized NF-style components and real-time observability. Features containerized 'network function' style gateway + app, Prometheus + Grafana monitoring (host + container metrics). Roadmap: Kubernetes → AWS deployment.",
+      tech: ["Networking", "Cloud-Native", "Docker", "Kubernetes", "Prometheus", "Grafana", "Edge"],
+      whatIDid: "Designed and implemented containerized network function architecture with end-to-end monitoring and edge deployment strategy",
+      result: "Fully operational cloud-native edge networking testbed with comprehensive observability",
       links: {},
       featured: true,
     },
@@ -129,6 +152,7 @@ export const profile = {
 
   skills: {
     "DevOps & Cloud": ["Docker", "Kubernetes", "AWS", "CI/CD", "Git", "Bash"],
+    "SRE & Observability": ["Prometheus", "Grafana", "Alerting", "Incident Response", "Monitoring"],
     "Networking": ["TCP/IP", "VLANs", "Switching", "Routing", "SDN", "5G", "Network Security", "Wireshark", "STP", "EtherChannel"],
     "Programming": ["Python", "JavaScript", "React", "React Native"],
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
@@ -295,13 +319,14 @@ export const profile = {
   ],
 
   contact: {
-    cta: "Open to DevOps / Networking / Systems / Software Engineering internships.",
+    cta: "Open to DevOps / Networking / SRE / Systems / Software Engineering internships.",
     availability: "Available for Internships",
   },
 
   navigation: [
     { id: "hero", label: "Home" },
     { id: "about", label: "About" },
+    { id: "facts", label: "Facts" },
     { id: "projects", label: "Projects" },
     { id: "skills", label: "Skills" },
     { id: "experience", label: "Experience" },

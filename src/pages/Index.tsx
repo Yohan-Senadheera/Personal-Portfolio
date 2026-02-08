@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { InterestingFacts } from "@/components/sections/InterestingFacts";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
 import { Experience } from "@/components/sections/Experience";
@@ -51,6 +52,10 @@ export default function Index() {
 
         <SectionShell id="about" variant="plain" stagger>
           <About />
+        </SectionShell>
+
+        <SectionShell id="facts" variant="alt" stagger>
+          <InterestingFacts />
         </SectionShell>
 
         <SectionShell id="projects" variant="deep">

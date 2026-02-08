@@ -76,10 +76,10 @@ export function Hero() {
 
           {/* Summary */}
           <p className="text-muted-foreground leading-[1.75] mb-8 max-w-2xl">
-            Hands-on experience in 5G network deployment, containerization, and
-            cloud infrastructure. Built edge UPF on Raspberry Pi, CI/CD
-            pipelines on Kubernetes/AWS, and mobile apps with Firebase backends.
-            Seeking DevOps, SE, or Networking internships.
+            Hands-on experience in 5G network deployment, cloud-native systems,
+            and SRE practices. Built edge UPF on Raspberry Pi, observability
+            platforms with Prometheus/Grafana, and CI/CD pipelines on
+            Kubernetes/AWS. Seeking DevOps, SE, SRE, or Networking internships.
           </p>
 
           {/* CTAs */}
