@@ -1,7 +1,7 @@
 export const profile = {
   name: "Yohan Senadheera",
   headline: "Computer Engineering Undergraduate",
-  tagline: "Networking • Private 5G • DevOps • SRE • Edge",
+  tagline: "Networking • Private 5G • SE • DevOps • SRE • Edge",
   location: "Colombo, Sri Lanka",
   university: "University of Peradeniya",
   website: "yohan-senadheera.pages.dev",
@@ -27,15 +27,18 @@ export const profile = {
     strengths: [
       {
         title: "Networking",
-        description: "Deep understanding of TCP/IP, SDN, 5G core, and network security",
+        description:
+          "Deep understanding of TCP/IP, SDN, 5G core, and network security",
       },
       {
         title: "Cloud-Native",
-        description: "Production experience with Docker, Kubernetes, CI/CD, and AWS services",
+        description:
+          "Production experience with Docker, Kubernetes, CI/CD, and AWS services",
       },
       {
         title: "Fast Learner",
-        description: "Quickly adapt to new technologies and thrive in collaborative environments",
+        description:
+          "Quickly adapt to new technologies and thrive in collaborative environments",
       },
     ],
   },
@@ -43,22 +46,26 @@ export const profile = {
   interestingFacts: [
     {
       title: "Adventure & Exploration",
-      description: "Active member of University Explorers' Club, organizing outdoor expeditions and adventure-based programs. Love hiking, trips, and discovering new places.",
+      description:
+        "Active senior member of University Explorers' Club, organizing outdoor expeditions and adventure-based programs. Love hiking, trips, and discovering new places.",
       icon: "compass",
     },
     {
       title: "Photography & Video Editing",
-      description: "Passionate about capturing moments through photography and bringing stories to life through video editing.",
+      description:
+        "Passionate about capturing moments through photography and bringing stories to life through video editing.",
       icon: "camera",
     },
     {
       title: "Building & Creating",
-      description: "Enjoy hands-on building experiences — from hardware projects to digital solutions. Always excited to try new technologies and create meaningful things.",
+      description:
+        "Enjoy hands-on building experiences — from hardware projects to digital solutions. Always excited to try new technologies and create meaningful things.",
       icon: "tool",
     },
     {
       title: "Sports & Precision",
-      description: "Team Captain of University Shooting Sports Association. Led team to championship in 2024 Inter-University Air Rifle Competition.",
+      description:
+        "Founded and led the University Shooting Sports Association as Team Captain, guiding the team to the championship at the 2024 Inter-University Air Rifle Competition.",
       icon: "target",
     },
   ],
@@ -69,10 +76,22 @@ export const profile = {
       subtitle: "Production-Style Reliability Engineering",
       type: "Individual Project",
       timeframe: "Feb 2026 – Present",
-      description: "Production-style reliability engineering lab: Kubernetes + FastAPI + PostgreSQL with full observability and incident runbooks. Features dependency-aware readiness (DB-aware), Prometheus metrics + Grafana Golden Signals dashboard, alerting rules (PrometheusRule/Alertmanager), and incident simulations with recovery validation (kill API pod, DB down scenarios).",
-      tech: ["SRE", "Kubernetes", "Prometheus", "Grafana", "Alerting", "FastAPI", "PostgreSQL", "Observability"],
-      whatIDid: "Designed and implemented end-to-end SRE platform with dependency-aware health checks, comprehensive monitoring dashboards, automated alerting, and incident simulation runbooks",
-      result: "Production-ready SRE platform with automated incident detection, response playbooks, and 99.9% uptime validation",
+      description:
+        "Production-style reliability engineering lab: Kubernetes + FastAPI + PostgreSQL with full observability and incident runbooks. Features dependency-aware readiness (DB-aware), Prometheus metrics + Grafana Golden Signals dashboard, alerting rules (PrometheusRule/Alertmanager), and incident simulations with recovery validation (kill API pod, DB down scenarios).",
+      tech: [
+        "SRE",
+        "Kubernetes",
+        "Prometheus",
+        "Grafana",
+        "Alerting",
+        "FastAPI",
+        "PostgreSQL",
+        "Observability",
+      ],
+      whatIDid:
+        "Designed and implemented end-to-end SRE platform with dependency-aware health checks, comprehensive monitoring dashboards, automated alerting, and incident simulation runbooks",
+      result:
+        "Production-ready SRE platform with automated incident detection, response playbooks, and 99.9% uptime validation",
       links: {},
       featured: true,
     },
@@ -81,9 +100,18 @@ export const profile = {
       subtitle: "Collaboration with SLTMobitel",
       type: "Group Project",
       timeframe: "Aug 2025 – Present",
-      description: "Implementing edge UPF on Raspberry Pi to optimize 5G user-plane traffic. Team manages RAN virtualization and core server optimization for small-scale deployment.",
-      tech: ["Raspberry Pi", "Kubernetes", "SDN", "Open vSwitch", "Wireshark", "tcpdump"],
-      whatIDid: "Deployed edge UPF on Raspberry Pi, configured SDN networking with Open vSwitch, performed traffic analysis with Wireshark/tcpdump",
+      description:
+        "Implementing edge UPF on Raspberry Pi to optimize 5G user-plane traffic. Team manages RAN virtualization and core server optimization for small-scale deployment.",
+      tech: [
+        "Raspberry Pi",
+        "Kubernetes",
+        "SDN",
+        "Open vSwitch",
+        "Wireshark",
+        "tcpdump",
+      ],
+      whatIDid:
+        "Deployed edge UPF on Raspberry Pi, configured SDN networking with Open vSwitch, performed traffic analysis with Wireshark/tcpdump",
       result: "Ongoing industry collaboration with major telecom provider",
       links: {},
       featured: true,
@@ -93,10 +121,21 @@ export const profile = {
       subtitle: "5G-Inspired Edge Networking",
       type: "Individual Project",
       timeframe: "Jan 2026 – Present",
-      description: "5G-inspired, cloud-native edge networking testbed with containerized NF-style components and real-time observability. Features containerized 'network function' style gateway + app, Prometheus + Grafana monitoring (host + container metrics). Roadmap: Kubernetes → AWS deployment.",
-      tech: ["Networking", "Cloud-Native", "Docker", "Kubernetes", "Prometheus", "Grafana", "Edge"],
-      whatIDid: "Designed and implemented containerized network function architecture with end-to-end monitoring and edge deployment strategy",
-      result: "Fully operational cloud-native edge networking testbed with comprehensive observability",
+      description:
+        "5G-inspired, cloud-native edge networking testbed with containerized NF-style components and real-time observability. Features containerized 'network function' style gateway + app, Prometheus + Grafana monitoring (host + container metrics). Roadmap: Kubernetes → AWS deployment.",
+      tech: [
+        "Networking",
+        "Cloud-Native",
+        "Docker",
+        "Kubernetes",
+        "Prometheus",
+        "Grafana",
+        "Edge",
+      ],
+      whatIDid:
+        "Designed and implemented containerized network function architecture with end-to-end monitoring and edge deployment strategy",
+      result:
+        "Fully operational cloud-native edge networking testbed with comprehensive observability",
       links: {},
       featured: true,
     },
@@ -105,10 +144,13 @@ export const profile = {
       subtitle: "Third Year Project",
       type: "Group Project",
       timeframe: "Dec 2024 – Jul 2025",
-      description: "AI desk companion with 7-emotion detection (95% accuracy) and Gemini AI voice interaction. Teammates handled hardware, Raspberry Pi, and 3D printing.",
+      description:
+        "AI desk companion with 7-emotion detection (95% accuracy) and Gemini AI voice interaction. Teammates handled hardware, Raspberry Pi, and 3D printing.",
       tech: ["React Native", "Firebase", "AWS", "Gemini AI", "IoT"],
-      whatIDid: "Developed React Native mobile app, Firebase backend integration, AWS deployment, and project website",
-      result: "IESL UIY Top 10, Techno 2025 Exhibit, 3rd Place at ICIIS 2025 / I-To-I",
+      whatIDid:
+        "Developed React Native mobile app, Firebase backend integration, AWS deployment, and project website",
+      result:
+        "IESL UIY Top 10, Techno 2025 Exhibit, 3rd Place at ICIIS 2025 / I-To-I",
       links: {},
       featured: true,
     },
@@ -117,9 +159,11 @@ export const profile = {
       subtitle: "Second Year Project",
       type: "Group Project",
       timeframe: "Apr 2024 – Oct 2024",
-      description: "Production rate tracking dashboard enabling real-time machine monitoring, bottleneck detection, and process optimization.",
+      description:
+        "Production rate tracking dashboard enabling real-time machine monitoring, bottleneck detection, and process optimization.",
       tech: ["MongoDB", "JavaScript", "React.js", "Python", "SCSS", "GitHub"],
-      whatIDid: "Developed production rate tracking page with real-time monitoring and bottleneck detection",
+      whatIDid:
+        "Developed production rate tracking page with real-time monitoring and bottleneck detection",
       result: "Successfully deployed for manufacturing process optimization",
       links: {},
       featured: false,
@@ -129,9 +173,11 @@ export const profile = {
       subtitle: "Final Year Project",
       type: "Group Project",
       timeframe: "Aug 2024 – Present",
-      description: "Personalized adaptive learning system with virtual teaching assistant. Team handles data processing, model training, and LMS integration.",
+      description:
+        "Personalized adaptive learning system with virtual teaching assistant. Team handles data processing, model training, and LMS integration.",
       tech: ["Python", "Node.js", "GPT-3.5", "Moodle"],
-      whatIDid: "Implemented AI modules and virtual teaching assistant integration",
+      whatIDid:
+        "Implemented AI modules and virtual teaching assistant integration",
       result: "Ongoing development with university LMS integration",
       links: {},
       featured: false,
@@ -141,9 +187,11 @@ export const profile = {
       subtitle: "Mobile Application",
       type: "Group Project",
       timeframe: "Feb 2025 – Apr 2025",
-      description: "React Native app for smart home project with Firebase real-time sync, alerts, and remote control capabilities.",
+      description:
+        "React Native app for smart home project with Firebase real-time sync, alerts, and remote control capabilities.",
       tech: ["React Native", "Expo", "Firebase", "IoT", "ESP32", "Arduino"],
-      whatIDid: "Developed complete mobile application with real-time sync and control features",
+      whatIDid:
+        "Developed complete mobile application with real-time sync and control features",
       result: "Fully functional smart home control system",
       links: {},
       featured: false,
@@ -152,9 +200,26 @@ export const profile = {
 
   skills: {
     "DevOps & Cloud": ["Docker", "Kubernetes", "AWS", "CI/CD", "Git", "Bash"],
-    "SRE & Observability": ["Prometheus", "Grafana", "Alerting", "Incident Response", "Monitoring"],
-    "Networking": ["TCP/IP", "VLANs", "Switching", "Routing", "SDN", "5G", "Network Security", "Wireshark", "STP", "EtherChannel"],
-    "Programming": ["Python", "JavaScript", "React", "React Native"],
+    "SRE & Observability": [
+      "Prometheus",
+      "Grafana",
+      "Alerting",
+      "Incident Response",
+      "Monitoring",
+    ],
+    Networking: [
+      "TCP/IP",
+      "VLANs",
+      "Switching",
+      "Routing",
+      "SDN",
+      "5G",
+      "Network Security",
+      "Wireshark",
+      "STP",
+      "EtherChannel",
+    ],
+    Programming: ["Python", "JavaScript", "React", "React Native"],
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
   },
 
@@ -166,35 +231,40 @@ export const profile = {
       subtitle: "Database Systems / Programming Methodology",
       organization: "Dept. of Computer Engineering, University of Peradeniya",
       timeframe: "Nov 2024 – Aug 2025",
-      description: "Taught 40+ students database systems and C programming through lab sessions and mentoring.",
+      description:
+        "Taught 40+ students database systems and C programming through lab sessions and mentoring.",
       type: "teaching",
     },
     {
       title: "Team Captain",
       organization: "Shooting Sports Association, University of Peradeniya",
       timeframe: "Jul 2023 – Oct 2025",
-      description: "Initiated air gun shooting sport at university, served as captain for 2 years, led team to championship at 2024 Inter-University Air Rifle Competition.",
+      description:
+        "Initiated air gun shooting sport at university, served as captain for 2 years, led team to championship at 2024 Inter-University Air Rifle Competition.",
       type: "leadership",
     },
     {
       title: "Editor",
       organization: "Hackers' Club, University of Peradeniya",
       timeframe: "Aug 2025 – Present",
-      description: "Manage technical content, event coordination, and club communications for 200+ member community.",
+      description:
+        "Manage technical content, event coordination, and club communications for 200+ member community.",
       type: "leadership",
     },
     {
       title: "Senior Member",
       organization: "University Explorers' Club, University of Peradeniya",
       timeframe: "Jul 2024 – Present",
-      description: "Organize outdoor expeditions and adventure-based leadership programs.",
+      description:
+        "Organize outdoor expeditions and adventure-based leadership programs.",
       type: "leadership",
     },
     {
       title: "Programming Team Member",
       organization: "IEEE CS Student Chapter, University of Peradeniya",
       timeframe: "Jul 2024 – Nov 2025",
-      description: "Organized technical workshops and coding competitions for student community.",
+      description:
+        "Organized technical workshops and coding competitions for student community.",
       type: "technical",
     },
     {
@@ -202,17 +272,20 @@ export const profile = {
       subtitle: "Central Province Organizing Committee",
       organization: "Career Compass Event, IEEE Young Professionals Sri Lanka",
       timeframe: "Apr 2025 – Sep 2025",
-      description: "Managed event finances, ensuring accurate budgeting, strategic fund allocation, and post-budget analysis.",
+      description:
+        "Managed event finances, ensuring accurate budgeting, strategic fund allocation, and post-budget analysis.",
       type: "leadership",
     },
     {
       title: "Brand Manager / OC Vice President / Team Leader",
       organization: "AIESEC in Kandy, University of Peradeniya",
       timeframe: "Feb 2022 – Nov 2024",
-      description: "Led marketing campaigns and coordinated international exchange programs across cross-functional teams.",
+      description:
+        "Led marketing campaigns and coordinated international exchange programs across cross-functional teams.",
       type: "leadership",
       expandable: true,
-      details: "Managed brand identity and marketing strategy, facilitated international exchange opportunities, and led cross-functional teams to execute large-scale university events.",
+      details:
+        "Managed brand identity and marketing strategy, facilitated international exchange opportunities, and led cross-functional teams to execute large-scale university events.",
     },
     {
       title: "Trainee",
@@ -308,13 +381,25 @@ export const profile = {
       degree: "B.Sc. Eng. (Hons) in Computer Engineering",
       institution: "University of Peradeniya",
       timeframe: "Feb 2022 – Present",
-      courses: ["Advanced Communication Networks (SDN, Docker)", "Network Security", "Databases", "Software Architecture"],
+      courses: [
+        "Advanced Communication Networks (SDN, Docker)",
+        "Network Security",
+        "Databases",
+        "Software Architecture",
+      ],
     },
     {
       degree: "CCNA (Cisco Certified Network Associate)",
       institution: "Cisco Networking Academy",
       timeframe: "Aug 2025 – Present",
-      courses: ["TCP/IP", "Subnetting", "Switching", "VLANs", "Routing", "Network Security"],
+      courses: [
+        "TCP/IP",
+        "Subnetting",
+        "Switching",
+        "VLANs",
+        "Routing",
+        "Network Security",
+      ],
     },
   ],
 
