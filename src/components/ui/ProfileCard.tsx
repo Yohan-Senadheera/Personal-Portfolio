@@ -62,7 +62,7 @@ export function ProfileCard() {
             <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/10 px-3 py-2">
               <span className="text-muted-foreground">Availability</span>
               <span className="text-primary font-semibold">
-                Open for Internships
+                SRE Intern at WSO2
               </span>
             </div>
           </div>

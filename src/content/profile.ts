@@ -11,7 +11,7 @@ export const profile = {
   github: "https://github.com/yohan-senadheera",
   cvUrl: "/Yohan_Senadheera_CV.pdf",
 
-  summary: `Computer Engineering undergraduate with hands-on experience in 5G network deployment, SRE practices, and cloud-native infrastructure. Implemented edge UPF on Raspberry Pi, built observability platforms with Prometheus/Grafana, and developed CI/CD pipelines for containerized network functions on Kubernetes/AWS. Seeking DevOps, Software Engineering, SRE, or Networking internships that bridge infrastructure, reliability, and development.`,
+  summary: `Computer Engineering undergraduate with hands-on experience in 5G network deployment, SRE practices, and cloud-native infrastructure. Implemented edge UPF on Raspberry Pi, built observability platforms with Prometheus/Grafana, and developed CI/CD pipelines for containerized network functions on Kubernetes/AWS. Currently working as an SRE Intern at WSO2, focusing on infrastructure reliability, observability, and automation.`,
 
   about: {
     whatIBuild: [
@@ -227,6 +227,14 @@ export const profile = {
 
   experience: [
     {
+      title: "SRE Intern",
+      organization: "WSO2",
+      timeframe: "Apr 2026 – Present",
+      description:
+        "Contributing to site reliability engineering initiatives with a focus on observability, infrastructure reliability, and automation.",
+      type: "work",
+    },
+    {
       title: "Casual Instructor",
       subtitle: "Database Systems / Programming Methodology",
       organization: "Dept. of Computer Engineering, University of Peradeniya",
@@ -404,8 +412,8 @@ export const profile = {
   ],
 
   contact: {
-    cta: "Open to DevOps / Networking / SRE / Systems / Software Engineering internships.",
-    availability: "Available for Internships",
+    cta: "Currently working as an SRE Intern at WSO2.",
+    availability: "SRE Intern at WSO2",
   },
 
   navigation: [

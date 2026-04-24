@@ -79,7 +79,7 @@ export function Hero() {
             Hands-on experience in 5G network deployment, cloud-native systems,
             and SRE practices. Built edge UPF on Raspberry Pi, observability
             platforms with Prometheus/Grafana, and CI/CD pipelines on
-            Kubernetes/AWS. Seeking DevOps, SE, SRE, or Networking internships.
+            Kubernetes/AWS. Currently working as an SRE Intern at WSO2.
           </p>
 
           {/* CTAs */}

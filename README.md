@@ -21,6 +21,7 @@
 ## 🚀 What I'm Building Right Now
 
 ### 🌐 **Private 5G Network** (with SLTMobitel)
+
 Running a **production 5G edge network** with User Plane Functions on **Raspberry Pi**. Yes, 5G. On a Pi. At the edge.
 
 `Raspberry Pi` `Kubernetes` `SDN` `Open vSwitch` `5G Core`
@@ -28,6 +29,7 @@ Running a **production 5G edge network** with User Plane Functions on **Raspberr
 ---
 
 ### ☁️ **Cloud-Native Platform with Auto-Recovery**
+
 Built a Kubernetes platform where **systems heal themselves**. Containers crash? Auto-restart. Database fails? Automatic failover. Everything monitored in real-time with Prometheus & Grafana.
 
 `Kubernetes` `Docker` `Prometheus` `Grafana` `Auto-Recovery` `Linux`
@@ -35,6 +37,7 @@ Built a Kubernetes platform where **systems heal themselves**. Containers crash?
 ---
 
 ### 🤖 **P-E-BO - AI Desk Companion**
+
 **🏆 IESL Top 10 Finalist | 🥉 3rd Place ICIIS 2025**
 
 Built the mobile app and AWS deployment for an AI desk companion with **7-emotion detection** (95% accuracy) and Gemini AI voice interaction.
@@ -64,7 +67,7 @@ Built the mobile app and AWS deployment for an AI desk companion with **7-emotio
 ### 🔥 **Then I Break Them**
 
 - Inject network failures
-- Simulate edge node crashes  
+- Simulate edge node crashes
 - Test recovery mechanisms
 - Measure MTTR (Mean Time To Recovery)
 
@@ -81,6 +84,7 @@ Built the mobile app and AWS deployment for an AI desk companion with **7-emotio
 <div align="center">
 
 ### **Infrastructure & Cloud**
+
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=black)
@@ -88,17 +92,20 @@ Built the mobile app and AWS deployment for an AI desk companion with **7-emotio
 ![Raspberry Pi](https://img.shields.io/badge/Raspberry_Pi-A22846?style=for-the-badge&logo=raspberrypi&logoColor=white)
 
 ### **Monitoring & Observability**
+
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
 ![Wireshark](https://img.shields.io/badge/Wireshark-1679A7?style=for-the-badge&logo=wireshark&logoColor=white)
 
 ### **Development**
+
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![React Native](https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 
 ### **Networking**
+
 ![Cisco](https://img.shields.io/badge/Cisco-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
 ![5G](https://img.shields.io/badge/5G-FF6600?style=for-the-badge)
 ![SDN](https://img.shields.io/badge/SDN-00BCB4?style=for-the-badge)
@@ -152,6 +159,7 @@ step_5_document:
 <td width="33%" align="center">
 
 ### 🌐
+
 **Complete Private 5G**
 
 Deploy production-ready private 5G network with SLTMobitel
@@ -160,6 +168,7 @@ Deploy production-ready private 5G network with SLTMobitel
 <td width="33%" align="center">
 
 ### 🎓
+
 **Get CKA Certified**
 
 Master Kubernetes administration at production scale
@@ -168,6 +177,7 @@ Master Kubernetes administration at production scale
 <td width="33%" align="center">
 
 ### 📝
+
 **Launch Tech Blog**
 
 Share lessons from 5G, K8s, and SRE experiments
@@ -183,10 +193,12 @@ Share lessons from 5G, K8s, and SRE experiments
 **🎓 Computer Engineering** @ University of Peradeniya (2022-Present)
 
 **📜 Currently Getting:**
+
 - CCNA (Cisco Certified Network Associate)
 - CKA (Certified Kubernetes Administrator) - Planned
 
 **✅ Certified:**
+
 - AWS Technical Essentials
 - 5G for Everyone (Qualcomm)
 - Linux Commands & Shell Scripting (IBM)
@@ -210,6 +222,7 @@ Share lessons from 5G, K8s, and SRE experiments
 <td width="50%">
 
 ### 🎯 **Founded University Shooting Team**
+
 - Started air rifle program from scratch
 - Led team to **championship** in 2024
 - Served as captain for 2 years
@@ -218,6 +231,7 @@ Share lessons from 5G, K8s, and SRE experiments
 <td width="50%">
 
 ### 👨‍🏫 **Teaching & Mentoring**
+
 - Taught 40+ students Database Systems
 - Programming methodology instructor
 - Creating hands-on learning experiences
@@ -254,6 +268,7 @@ Share lessons from 5G, K8s, and SRE experiments
 <br>
 
 ### 💼 Open to:
+
 **SRE Internships** • **DevOps Roles** • **Network Engineering** • **Cloud Infrastructure**
 
 </div>
@@ -280,6 +295,6 @@ and the best way to learn reliability is to teach 40 students who ask "why?" con
 
 ---
 
-*Building systems that survive production, one failure at a time.*
+_Building systems that survive production, one failure at a time._
 
 </div>
