@@ -53,11 +53,11 @@ export function About() {
             variants={itemVariants}
             className="text-muted-foreground mb-10 max-w-3xl leading-relaxed"
           >
-            I'm a computer engineering undergraduate focused on building
-            reliable, cloud-native systems — from private 5G and edge networks
-            to SRE platforms with observability and automation workflows. I care
-            deeply about reliability, performance, and making systems work at
-            scale.
+            I'm a computer engineering undergraduate focused on owning
+            production infrastructure end-to-end — from a zero-inbound
+            multi-cloud CI/CD platform to automated PKI security, plus private
+            5G and edge networks on the side. I care deeply about reliability,
+            security, and making systems work at scale.
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-8">

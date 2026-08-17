@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { useReveal } from "@/hooks/useReveal";
 import { Navigation } from "@/components/Navigation";
@@ -14,6 +14,7 @@ import { Certifications } from "@/components/sections/Certifications";
 import { Contact } from "@/components/sections/Contact";
 import { SectionShell } from "@/components/SectionShell";
 import { CursorGlow } from "@/components/CursorGlow";
+import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 
 // Lazy load 3D components
 const NetworkMeshCanvas = lazy(() => import("@/components/three/NetworkMesh"));
@@ -30,12 +31,28 @@ export default function Index() {
   // 🔥 This adds life to every section that has data-reveal
   useReveal();
 
+  // Skip the ~800KB three.js background entirely for reduced-motion users
+  // and small mobile viewports — it's barely visible there and not worth
+  // the download. AmbientBackground's CSS gradients still render either way.
+  const [show3D, setShow3D] = useState(false);
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isSmallMobile = window.innerWidth < 480;
+    setShow3D(!reduced && !isSmallMobile);
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* 3D Background */}
-      <Suspense fallback={<NetworkMeshFallback />}>
-        <NetworkMeshCanvas scrollY={scrollY} />
-      </Suspense>
+      {show3D ? (
+        <CanvasErrorBoundary fallback={<NetworkMeshFallback />}>
+          <Suspense fallback={<NetworkMeshFallback />}>
+            <NetworkMeshCanvas scrollY={scrollY} />
+          </Suspense>
+        </CanvasErrorBoundary>
+      ) : (
+        <NetworkMeshFallback />
+      )}
       <CursorGlow />
       {/* Ambient effects */}
       <AmbientBackground />

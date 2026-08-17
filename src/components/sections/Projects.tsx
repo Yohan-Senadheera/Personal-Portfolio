@@ -270,7 +270,7 @@ export function Projects() {
             Projects
           </h2>
           <p className="text-muted-foreground max-w-2xl">
-            Network modules and systems I’ve built and contributed to.
+            Platform, security, and network systems I’ve built and contributed to.
           </p>
         </div>
 

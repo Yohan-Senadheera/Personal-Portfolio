@@ -141,7 +141,7 @@ export const profile = {
         "Designed and implemented end-to-end SRE platform with dependency-aware health checks, comprehensive monitoring dashboards, automated alerting, and incident simulation runbooks",
       result:
         "Production-ready SRE platform with automated incident detection, response playbooks, and 99.9% uptime validation",
-      links: {},
+      links: { repo: "https://github.com/Yohan-Senadheera/cloud-reliability-platform" },
       featured: true,
     },
     {
@@ -185,7 +185,7 @@ export const profile = {
         "Designed and implemented containerized network function architecture with end-to-end monitoring and edge deployment strategy",
       result:
         "Fully operational cloud-native edge networking testbed with comprehensive observability",
-      links: {},
+      links: { repo: "https://github.com/Yohan-Senadheera/mini-5g-edge-testbed" },
       featured: true,
     },
     {
@@ -200,7 +200,10 @@ export const profile = {
         "Developed React Native mobile app, Firebase backend integration, AWS deployment, and project website",
       result:
         "IESL UIY Top 10, Techno 2025 Exhibit, 3rd Place at ICIIS 2025 / I-To-I",
-      links: {},
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/e20-3yp-P-E-BO-Desk-Companion",
+        demo: "https://cepdnaclk.github.io/e20-3yp-P-E-BO-Desk-Companion/",
+      },
       featured: true,
     },
     {
@@ -214,7 +217,7 @@ export const profile = {
       whatIDid:
         "Developed production rate tracking page with real-time monitoring and bottleneck detection",
       result: "Successfully deployed for manufacturing process optimization",
-      links: {},
+      links: { repo: "https://github.com/Yohan-Senadheera/e20-co227-MONA-Dashboard" },
       featured: false,
     },
     {
@@ -228,7 +231,7 @@ export const profile = {
       whatIDid:
         "Implemented AI modules and virtual teaching assistant integration",
       result: "Ongoing development with university LMS integration",
-      links: {},
+      links: { repo: "https://github.com/Yohan-Senadheera/ai-feedback-tutoring-system" },
       featured: false,
     },
     {
@@ -242,7 +245,7 @@ export const profile = {
       whatIDid:
         "Developed complete mobile application with real-time sync and control features",
       result: "Fully functional smart home control system",
-      links: {},
+      links: { repo: "https://github.com/Yohan-Senadheera/energy-app" },
       featured: false,
     },
   ],
