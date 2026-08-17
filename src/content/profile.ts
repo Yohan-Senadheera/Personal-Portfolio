@@ -11,7 +11,7 @@ export const profile = {
   github: "https://github.com/yohan-senadheera",
   cvUrl: "/Yohan_Senadheera_CV.pdf",
 
-  summary: `Computer Engineering undergraduate with hands-on experience in 5G network deployment, SRE practices, and cloud-native infrastructure. Implemented edge UPF on Raspberry Pi, built observability platforms with Prometheus/Grafana, and developed CI/CD pipelines for containerized network functions on Kubernetes/AWS. Currently working as an SRE Intern at WSO2, focusing on infrastructure reliability, observability, and automation.`,
+  summary: `Computer Engineering undergraduate and Site Reliability Engineering Intern at WSO2, with a track record of owning complex features end-to-end — translating fuzzy requirements into production-ready architecture. Independently designed a zero-inbound multi-cloud CI/CD platform and coordinated a cross-organization CA-signed PKI migration. Also hands-on with 5G network deployment, edge UPF on Raspberry Pi, and observability platforms with Prometheus/Grafana. Strong in C, Python and JavaScript with a broad core CS foundation, and has reviewed code and designs for 40+ students as an instructor.`,
 
   about: {
     whatIBuild: [
@@ -72,6 +72,55 @@ export const profile = {
 
   projects: [
     {
+      title: "Zero-Inbound Multi-Cloud CI/CD Platform",
+      subtitle: "SRE Internship — WSO2 (Asgardeo)",
+      type: "Individual Project",
+      timeframe: "Apr 2026 – Present",
+      description:
+        "A cloud-agnostic, pull-based central control plane driving independent AWS, Azure, and on-premises data planes over Azure DevOps — architected from a fuzzy brief for resilience against single-cloud outages and rapid onboarding of new environments.",
+      tech: [
+        "Argo Workflows",
+        "NATS JetStream",
+        "Kubernetes",
+        "AKS",
+        "EKS",
+        "k3s",
+        "Helm",
+        "OIDC",
+        "mTLS",
+        "AWS",
+        "Azure",
+      ],
+      whatIDid:
+        "Architected the control plane end-to-end, enforced strict security boundaries — network isolation and RBAC replacing shared admin credentials, an mTLS message bus with per-identity ACLs, and a self-hosted OIDC issuer removing static secrets — and am driving the production migration and STRIDE threat modeling to completion.",
+      result:
+        "Zero-inbound architecture resilient to single-cloud outages; production migration in progress",
+      links: {},
+      featured: true,
+    },
+    {
+      title: "PKI Certificate Automation",
+      subtitle: "Cross-Team Technical Leadership — WSO2 (Asgardeo)",
+      type: "Cross-Team Project",
+      timeframe: "2026",
+      description:
+        "Migrated certificate issuance across Asgardeo's microservices from a manual, tedious self-signing process to automated CA-signed PKI — broken into 20+ actionable pull requests across 7 repositories and taken through WSO2's formal Change Request process.",
+      tech: [
+        "Terraform",
+        "Azure DevOps YAML",
+        "Azure Key Vault",
+        "Workload Identity Federation",
+        "Azure RBAC",
+        "GitHub",
+      ],
+      whatIDid:
+        "Designed and proposed the security model — cross-organization trust via Workload Identity Federation replacing personal access tokens, with least-privilege identity segmentation so no single compromised credential can execute the signing workflow — and authored reusable modules merged and released in WSO2's public Terraform library.",
+      result:
+        "Automated a manual security-sensitive process and eliminated static credentials from the signing workflow",
+      links: {},
+      featured: true,
+    },
+    {
       title: "Cloud Reliability Platform (SRE Lab)",
       subtitle: "Production-Style Reliability Engineering",
       type: "Individual Project",
@@ -101,7 +150,7 @@ export const profile = {
       type: "Group Project",
       timeframe: "Aug 2025 – Present",
       description:
-        "Implementing edge UPF on Raspberry Pi to optimize 5G user-plane traffic. Team manages RAN virtualization and core server optimization for small-scale deployment.",
+        "Implementing edge UPF on Raspberry Pi with actual 5G RAN to optimize 5G user-plane traffic. Team manages RAN virtualization and core server optimization for small-scale deployment.",
       tech: [
         "Raspberry Pi",
         "Kubernetes",
@@ -199,13 +248,33 @@ export const profile = {
   ],
 
   skills: {
-    "DevOps & Cloud": ["Docker", "Kubernetes", "AWS", "CI/CD", "Git", "Bash"],
+    "DevOps & Cloud": [
+      "Docker",
+      "Kubernetes",
+      "Helm",
+      "Argo Workflows",
+      "Terraform",
+      "AWS",
+      "Azure",
+      "CI/CD",
+      "GitOps",
+      "Git",
+      "Bash",
+    ],
     "SRE & Observability": [
       "Prometheus",
       "Grafana",
       "Alerting",
       "Incident Response",
       "Monitoring",
+    ],
+    "Security & Identity": [
+      "OIDC",
+      "mTLS",
+      "RBAC Design",
+      "STRIDE Threat Modeling",
+      "Workload Identity Federation",
+      "Network Security",
     ],
     Networking: [
       "TCP/IP",
@@ -214,24 +283,26 @@ export const profile = {
       "Routing",
       "SDN",
       "5G",
-      "Network Security",
       "Wireshark",
       "STP",
       "EtherChannel",
     ],
-    Programming: ["Python", "JavaScript", "React", "React Native"],
+    Programming: ["Python", "C", "JavaScript", "React", "React Native", "Node.js"],
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
   },
 
-  currentlyLearning: ["CCNA 1 & 2", "Kubernetes Advanced"],
+  currentlyLearning: [
+    "WSO2 Certified Identity Server Practitioner",
+    "WSO2 Certified Integration Practitioner",
+  ],
 
   experience: [
     {
       title: "SRE Intern",
-      organization: "WSO2",
+      organization: "WSO2 (Asgardeo)",
       timeframe: "Apr 2026 – Present",
       description:
-        "Contributing to site reliability engineering initiatives with a focus on observability, infrastructure reliability, and automation.",
+        "Owning two production platform workstreams at Asgardeo, WSO2's identity-as-a-service platform: architected a zero-inbound multi-cloud CI/CD platform, and led a cross-team migration to automated CA-signed PKI. See Projects below.",
       type: "work",
     },
     {
@@ -341,6 +412,22 @@ export const profile = {
 
   certifications: [
     {
+      title: "WSO2 Certified Identity Server Practitioner",
+      issuer: "WSO2",
+      status: "in-progress",
+    },
+    {
+      title: "WSO2 Certified Integration Practitioner",
+      issuer: "WSO2",
+      status: "in-progress",
+    },
+    {
+      title: "Docker / Kubernetes for Beginners",
+      issuer: "KodeKloud (Coursera)",
+      date: "Mar 2026",
+      status: "completed",
+    },
+    {
       title: "AWS Technical Essentials",
       issuer: "AWS (Coursera)",
       date: "Jan 2026",
@@ -359,14 +446,9 @@ export const profile = {
       status: "completed",
     },
     {
-      title: "Docker / Kubernetes for Beginners",
-      issuer: "KodeKloud (Coursera)",
-      status: "in-progress",
-    },
-    {
-      title: "CCNA 1 & 2",
+      title: "CCNA 1, 2 & 3",
       issuer: "Cisco Networking Academy",
-      status: "in-progress",
+      status: "completed",
     },
     {
       title: "MoraExtreme 9.0",
@@ -399,7 +481,7 @@ export const profile = {
     {
       degree: "CCNA (Cisco Certified Network Associate)",
       institution: "Cisco Networking Academy",
-      timeframe: "Aug 2025 – Present",
+      timeframe: "Completed — CCNA 1, 2 & 3",
       courses: [
         "TCP/IP",
         "Subnetting",

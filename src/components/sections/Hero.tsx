@@ -76,10 +76,10 @@ export function Hero() {
 
           {/* Summary */}
           <p className="text-muted-foreground leading-[1.75] mb-8 max-w-2xl">
-            Hands-on experience in 5G network deployment, cloud-native systems,
-            and SRE practices. Built edge UPF on Raspberry Pi, observability
-            platforms with Prometheus/Grafana, and CI/CD pipelines on
-            Kubernetes/AWS. Currently working as an SRE Intern at WSO2.
+            SRE Intern at WSO2, architecting a zero-inbound multi-cloud CI/CD
+            platform and leading a cross-team migration to automated CA-signed
+            PKI. Also hands-on with 5G network deployment, edge UPF on
+            Raspberry Pi, and observability platforms with Prometheus/Grafana.
           </p>
 
           {/* CTAs */}
