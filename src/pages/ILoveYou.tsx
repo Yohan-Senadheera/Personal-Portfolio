@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import "@/ops.css";
 
-// The /i-love-you page. It is meant to look like a real access error.
 export default function ILoveYou() {
   const reqId = "8f3c-" + Math.random().toString(16).slice(2, 10);
   return (

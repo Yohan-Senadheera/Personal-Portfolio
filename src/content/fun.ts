@@ -1,5 +1,3 @@
-// Content for chill mode. Fill in the TODOs; empty values are hidden on the site.
-
 export const medium = {
   profile: "https://medium.com/@yohansenadheera",
   articles: [
@@ -34,7 +32,6 @@ export const medium = {
   ],
 };
 
-// Unlocked by the Kubernetes secret game in the Off-call section.
 export const socials = [
   { name: "Instagram", icon: "📸", url: "https://www.instagram.com/_.yokka._/" },
   { name: "Facebook", icon: "👍", url: "https://www.facebook.com/yohan.senadheera.7/" },
@@ -42,18 +39,6 @@ export const socials = [
   { name: "Medium", icon: "✍", url: "https://medium.com/@yohansenadheera" },
 ];
 
-// Travel journey shown in chill mode. Put images and videos in public/travel/
-// and reference them as "/travel/<file>". Entries with no media are hidden.
-// TODO(yohan): add your trips. Example shape:
-// {
-//   place: "Adam's Peak",
-//   date: "Feb 2025",
-//   story: "Two short sentences about the trip.",
-//   media: [
-//     { type: "image", src: "/travel/adams-peak-1.jpg", caption: "Sunrise from the top" },
-//     { type: "video", src: "/travel/adams-peak.mp4", caption: "The last steps" },
-//   ],
-// },
 export type TravelMedia = { type: "image" | "video"; src: string; caption?: string };
 export type Trip = { place: string; date: string; story: string; media: TravelMedia[] };
 export const travel: Trip[] = [];

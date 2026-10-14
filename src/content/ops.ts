@@ -1,6 +1,3 @@
-// Content for the ops-dashboard layout. Everything here is backed by a repo,
-// a pull request or a project document. Re-check PR statuses before editing.
-
 export const statusAsOf = "8 Oct 2026";
 
 export const metrics = [
@@ -113,7 +110,6 @@ export const statusLabel: Record<Contribution["status"], string> = {
   issue: "Issue",
 };
 
-// Short status badge shown on each featured project card.
 export const projectBadge: Record<string, string> = {
   "Pull-Based Multi-Cloud CI/CD Platform": "Validated on EKS + AKS",
   "PKI Certificate Automation": "Stage + prod onboarded",

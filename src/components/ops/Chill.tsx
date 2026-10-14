@@ -27,8 +27,6 @@ function SectionHead({
   );
 }
 
-/* ---------------- writing (Medium) ---------------- */
-
 export function Writing({ n }: { n: string }) {
   return (
     <section id="writing" className="ops-wrap ops-sec">
@@ -70,8 +68,6 @@ export function Writing({ n }: { n: string }) {
     </section>
   );
 }
-
-/* ---------------- kubernetes secret game ---------------- */
 
 type Line = { kind: "cmd" | "out" | "err" | "ok"; text: string };
 
@@ -128,7 +124,6 @@ export function SecretGame() {
     const c = cmd.toLowerCase().replace(/\s+/g, " ");
     out({ kind: "cmd", text: cmd });
 
-    // any confession of feelings ends up on the same blocked page
     const feelings = [
       /\b(love|luv|lv|like|want|need|adore|miss|fancy|crush on|have a crush on)\s*(you|u|ya|yu|yohan)\b/,
       /\b(i|me)\s*(❤️?|♥️?|💕|💖|😍|<3)\s*(you|u)\b/,
@@ -244,7 +239,6 @@ export function SecretGame() {
       return;
     }
 
-    // bad words get a polite, slightly cheeky reply
     const rude =
       /\b(f+u+c*k+\w*|fk|fck|wtf|stfu|sh[i1]t\w*|bullshit|crap|damn|bitch\w*|bastard|ass(hole)?|dick|piss\w*|suck(s)?|idiot|stupid|dumb|moron|loser|noob|hate you|pako|huththa|hutta|hutto|kari(ya)?|ponnaya|wesi\w*|baduwa)\b/;
     if (rude.test(c)) {
@@ -260,7 +254,6 @@ export function SecretGame() {
       return;
     }
 
-    // everything people are likely to try
     const replies: [RegExp, Line][] = [
       [
         /^(hi|hello|hey|yo|hii+)\b/,
@@ -559,8 +552,6 @@ export function SecretGame() {
     </div>
   );
 }
-
-/* ---------------- travel journey ---------------- */
 
 export function Travel() {
   const [i, setI] = useState(0);

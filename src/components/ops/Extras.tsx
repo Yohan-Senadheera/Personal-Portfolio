@@ -13,8 +13,6 @@ function SectionHead({ n, tag, title, lead }: { n: string; tag: string; title: s
   );
 }
 
-/* ---------------- values, each backed by evidence ---------------- */
-
 const values = [
   {
     icon: "⚙",
@@ -93,8 +91,6 @@ export function Values({ n }: { n: string }) {
         {values.map((v, i) => {
           const isOpen = all || open === i;
           return (
-            // The reveal class sits on a wrapper whose className never changes,
-            // because React would otherwise wipe the "on" class when the card opens.
             <div className="rv" key={v.title} style={{ transitionDelay: `${i * 0.05}s` }}>
             <button
               className={`ops-value ${isOpen ? "open" : ""}`}
@@ -121,8 +117,6 @@ export function Values({ n }: { n: string }) {
     </section>
   );
 }
-
-/* ---------------- off-call: awards, sport, leadership ---------------- */
 
 const trophies = [
   { tier: "gold", place: "Champions", title: "Inter-University Air Rifle Championship", sub: "Men's team · plus Magam Shooting Sports Colours", date: "Aug 2024" },
@@ -157,7 +151,6 @@ function TargetGame() {
     const el = ref.current;
     if (!el || shots.length >= max) return;
     const r = el.getBoundingClientRect();
-    // hand shake: the shot lands near where you click, not exactly on it
     const x = (cx - r.left) / r.width + (Math.random() - 0.5) * 0.12;
     const y = (cy - r.top) / r.height + (Math.random() - 0.5) * 0.12;
     const d = Math.hypot(x - 0.5, y - 0.5) / 0.5;
@@ -178,7 +171,6 @@ function TargetGame() {
         rot: Math.random() * 360,
         color: ["#3ddc97", "#4cc9f0", "#f5b942", "#ff6b6b", "#8c6eff"][i % 5],
       })),
-    // a fresh shower for every finished round
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [great],
   );
@@ -212,7 +204,6 @@ function TargetGame() {
           if (e.key !== "Enter" && e.key !== " ") return;
           e.preventDefault();
           const r = ref.current?.getBoundingClientRect();
-          // keyboard shots cannot aim, so they get a wider shake
           if (r) shoot(r.left + r.width * (0.5 + (Math.random() - 0.5) * 0.3), r.top + r.height * (0.5 + (Math.random() - 0.5) * 0.3));
         }}
       >

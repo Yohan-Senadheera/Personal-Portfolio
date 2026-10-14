@@ -59,8 +59,6 @@ function useInView<T extends Element>(threshold = 0.25) {
   return { ref, seen };
 }
 
-/* ---------------- top bar + pipeline rail ---------------- */
-
 function useScrollState() {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -116,8 +114,6 @@ function TopBar({ active, progress }: { active: number; progress: number }) {
     </header>
   );
 }
-
-/* ---------------- animated background: a living service mesh ---------------- */
 
 function BackgroundMesh() {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -212,7 +208,6 @@ function BackgroundMesh() {
         return v < -20 ? v + h + 40 : v;
       };
 
-      // links
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
         for (let j = i + 1; j < nodes.length; j++) {
@@ -228,7 +223,6 @@ function BackgroundMesh() {
             ctx.stroke();
           }
         }
-        // links to the cursor
         const dx = mouse.x - a.x;
         const dy = mouse.y - py(a.y);
         const md = Math.sqrt(dx * dx + dy * dy);
@@ -241,7 +235,6 @@ function BackgroundMesh() {
         }
       }
 
-      // packets hop across the mesh
       if (packets.length < 16 && Math.random() < 0.09) {
         const a = Math.floor(Math.random() * nodes.length);
         const b = neighbour(a);
@@ -287,7 +280,6 @@ function BackgroundMesh() {
         return true;
       });
 
-      // nodes
       for (const n of nodes) {
         const y = py(n.y);
         if (n.hub) {
@@ -361,8 +353,6 @@ function BackgroundMesh() {
   );
 }
 
-/* ---------------- text that decodes itself ---------------- */
-
 function Scramble({ text, delay = 0 }: { text: string; delay?: number }) {
   const [out, setOut] = useState(text);
   useEffect(() => {
@@ -391,8 +381,6 @@ function Scramble({ text, delay = 0 }: { text: string; delay?: number }) {
   }, [text, delay]);
   return <>{out}</>;
 }
-
-/* ---------------- hero: self-typing terminal ---------------- */
 
 type TermLine = { kind: "cmd" | "out" | "fetch"; text: string };
 const script: TermLine[] = [
@@ -591,8 +579,6 @@ function Hero() {
   );
 }
 
-/* ---------------- metrics (bento + counters) ---------------- */
-
 function Counter({ value, run }: { value: string; run: boolean }) {
   const m = value.match(/^(\d+)(.*)$/);
   const target = m ? parseInt(m[1], 10) : 0;
@@ -657,8 +643,6 @@ function Metrics() {
   );
 }
 
-/* ---------------- section header ---------------- */
-
 function Head({
   n,
   tag,
@@ -683,8 +667,6 @@ function Head({
     </div>
   );
 }
-
-/* ---------------- interactive architecture ---------------- */
 
 const archInfo: Record<string, { t: string; d: string }> = {
   git: {
@@ -978,8 +960,6 @@ function Architecture() {
   );
 }
 
-/* ---------------- chaos lab (simulation) ---------------- */
-
 type Phase = "ready" | "terminating" | "pending" | "starting";
 type Pod = { id: string; phase: Phase };
 type Ev = { t: string; msg: string; kind: "kill" | "info" | "ok" | "alert" };
@@ -1153,8 +1133,6 @@ function ChaosLab() {
   );
 }
 
-/* ---------------- projects (master-detail) ---------------- */
-
 function Projects() {
   const own = profile.projects.filter((p) => !String(p.subtitle).includes("WSO2"));
   const main = own.filter((p) => p.featured);
@@ -1245,8 +1223,6 @@ function Projects() {
   );
 }
 
-/* ---------------- contributions ---------------- */
-
 function Contributions() {
   return (
     <section id="contributions" className="ops-band">
@@ -1295,8 +1271,6 @@ function Contributions() {
   );
 }
 
-/* ---------------- stack as layers ---------------- */
-
 function Stack() {
   const groups = Object.entries(profile.skills);
   return (
@@ -1331,8 +1305,6 @@ function Stack() {
     </section>
   );
 }
-
-/* ---------------- experience ---------------- */
 
 function Experience() {
   const work = profile.experience.filter((e) => e.type === "work" || e.type === "teaching");
@@ -1451,8 +1423,6 @@ function Experience() {
   );
 }
 
-/* ---------------- contact ---------------- */
-
 function Contact() {
   return (
     <section id="contact" className="ops-wrap ops-sec">
@@ -1549,8 +1519,6 @@ function Contact() {
     </section>
   );
 }
-
-/* ---------------- page ---------------- */
 
 export default function Index() {
   const { active, progress } = useScrollState();

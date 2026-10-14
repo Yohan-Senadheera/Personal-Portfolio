@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-/* ---------------- photo with an orbit of the tools I use ---------------- */
-
 const orbit = ["Kubernetes", "Terraform", "Argo", "AWS", "Azure", "Helm", "Prometheus", "Linux"];
 
 export function ProfilePhoto() {
@@ -38,8 +36,6 @@ export function ProfilePhoto() {
     </div>
   );
 }
-
-/* ---------------- open to work, with the roles ---------------- */
 
 const roles = ["Site Reliability Engineering", "DevOps", "Cloud Infrastructure"];
 
