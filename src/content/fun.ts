@@ -34,8 +34,7 @@ export const medium = {
   ],
 };
 
-// Unlocked by the Kubernetes secret game in chill mode.
-// TODO(yohan): confirm the WhatsApp number.
+// Unlocked by the Kubernetes secret game in the Off-call section.
 export const socials = [
   { name: "Instagram", icon: "📸", url: "https://www.instagram.com/_.yokka._/" },
   { name: "Facebook", icon: "👍", url: "https://www.facebook.com/yohan.senadheera.7/" },

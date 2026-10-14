@@ -2,7 +2,7 @@ import "@/ops.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { profile } from "@/content/profile";
 import { OffCall, Values } from "@/components/ops/Extras";
-import { SecretGame, Travel, Writing } from "@/components/ops/Chill";
+import { SecretGame, Writing } from "@/components/ops/Chill";
 import { OpenToWork } from "@/components/ops/Badge";
 import { FileDown, Github, Linkedin } from "lucide-react";
 import { medium } from "@/content/fun";
@@ -1592,7 +1592,6 @@ export default function Index() {
         <Stack />
         <OffCall n="08">
           <SecretGame />
-          <Travel />
         </OffCall>
         <Contact />
       </main>

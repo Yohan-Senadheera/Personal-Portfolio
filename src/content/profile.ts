@@ -96,7 +96,9 @@ export const profile = {
         "Designed the pull-based architecture, wrote a generator that produces dispatcher, executor and sensor files from one pipeline registry, replaced 50+ inline sed-based secret injections with External Secrets Operator, and wrote the Terraform modules (multi-AZ, replicated workflow controllers and NATS) for the control and data planes. Ran the knowledge-transfer session and wrote the handover document.",
       result:
         "Validated on EKS and AKS. Argo Terraform modules for Azure and AWS are submitted to WSO2's public repositories and in review.",
-      links: { repo: "https://github.com/wso2/azure-terraform-modules/pull/224" },
+      links: {
+        repo: "https://github.com/wso2/azure-terraform-modules/pull/224",
+      },
       featured: true,
     },
     {
@@ -120,7 +122,9 @@ export const profile = {
         "Built the Bash and Azure CLI pipeline that generates CSRs, triggers the central CA pipeline across organisations, polls it to completion and uploads the signed certificate to the key vault. Designed cross-organisation trust with Workload Identity Federation in place of personal access tokens, using separate least-privilege identities. Contributed the authentication and authorisation Terraform modules to WSO2's public Azure module library (PRs #217, #221, #226, merged).",
       result:
         "Stage and production onboarded; static personal access tokens removed from the signing workflow.",
-      links: { repo: "https://github.com/wso2/azure-terraform-modules/pull/226" },
+      links: {
+        repo: "https://github.com/wso2/azure-terraform-modules/pull/226",
+      },
       featured: true,
     },
     {
@@ -144,7 +148,9 @@ export const profile = {
         "Built and deployed the service and the monitoring stack, wrote the alert rules and runbooks, and ran the failure experiments to confirm recovery.",
       result:
         "Self-healing and alerting verified by chaos experiments. Next: SLOs with burn-rate alerts, Loki logs and an automated chaos runner.",
-      links: { repo: "https://github.com/Yohan-Senadheera/cloud-reliability-platform" },
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/cloud-reliability-platform",
+      },
       featured: true,
     },
     {
@@ -189,7 +195,9 @@ export const profile = {
         "Designed and implemented containerized network function architecture with end-to-end monitoring and edge deployment strategy",
       result:
         "Fully operational cloud-native edge networking testbed with comprehensive observability",
-      links: { repo: "https://github.com/Yohan-Senadheera/mini-5g-edge-testbed" },
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/mini-5g-edge-testbed",
+      },
       featured: false,
     },
     {
@@ -221,7 +229,9 @@ export const profile = {
       whatIDid:
         "Developed production rate tracking page with real-time monitoring and bottleneck detection",
       result: "Successfully deployed for manufacturing process optimization",
-      links: { repo: "https://github.com/Yohan-Senadheera/e20-co227-MONA-Dashboard" },
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/e20-co227-MONA-Dashboard",
+      },
       featured: false,
     },
     {
@@ -235,7 +245,9 @@ export const profile = {
       whatIDid:
         "Implemented AI modules and virtual teaching assistant integration",
       result: "Ongoing development with university LMS integration",
-      links: { repo: "https://github.com/Yohan-Senadheera/ai-feedback-tutoring-system" },
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/ai-feedback-tutoring-system",
+      },
       featured: false,
     },
     {
@@ -298,15 +310,18 @@ export const profile = {
       "STP",
       "EtherChannel",
     ],
-    Programming: ["Python", "C", "JavaScript", "React", "React Native", "Node.js"],
+    Programming: [
+      "Python",
+      "C",
+      "JavaScript",
+      "React",
+      "React Native",
+      "Node.js",
+    ],
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
   },
 
-  currentlyLearning: [
-    "Certified Kubernetes Administrator (CKA) preparation",
-    "Terraform Associate",
-    "WSO2 API Manager and Micro Integrator",
-  ],
+  currentlyLearning: ["Certified Kubernetes Administrator (CKA)"],
 
   experience: [
     {
@@ -430,8 +445,8 @@ export const profile = {
       status: "completed",
     },
     {
-      title: "Certified Kubernetes Administrator (CKA) preparation",
-      issuer: "KodeKloud course",
+      title: "Certified Kubernetes Administrator (CKA)",
+      issuer: "KodeKloud (Udemy)",
       status: "in-progress",
     },
     {

@@ -244,6 +244,22 @@ export function SecretGame() {
       return;
     }
 
+    // bad words get a polite, slightly cheeky reply
+    const rude =
+      /\b(f+u+c*k+\w*|fk|fck|wtf|stfu|sh[i1]t\w*|bullshit|crap|damn|bitch\w*|bastard|ass(hole)?|dick|piss\w*|suck(s)?|idiot|stupid|dumb|moron|loser|noob|hate you|pako|huththa|hutta|hutto|kari(ya)?|ponnaya|wesi\w*|baduwa)\b/;
+    if (rude.test(c)) {
+      const comebacks = [
+        "whoa, language! this cluster enforces a PodSecurityPolicy for that. 🧼",
+        "error: profanity is not a valid kubectl verb. try 'help'.",
+        "kubectl apply -f manners.yaml ... deployment.apps/manners created ✓",
+        "I'll pretend that was a typo. the pod is crashing, not you. 🙂",
+        "403: my cluster's RBAC doesn't grant 'rude' to anyone. not even me.",
+        "logged to /var/log/visitor-mood.log. take a breath, then try: kubectl get pods",
+      ];
+      out({ kind: "err", text: comebacks[Math.floor(Math.random() * comebacks.length)] });
+      return;
+    }
+
     // everything people are likely to try
     const replies: [RegExp, Line][] = [
       [
