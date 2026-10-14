@@ -30,7 +30,7 @@ Running a **production 5G edge network** with User Plane Functions on **Raspberr
 
 ### ☁️ **Cloud-Native Platform with Auto-Recovery**
 
-Built a Kubernetes platform where **systems heal themselves**. Containers crash? Auto-restart. Database fails? Automatic failover. Everything monitored in real-time with Prometheus & Grafana.
+Built a Kubernetes platform with readiness-gated self-healing: crashed containers restart and traffic only reaches ready pods. Monitored with Prometheus, Grafana and Alertmanager, and tested with chaos experiments and runbooks.
 
 `Kubernetes` `Docker` `Prometheus` `Grafana` `Auto-Recovery` `Linux`
 
@@ -40,7 +40,7 @@ Built a Kubernetes platform where **systems heal themselves**. Containers crash?
 
 **🏆 IESL Top 10 Finalist | 🥉 3rd Place ICIIS 2025**
 
-Built the mobile app and AWS deployment for an AI desk companion with **7-emotion detection** (95% accuracy) and Gemini AI voice interaction.
+Top contributor (174 commits) to an AI desk companion: React Native app, Firebase, AWS Rekognition and Gemini voice interaction.
 
 `React Native` `Firebase` `AWS` `Gemini AI` `IoT` `Computer Vision`
 

@@ -1,7 +1,7 @@
 export const profile = {
   name: "Yohan Senadheera",
   headline: "Computer Engineering Undergraduate",
-  tagline: "Networking • Private 5G • SE • DevOps • SRE • Edge",
+  tagline: "SRE • DevOps • Kubernetes • Cloud Infrastructure • Private 5G",
   location: "Colombo, Sri Lanka",
   university: "University of Peradeniya",
   website: "yohan-senadheera.pages.dev",
@@ -11,13 +11,13 @@ export const profile = {
   github: "https://github.com/yohan-senadheera",
   cvUrl: "/Yohan_Senadheera_CV.pdf",
 
-  summary: `Computer Engineering undergraduate and Site Reliability Engineering Intern at WSO2, with a track record of owning complex features end-to-end — translating fuzzy requirements into production-ready architecture. Independently designed a zero-inbound multi-cloud CI/CD platform and coordinated a cross-organization CA-signed PKI migration. Also hands-on with 5G network deployment, edge UPF on Raspberry Pi, and observability platforms with Prometheus/Grafana. Strong in C, Python and JavaScript with a broad core CS foundation, and has reviewed code and designs for 40+ students as an instructor.`,
+  summary: `Computer Engineering undergraduate and Site Reliability Engineering Intern at WSO2. Designed a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an instructor.`,
 
   about: {
     whatIBuild: [
       "Network systems and 5G infrastructure prototypes",
-      "Cloud-native deployments with Kubernetes & AWS",
-      "SRE platforms with observability and reliability engineering",
+      "Cloud-native platforms on Kubernetes, AWS and Azure",
+      "CI/CD, GitOps and certificate automation",
     ],
     whatICareAbout: [
       "Reliability & high availability",
@@ -33,7 +33,7 @@ export const profile = {
       {
         title: "Cloud-Native",
         description:
-          "Production experience with Docker, Kubernetes, CI/CD, and AWS services",
+          "Hands-on with Docker, Kubernetes, Helm, Terraform, CI/CD and GitOps on AWS and Azure",
       },
       {
         title: "Fast Learner",
@@ -72,96 +72,100 @@ export const profile = {
 
   projects: [
     {
-      title: "Zero-Inbound Multi-Cloud CI/CD Platform",
-      subtitle: "SRE Internship — WSO2 (Asgardeo)",
-      type: "Individual Project",
+      title: "Pull-Based Multi-Cloud CI/CD Platform",
+      subtitle: "SRE Internship — WSO2",
+      type: "Internship Project",
       timeframe: "Apr 2026 – Present",
       description:
-        "A cloud-agnostic, pull-based central control plane driving independent AWS, Azure, and on-premises data planes over Azure DevOps — architected from a fuzzy brief for resilience against single-cloud outages and rapid onboarding of new environments.",
+        "A cloud-agnostic, pull-based platform that moves deployment pipelines from Azure DevOps to Argo Workflows, Argo Events and Argo CD. Each data plane dials out to the control plane over a mutual-TLS NATS bus, so nothing is open inbound into production. Validated end to end on EKS and AKS; on-premises is planned.",
       tech: [
         "Argo Workflows",
-        "NATS JetStream",
+        "Argo Events",
+        "Argo CD",
+        "NATS",
         "Kubernetes",
         "AKS",
         "EKS",
-        "k3s",
         "Helm",
-        "OIDC",
-        "mTLS",
+        "Terraform",
+        "External Secrets Operator",
         "AWS",
         "Azure",
       ],
       whatIDid:
-        "Architected the control plane end-to-end, enforced strict security boundaries — network isolation and RBAC replacing shared admin credentials, an mTLS message bus with per-identity ACLs, and a self-hosted OIDC issuer removing static secrets — and am driving the production migration and STRIDE threat modeling to completion.",
+        "Designed the pull-based architecture, wrote a generator that produces dispatcher, executor and sensor files from one pipeline registry, replaced 50+ inline sed-based secret injections with External Secrets Operator, and wrote the Terraform modules (multi-AZ, replicated workflow controllers and NATS) for the control and data planes. Ran the knowledge-transfer session and wrote the handover document.",
       result:
-        "Zero-inbound architecture resilient to single-cloud outages; production migration in progress",
-      links: {},
+        "Validated on EKS and AKS. Argo Terraform modules for Azure and AWS are submitted to WSO2's public repositories and in review.",
+      links: { repo: "https://github.com/wso2/azure-terraform-modules/pull/224" },
       featured: true,
     },
     {
       title: "PKI Certificate Automation",
-      subtitle: "Cross-Team Technical Leadership — WSO2 (Asgardeo)",
-      type: "Cross-Team Project",
+      subtitle: "SRE Internship — WSO2",
+      type: "Internship Project",
       timeframe: "2026",
       description:
-        "Migrated certificate issuance across Asgardeo's microservices from a manual, tedious self-signing process to automated CA-signed PKI — broken into 20+ actionable pull requests across 7 repositories and taken through WSO2's formal Change Request process.",
+        "Replaced a manual, per-service self-signing process with automated CA-signed certificates across 20+ microservices, delivered as pull requests across 7 repositories and taken through WSO2's formal Change Request process.",
       tech: [
         "Terraform",
         "Azure DevOps YAML",
+        "Bash",
+        "Azure CLI",
         "Azure Key Vault",
         "Workload Identity Federation",
         "Azure RBAC",
         "GitHub",
       ],
       whatIDid:
-        "Designed and proposed the security model — cross-organization trust via Workload Identity Federation replacing personal access tokens, with least-privilege identity segmentation so no single compromised credential can execute the signing workflow — and authored reusable modules merged and released in WSO2's public Terraform library.",
+        "Built the Bash and Azure CLI pipeline that generates CSRs, triggers the central CA pipeline across organisations, polls it to completion and uploads the signed certificate to the key vault. Designed cross-organisation trust with Workload Identity Federation in place of personal access tokens, using separate least-privilege identities. Contributed the authentication and authorisation Terraform modules to WSO2's public Azure module library (PRs #217, #221, #226, merged).",
       result:
-        "Automated a manual security-sensitive process and eliminated static credentials from the signing workflow",
-      links: {},
+        "Stage and production onboarded; static personal access tokens removed from the signing workflow.",
+      links: { repo: "https://github.com/wso2/azure-terraform-modules/pull/226" },
       featured: true,
     },
     {
       title: "Cloud Reliability Platform (SRE Lab)",
-      subtitle: "Production-Style Reliability Engineering",
+      subtitle: "Kubernetes Observability and Recovery",
       type: "Individual Project",
-      timeframe: "Feb 2026 – Present",
+      timeframe: "Feb 2026",
       description:
-        "Production-style reliability engineering lab: Kubernetes + FastAPI + PostgreSQL with full observability and incident runbooks. Features dependency-aware readiness (DB-aware), Prometheus metrics + Grafana Golden Signals dashboard, alerting rules (PrometheusRule/Alertmanager), and incident simulations with recovery validation (kill API pod, DB down scenarios).",
+        "A Kubernetes platform running a containerised FastAPI service and PostgreSQL with dependency-aware readiness, Prometheus metrics, a Grafana golden-signals dashboard and Alertmanager alerting. Checked with chaos experiments (kill the API pod, take the database down) and documented in runbooks.",
       tech: [
-        "SRE",
         "Kubernetes",
-        "Prometheus",
+        "Prometheus Operator",
         "Grafana",
-        "Alerting",
+        "Alertmanager",
         "FastAPI",
         "PostgreSQL",
-        "Observability",
+        "Docker",
+        "Runbooks",
       ],
       whatIDid:
-        "Designed and implemented end-to-end SRE platform with dependency-aware health checks, comprehensive monitoring dashboards, automated alerting, and incident simulation runbooks",
+        "Built and deployed the service and the monitoring stack, wrote the alert rules and runbooks, and ran the failure experiments to confirm recovery.",
       result:
-        "Production-ready SRE platform with automated incident detection, response playbooks, and 99.9% uptime validation",
+        "Self-healing and alerting verified by chaos experiments. Next: SLOs with burn-rate alerts, Loki logs and an automated chaos runner.",
       links: { repo: "https://github.com/Yohan-Senadheera/cloud-reliability-platform" },
       featured: true,
     },
     {
       title: "Private 5G Network Implementation",
-      subtitle: "Collaboration with SLTMobitel",
+      subtitle: "Final-Year Project with SLTMobitel",
       type: "Group Project",
       timeframe: "Aug 2025 – Present",
       description:
-        "Implementing edge UPF on Raspberry Pi with actual 5G RAN to optimize 5G user-plane traffic. Team manages RAN virtualization and core server optimization for small-scale deployment.",
+        "A small-scale private 5G network: the Aether SD-Core 5G core on Kubernetes with Helm on a university server, and an edge UPF on a Raspberry Pi with a real 5G RAN to optimise user-plane traffic. Teammates handle RAN virtualisation and core tuning.",
       tech: [
-        "Raspberry Pi",
         "Kubernetes",
+        "Helm",
+        "Aether SD-Core",
+        "Raspberry Pi",
         "SDN",
         "Open vSwitch",
         "Wireshark",
-        "tcpdump",
       ],
       whatIDid:
-        "Deployed edge UPF on Raspberry Pi, configured SDN networking with Open vSwitch, performed traffic analysis with Wireshark/tcpdump",
-      result: "Ongoing industry collaboration with major telecom provider",
+        "Deployed the 5G core on Kubernetes with Helm, implemented the edge UPF on a Raspberry Pi, and analysed user-plane traffic with Wireshark and tcpdump.",
+      result: "Ongoing industry collaboration with a major telecom provider",
       links: {},
       featured: true,
     },
@@ -186,7 +190,7 @@ export const profile = {
       result:
         "Fully operational cloud-native edge networking testbed with comprehensive observability",
       links: { repo: "https://github.com/Yohan-Senadheera/mini-5g-edge-testbed" },
-      featured: true,
+      featured: false,
     },
     {
       title: "P-E-BO Desk Companion",
@@ -194,17 +198,17 @@ export const profile = {
       type: "Group Project",
       timeframe: "Dec 2024 – Jul 2025",
       description:
-        "AI desk companion with 7-emotion detection (95% accuracy) and Gemini AI voice interaction. Teammates handled hardware, Raspberry Pi, and 3D printing.",
+        "An AI desk companion robot with emotion recognition and Gemini voice interaction. Teammates handled hardware, Raspberry Pi and 3D printing.",
       tech: ["React Native", "Firebase", "AWS", "Gemini AI", "IoT"],
       whatIDid:
-        "Developed React Native mobile app, Firebase backend integration, AWS deployment, and project website",
+        "Top contributor (174 commits): React Native app with Firebase authentication and real-time sync, AWS Rekognition face recognition with S3, QR-code Wi-Fi provisioning, over-the-air updates and the project website",
       result:
         "IESL UIY Top 10, Techno 2025 Exhibit, 3rd Place at ICIIS 2025 / I-To-I",
       links: {
         repo: "https://github.com/Yohan-Senadheera/e20-3yp-P-E-BO-Desk-Companion",
         demo: "https://cepdnaclk.github.io/e20-3yp-P-E-BO-Desk-Companion/",
       },
-      featured: true,
+      featured: false,
     },
     {
       title: "MONA Dashboard",
@@ -256,6 +260,7 @@ export const profile = {
       "Kubernetes",
       "Helm",
       "Argo Workflows",
+      "Argo CD",
       "Terraform",
       "AWS",
       "Azure",
@@ -267,15 +272,18 @@ export const profile = {
     "SRE & Observability": [
       "Prometheus",
       "Grafana",
+      "Alertmanager",
       "Alerting",
-      "Incident Response",
-      "Monitoring",
+      "Chaos Testing",
+      "Runbooks",
+      "Linux Troubleshooting",
     ],
     "Security & Identity": [
       "OIDC",
       "mTLS",
       "RBAC Design",
-      "STRIDE Threat Modeling",
+      "PKI & Certificates",
+      "External Secrets",
       "Workload Identity Federation",
       "Network Security",
     ],
@@ -295,17 +303,18 @@ export const profile = {
   },
 
   currentlyLearning: [
-    "WSO2 Certified Identity Server Practitioner",
-    "WSO2 Certified Integration Practitioner",
+    "Certified Kubernetes Administrator (CKA) preparation",
+    "Terraform Associate",
+    "WSO2 API Manager and Micro Integrator",
   ],
 
   experience: [
     {
       title: "SRE Intern",
-      organization: "WSO2 (Asgardeo)",
+      organization: "WSO2",
       timeframe: "Apr 2026 – Present",
       description:
-        "Owning two production platform workstreams at Asgardeo, WSO2's identity-as-a-service platform: architected a zero-inbound multi-cloud CI/CD platform, and led a cross-team migration to automated CA-signed PKI. See Projects below.",
+        "Worked on two platform workstreams: a pull-based multi-cloud CI/CD platform on Argo (validated on EKS and AKS), and automated CA-signed certificate issuance across 20+ microservices. Contributed Terraform modules to WSO2's public Azure library and issues and pull requests to upstream Argo Workflows. See Projects below.",
       type: "work",
     },
     {
@@ -328,7 +337,7 @@ export const profile = {
     {
       title: "Editor",
       organization: "Hackers' Club, University of Peradeniya",
-      timeframe: "Aug 2025 – Present",
+      timeframe: "Aug 2025 – Jul 2026",
       description:
         "Manage technical content, event coordination, and club communications for 200+ member community.",
       type: "leadership",
@@ -417,11 +426,12 @@ export const profile = {
     {
       title: "WSO2 Certified Identity Server Practitioner",
       issuer: "WSO2",
-      status: "in-progress",
+      date: "Aug 2026",
+      status: "completed",
     },
     {
-      title: "WSO2 Certified Integration Practitioner",
-      issuer: "WSO2",
+      title: "Certified Kubernetes Administrator (CKA) preparation",
+      issuer: "KodeKloud course",
       status: "in-progress",
     },
     {
@@ -451,6 +461,7 @@ export const profile = {
     {
       title: "CCNA 1, 2 & 3",
       issuer: "Cisco Networking Academy",
+      date: "Aug 2026",
       status: "completed",
     },
     {

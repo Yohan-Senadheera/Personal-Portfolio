@@ -76,10 +76,11 @@ export function Hero() {
 
           {/* Summary */}
           <p className="text-muted-foreground leading-[1.75] mb-8 max-w-2xl">
-            SRE Intern at WSO2, architecting a zero-inbound multi-cloud CI/CD
-            platform and leading a cross-team migration to automated CA-signed
-            PKI. Also hands-on with 5G network deployment, edge UPF on
-            Raspberry Pi, and observability platforms with Prometheus/Grafana.
+            SRE Intern at WSO2: designed a pull-based multi-cloud CI/CD
+            platform on Argo and Kubernetes (validated on EKS and AKS) and
+            automated CA-signed certificate issuance across 20+ microservices.
+            Also built a Kubernetes reliability lab with Prometheus/Grafana and
+            a private 5G core on Kubernetes.
           </p>
 
           {/* CTAs */}
