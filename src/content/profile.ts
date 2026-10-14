@@ -201,14 +201,14 @@ export const profile = {
         "An AI desk companion robot with emotion recognition and Gemini voice interaction. Teammates handled hardware, Raspberry Pi and 3D printing.",
       tech: ["React Native", "Firebase", "AWS", "Gemini AI", "IoT"],
       whatIDid:
-        "Top contributor (174 commits): React Native app with Firebase authentication and real-time sync, AWS Rekognition face recognition with S3, QR-code Wi-Fi provisioning, over-the-air updates and the project website",
+        "Developed the React Native app with Firebase authentication and real-time sync, AWS Rekognition face recognition with S3, QR-code Wi-Fi provisioning, over-the-air updates and the project website",
       result:
-        "IESL UIY Top 10, Techno 2025 Exhibit, 3rd Place at ICIIS 2025 / I-To-I",
+        "IESL Undergraduate Inventor of the Year Top 10 finalist, 3rd place at ICIIS 2025 (I-To-I), and exhibited at Techno 2025.",
       links: {
         repo: "https://github.com/Yohan-Senadheera/e20-3yp-P-E-BO-Desk-Companion",
         demo: "https://cepdnaclk.github.io/e20-3yp-P-E-BO-Desk-Companion/",
       },
-      featured: false,
+      featured: true,
     },
     {
       title: "MONA Dashboard",
@@ -314,7 +314,7 @@ export const profile = {
       organization: "WSO2",
       timeframe: "Apr 2026 – Present",
       description:
-        "Worked on two platform workstreams: a pull-based multi-cloud CI/CD platform on Argo (validated on EKS and AKS), and automated CA-signed certificate issuance across 20+ microservices. Contributed Terraform modules to WSO2's public Azure library and issues and pull requests to upstream Argo Workflows. See Projects below.",
+        "Worked on two platform workstreams: a pull-based multi-cloud CI/CD platform on Argo (validated on EKS and AKS), and automated CA-signed certificate issuance across 20+ microservices. Contributed Terraform modules to WSO2's public Azure library and issues and pull requests to upstream Argo Workflows. Open a project below for the details.",
       type: "work",
     },
     {
