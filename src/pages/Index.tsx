@@ -1447,7 +1447,7 @@ function Contact() {
             </div>
             <div className="ops-cmd">$ echo $PHONE</div>
             <div>{profile.phone[0]}</div>
-            <div className="ops-cmd">$ open github linkedin medium</div>
+            <div className="ops-cmd">$ open github linkedin medium website</div>
             <div>
               <a
                 href={profile.github}
