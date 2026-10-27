@@ -1,4 +1,4 @@
-export const statusAsOf = "8 Oct 2026";
+export const statusAsOf = "27 Oct 2026";
 
 export const metrics = [
   {

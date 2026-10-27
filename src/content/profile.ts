@@ -1,17 +1,17 @@
 export const profile = {
   name: "Yohan Senadheera",
-  headline: "Computer Engineering Undergraduate",
+  headline: "Computer Engineering Graduate",
   tagline: "SRE • DevOps • Kubernetes • Cloud Infrastructure • Private 5G",
   location: "Colombo, Sri Lanka",
   university: "University of Peradeniya",
-  website: "yohan-senadheera.pages.dev",
+  website: "yohan.is-a.dev",
   email: "yohansenadheera@gmail.com",
   phone: ["+94 76 802 2347", "+94 72 579 2197"],
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/yohan-senadheera",
   cvUrl: "/Yohan_Senadheera_CV.pdf",
 
-  summary: `Computer Engineering undergraduate and Site Reliability Engineering Intern at WSO2. Designed a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an instructor.`,
+  summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an instructor.`,
 
   about: {
     whatIBuild: [
@@ -75,7 +75,7 @@ export const profile = {
       title: "Pull-Based Multi-Cloud CI/CD Platform",
       subtitle: "SRE Internship — WSO2",
       type: "Internship Project",
-      timeframe: "Apr 2026 – Present",
+      timeframe: "Apr 2026 – Oct 2026",
       description:
         "A cloud-agnostic, pull-based platform that moves deployment pipelines from Azure DevOps to Argo Workflows, Argo Events and Argo CD. Each data plane dials out to the control plane over a mutual-TLS NATS bus, so nothing is open inbound into production. Validated end to end on EKS and AKS; on-premises is planned.",
       tech: [
@@ -327,7 +327,7 @@ export const profile = {
     {
       title: "SRE Intern",
       organization: "WSO2",
-      timeframe: "Apr 2026 – Present",
+      timeframe: "Apr 2026 – Oct 2026",
       description:
         "Worked on two platform workstreams: a pull-based multi-cloud CI/CD platform on Argo (validated on EKS and AKS), and automated CA-signed certificate issuance across 20+ microservices. Contributed Terraform modules to WSO2's public Azure library and issues and pull requests to upstream Argo Workflows. Open a project below for the details.",
       type: "work",
@@ -499,7 +499,7 @@ export const profile = {
     {
       degree: "B.Sc. Eng. (Hons) in Computer Engineering",
       institution: "University of Peradeniya",
-      timeframe: "Feb 2022 – Present",
+      timeframe: "Feb 2022 – Oct 2026",
       courses: [
         "Advanced Communication Networks (SDN, Docker)",
         "Network Security",
@@ -523,8 +523,8 @@ export const profile = {
   ],
 
   contact: {
-    cta: "Currently working as an SRE Intern at WSO2.",
-    availability: "SRE Intern at WSO2",
+    cta: "Open to DevOps, SRE and cloud engineering roles. Available immediately.",
+    availability: "Open to DevOps / SRE roles",
   },
 
   navigation: [

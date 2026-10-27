@@ -53,7 +53,7 @@ export function About() {
             variants={itemVariants}
             className="text-muted-foreground mb-10 max-w-3xl leading-relaxed"
           >
-            I'm a computer engineering undergraduate who builds and automates
+            I'm a computer engineering graduate who builds and automates
             cloud infrastructure — from a pull-based multi-cloud CI/CD platform
             to automated certificate issuance — plus private 5G on Kubernetes.
             I care about reliability, security, and learning how systems

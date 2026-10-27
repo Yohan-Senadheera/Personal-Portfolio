@@ -396,7 +396,7 @@ const script: TermLine[] = [
 ];
 
 const fetchInfo: [string, string][] = [
-  ["Role", "SRE Intern @ WSO2"],
+  ["Role", "Ex-SRE Intern @ WSO2"],
   ["Degree", "BSc Eng, Computer Eng."],
   ["Uni", "University of Peradeniya"],
   ["Focus", "Kubernetes · CI/CD · IaC"],
@@ -751,7 +751,7 @@ function Architecture() {
         <span className="ops-eyebrow">featured build</span>
         <h3>A pull-based CI/CD platform where nothing opens inbound into production</h3>
         <p>
-          Designed at WSO2 to move deployment pipelines from Azure DevOps to Argo.
+          Worked on at WSO2 to move deployment pipelines from Azure DevOps to Argo.
           Hover or tap any component to see what it does.
         </p>
       </div>
@@ -1473,6 +1473,15 @@ function Contact() {
                 rel="noopener noreferrer"
               >
                 medium.com/@yohansenadheera
+              </a>
+            </div>
+            <div>
+              <a
+                href="https://yohan.is-a.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                yohan.is-a.dev
               </a>
             </div>
             <div className="ops-cmd">
