@@ -547,7 +547,7 @@ function Hero() {
         </p>
         <div className="ops-now" aria-label="Right now">
           <span className="t">now</span>
-          <span>final year, Computer Engineering</span>
+          <span>Computer Engineering graduate</span>
           <span>preparing for CKA</span>
           <span>open to SRE · DevOps · Cloud roles</span>
         </div>
