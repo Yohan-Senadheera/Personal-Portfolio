@@ -43,7 +43,7 @@ export function ProfileCard() {
           <div className="text-lg font-semibold">Yohan Senadheera</div>
 
           <div className="text-sm text-muted-foreground leading-snug">
-            Computer Engineering Undergraduate <br />
+            Computer Engineering Graduate <br />
             Focused on Networking, Software Engineering and Devops
           </div>
 
@@ -51,7 +51,7 @@ export function ProfileCard() {
           <div className="mt-4 space-y-2 text-xs">
             <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2">
               <span className="text-muted-foreground">Status</span>
-              <span className="text-foreground font-medium">Final Year UG</span>
+              <span className="text-foreground font-medium">Graduate</span>
             </div>
 
             <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2">
@@ -60,9 +60,9 @@ export function ProfileCard() {
             </div>
 
             <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/10 px-3 py-2">
-              <span className="text-muted-foreground">Current role</span>
+              <span className="text-muted-foreground">Previous role</span>
               <span className="text-primary font-semibold">
-                SRE Intern at WSO2
+                Ex-SRE Intern at WSO2
               </span>
             </div>
           </div>
