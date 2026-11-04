@@ -46,7 +46,7 @@ const values = [
     title: "Fix it at the source",
     line: "When a tool has a gap, I report it and send the fix upstream.",
     evidence: [
-      "Filed two issues and opened two pull requests to Argo Workflows; the docs fix is approved.",
+      "Filed two issues and opened two pull requests to Argo Workflows; the docs fix is merged.",
       "Contributed Terraform modules to WSO2's public module libraries (3 merged).",
     ],
   },

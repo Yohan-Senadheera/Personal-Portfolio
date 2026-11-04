@@ -20,7 +20,7 @@ export const metrics = [
   {
     value: "9",
     label: "public contributions",
-    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 2 PRs + 2 issues upstream in Argo Workflows",
+    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 2 PRs (1 merged) + 2 issues upstream in Argo Workflows",
   },
   {
     value: "4",
@@ -77,7 +77,7 @@ export const contributions: Contribution[] = [
     repo: "argoproj/argo-workflows",
     ref: "#17131",
     title: "docs: SSO group claims are not revalidated mid-session",
-    status: "approved",
+    status: "merged",
     url: "https://github.com/argoproj/argo-workflows/pull/17131",
   },
   {
