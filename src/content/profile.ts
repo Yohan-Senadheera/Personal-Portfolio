@@ -321,7 +321,7 @@ export const profile = {
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
   },
 
-  currentlyLearning: ["Certified Kubernetes Administrator (CKA)"],
+  currentlyLearning: ["CKA exam preparation"],
 
   experience: [
     {
@@ -445,9 +445,10 @@ export const profile = {
       status: "completed",
     },
     {
-      title: "Certified Kubernetes Administrator (CKA)",
-      issuer: "KodeKloud (Udemy)",
-      status: "in-progress",
+      title: "Certified Kubernetes Administrator (CKA) course",
+      issuer: "KodeKloud",
+      date: "Nov 2026",
+      status: "completed",
     },
     {
       title: "Docker / Kubernetes for Beginners",
