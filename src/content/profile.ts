@@ -336,7 +336,7 @@ export const profile = {
     ],
     Programming: [
       "Python",
-      "Java (learning)",
+      "Java",
       "C",
       "JavaScript",
       "React",
