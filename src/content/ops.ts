@@ -114,7 +114,8 @@ export const projectBadge: Record<string, string> = {
   "Pull-Based Multi-Cloud CI/CD Platform": "Validated on EKS + AKS",
   "PKI Certificate Automation": "Stage + prod onboarded",
   "Cloud Reliability Platform (SRE Lab)": "Chaos-tested lab",
-  "Private 5G Network Implementation": "Ongoing",
+  PageRewind: "In progress",
+  "Private 5G Network Implementation": "Industry project",
   "P-E-BO Desk Companion": "Award-winning",
 };
 

@@ -128,7 +128,7 @@ const trophies = [
 ];
 
 const roles = [
-  { stat: "40+", unit: "students", title: "Casual Instructor", org: "Dept. of Computer Engineering, Peradeniya", when: "Nov 2024 – Aug 2025" },
+  { stat: "40+", unit: "students", title: "Undergraduate Teaching Assistant", org: "Dept. of Computer Engineering, Peradeniya", when: "Nov 2024 – Aug 2025" },
   { stat: "200+", unit: "members", title: "Editor", org: "Hackers' Club, Peradeniya", when: "Aug 2025 – Jul 2026" },
   { stat: "3", unit: "roles", title: "Brand Manager · OC Vice President · Team Leader", org: "AIESEC in Kandy", when: "Feb 2022 – Nov 2024" },
   { stat: "Rs", unit: "finances", title: "Finance Vice Chair", org: "Career Compass, IEEE Young Professionals Sri Lanka", when: "Apr – Sep 2025" },

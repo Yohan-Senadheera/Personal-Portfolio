@@ -10,7 +10,7 @@ export const profile = {
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/yohan-senadheera",
 
-  summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an instructor.`,
+  summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an undergraduate teaching assistant.`,
 
   about: {
     whatIBuild: [
@@ -153,12 +153,37 @@ export const profile = {
       featured: true,
     },
     {
+      title: "PageRewind",
+      subtitle: "Open-Source On-Call and Incident Tool for Kubernetes",
+      type: "Individual Project",
+      timeframe: "Nov 2026 – Present",
+      description:
+        "A self-hosted on-call and incident tool for Kubernetes teams. Each page arrives with the recent logs from the affected workload and a timeline of what changed just before the alert, so the on-call engineer starts with the evidence. Planned as Java (Spring Boot) microservices with Alertmanager intake, a Helm chart and Docker Compose install, and an AWS reference deployment with Terraform, GitHub Actions and Argo CD. Early stage: the plan and architecture are written and the repository is started; the build is in progress.",
+      tech: [
+        "Java",
+        "Spring Boot",
+        "Kubernetes",
+        "Alertmanager",
+        "Prometheus",
+        "Terraform",
+        "Argo CD",
+        "AWS",
+      ],
+      whatIDid:
+        "Wrote the product plan and architecture (services, data flow and delivery pipeline) and set up the open-source repository. Building the first services next.",
+      result: "In progress. Nothing is released yet.",
+      links: {
+        repo: "https://github.com/Yohan-Senadheera/pagerewind",
+      },
+      featured: true,
+    },
+    {
       title: "Private 5G Network Implementation",
       subtitle: "Final-Year Project with SLTMobitel",
       type: "Group Project",
-      timeframe: "Aug 2025 – Present",
+      timeframe: "Aug 2025 – Mar 2026",
       description:
-        "A small-scale private 5G network: the Aether SD-Core 5G core on Kubernetes with Helm on a university server, and an edge UPF on a Raspberry Pi with a real 5G RAN to optimise user-plane traffic. Teammates handle RAN virtualisation and core tuning.",
+        "A small-scale private 5G network: the Aether SD-Core 5G core on Kubernetes with Helm on a university server, and an edge UPF on a Raspberry Pi with a real 5G RAN to optimise user-plane traffic. Teammates handled RAN virtualisation and core tuning.",
       tech: [
         "Kubernetes",
         "Helm",
@@ -170,7 +195,7 @@ export const profile = {
       ],
       whatIDid:
         "Deployed the 5G core on Kubernetes with Helm, implemented the edge UPF on a Raspberry Pi, and analysed user-plane traffic with Wireshark and tcpdump.",
-      result: "Ongoing industry collaboration with a major telecom provider",
+      result: "Industry collaboration with SLT-Mobitel",
       links: {},
       featured: true,
     },
@@ -311,6 +336,7 @@ export const profile = {
     ],
     Programming: [
       "Python",
+      "Java (learning)",
       "C",
       "JavaScript",
       "React",
@@ -320,7 +346,7 @@ export const profile = {
     "Databases & Tools": ["SQL", "Firebase", "MongoDB", "Linux Administration"],
   },
 
-  currentlyLearning: ["CKA exam preparation"],
+  currentlyLearning: ["CKA exam preparation", "Java and Spring Boot (PageRewind)"],
 
   experience: [
     {
@@ -332,7 +358,7 @@ export const profile = {
       type: "work",
     },
     {
-      title: "Casual Instructor",
+      title: "Undergraduate Teaching Assistant",
       subtitle: "Database Systems / Programming Methodology",
       organization: "Dept. of Computer Engineering, University of Peradeniya",
       timeframe: "Nov 2024 – Aug 2025",
@@ -446,6 +472,18 @@ export const profile = {
     {
       title: "Certified Kubernetes Administrator (CKA) course",
       issuer: "KodeKloud",
+      date: "Nov 2026",
+      status: "completed",
+    },
+    {
+      title: "DevOps Foundations: Site Reliability Engineering",
+      issuer: "LinkedIn Learning",
+      date: "Nov 2026",
+      status: "completed",
+    },
+    {
+      title: "Hands-On Linux: Build Real Command Line Confidence from Scratch",
+      issuer: "LinkedIn Learning",
       date: "Nov 2026",
       status: "completed",
     },
