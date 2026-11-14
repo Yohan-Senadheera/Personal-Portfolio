@@ -488,6 +488,12 @@ export const profile = {
       status: "completed",
     },
     {
+      title: "AWS Knowledge: Cloud Essentials (training badge)",
+      issuer: "Amazon Web Services (AWS)",
+      date: "Nov 2026",
+      status: "completed",
+    },
+    {
       title: "Docker / Kubernetes for Beginners",
       issuer: "KodeKloud (Coursera)",
       date: "Mar 2026",
