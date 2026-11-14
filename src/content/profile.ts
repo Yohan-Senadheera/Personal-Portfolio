@@ -203,9 +203,9 @@ export const profile = {
       title: "Mini 5G Edge Network Testbed (Cloud-Native Networking)",
       subtitle: "5G-Inspired Edge Networking",
       type: "Individual Project",
-      timeframe: "Jan 2026 – Present",
+      timeframe: "Jan 2026",
       description:
-        "5G-inspired, cloud-native edge networking testbed with containerized NF-style components and real-time observability. Features containerized 'network function' style gateway + app, Prometheus + Grafana monitoring (host + container metrics). Roadmap: Kubernetes → AWS deployment.",
+        "5G-inspired, cloud-native edge networking testbed with containerized NF-style components and real-time observability. Features containerized 'network function' style gateway + app, Prometheus + Grafana monitoring (host + container metrics).",
       tech: [
         "Networking",
         "Cloud-Native",
@@ -262,13 +262,13 @@ export const profile = {
       title: "Personalized AI Feedback for Higher Education",
       subtitle: "Final Year Project",
       type: "Group Project",
-      timeframe: "Aug 2024 – Present",
+      timeframe: "Aug 2024 – Oct 2026",
       description:
-        "Personalized adaptive learning system with virtual teaching assistant. Team handles data processing, model training, and LMS integration.",
+        "Personalized adaptive learning system with virtual teaching assistant. The team handled data processing, model training, and LMS integration.",
       tech: ["Python", "Node.js", "GPT-3.5", "Moodle"],
       whatIDid:
         "Implemented AI modules and virtual teaching assistant integration",
-      result: "Ongoing development with university LMS integration",
+      result: "Completed as the final-year project, with university LMS integration",
       links: {
         repo: "https://github.com/Yohan-Senadheera/ai-feedback-tutoring-system",
       },
@@ -363,7 +363,7 @@ export const profile = {
       organization: "Dept. of Computer Engineering, University of Peradeniya",
       timeframe: "Nov 2024 – Aug 2025",
       description:
-        "Taught 40+ students database systems and C programming through lab sessions and mentoring.",
+        "Taught and mentored 40+ students in database systems and C programming. Reviewed their code and designs in lab sessions and one-to-one meetings, and gave direct, constructive feedback before they started implementing.",
       type: "teaching",
     },
     {

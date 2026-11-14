@@ -391,9 +391,11 @@ const script: TermLine[] = [
   { kind: "out", text: "multicloud-cicd        1/1    Completed" },
   { kind: "out", text: "pki-cert-automation    1/1    Completed" },
   { kind: "out", text: "reliability-lab        1/1    Running" },
-  { kind: "out", text: "private-5g-core        1/1    Running" },
+  { kind: "out", text: "private-5g-core        1/1    Completed" },
+  { kind: "out", text: "sre-linux-courses      1/1    Completed" },
   { kind: "out", text: "cka-course             1/1    Completed" },
   { kind: "out", text: "cka-exam               0/1    ContainerCreating" },
+  { kind: "out", text: "pagerewind             0/1    ContainerCreating" },
 ];
 
 const fetchInfo: [string, string][] = [
