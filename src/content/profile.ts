@@ -9,7 +9,6 @@ export const profile = {
   phone: ["+94 76 802 2347", "+94 72 579 2197"],
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/yohan-senadheera",
-  cvUrl: "/Yohan_Senadheera_CV.pdf",
 
   summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an instructor.`,
 

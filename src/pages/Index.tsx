@@ -4,7 +4,7 @@ import { profile } from "@/content/profile";
 import { OffCall, Values } from "@/components/ops/Extras";
 import { SecretGame, Writing } from "@/components/ops/Chill";
 import { OpenToWork } from "@/components/ops/Badge";
-import { FileDown, Github, Linkedin } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import { medium } from "@/content/fun";
 import {
   contributions,
@@ -553,10 +553,7 @@ function Hero() {
           <span>open to SRE · DevOps · Cloud roles</span>
         </div>
         <div className="ops-cta">
-          <a className="ops-btn primary" href={profile.cvUrl} target="_blank" rel="noopener noreferrer">
-            <FileDown size={17} aria-hidden="true" /> CV
-          </a>
-          <a className="ops-btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer">
+          <a className="ops-btn primary" href={profile.github} target="_blank" rel="noopener noreferrer">
             <Github size={17} aria-hidden="true" /> GitHub
           </a>
           <a className="ops-btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">
@@ -1502,15 +1499,7 @@ function Contact() {
             secret. <a href="#secret">Unlock them in the side quest →</a>
           </p>
           <div className="ops-cta">
-            <a
-              className="ops-btn primary"
-              href={profile.cvUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download CV
-            </a>
-            <a className="ops-btn" href={`mailto:${profile.email}`}>
+            <a className="ops-btn primary" href={`mailto:${profile.email}`}>
               Send an email
             </a>
           </div>
