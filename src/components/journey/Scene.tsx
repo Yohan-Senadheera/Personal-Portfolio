@@ -498,16 +498,6 @@ function Rack() {
         <planeGeometry args={[1.06, 2.0]} />
         <meshBasicMaterial color={new THREE.Color(CYAN).multiplyScalar(2.6)} transparent opacity={0} toneMapped={false} />
       </mesh>
-      <group ref={door} position={[-0.62, 1.15, 0.545]}>
-        <mesh position={[0.62, 0, 0]}>
-          <boxGeometry args={[1.22, 2.24, 0.015]} />
-          <meshPhysicalMaterial color="#8fa3b8" roughness={0.04} metalness={0.1} transparent opacity={0.12} clearcoat={1} />
-        </mesh>
-        <mesh position={[1.18, 0, 0.02]}>
-          <boxGeometry args={[0.02, 0.4, 0.03]} />
-          <meshStandardMaterial color="#c9ced6" metalness={1} roughness={0.2} />
-        </mesh>
-      </group>
       <Tag position={[0, 2.75, 0.3]} show={[1, 0.5]} tone="dark">
         <b>prod-rack-01</b>
         <span>keep scrolling to step inside</span>
