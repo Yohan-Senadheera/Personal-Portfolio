@@ -7,7 +7,7 @@ import { journey, LAST, near } from "./store";
 
 const MODEL = "/avatar/yohan.glb";
 const CLIPS = {
-  idle: "/avatar/anim/idle.fbx",
+  idle: "/avatar/anim/happy.fbx",
   greet: "/avatar/anim/greeting.fbx",
   wave: "/avatar/anim/wave.fbx",
 };
