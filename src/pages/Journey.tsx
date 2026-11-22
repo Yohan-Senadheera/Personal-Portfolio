@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { useProgress } from "@react-three/drei";
-import { CHAPTERS, journey } from "@/components/journey/store";
+import { CHAPTERS, isDark, journey } from "@/components/journey/store";
 import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 import { contributions, statusLabel } from "@/content/ops";
 import "@/journey.css";
@@ -24,6 +24,7 @@ const LINKS = {
 function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[]>) {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [dark, setDark] = useState(false);
   useEffect(() => {
     const calm =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -43,9 +44,17 @@ function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[
       const hold = 0.38;
       const eased = frac < hold ? 0 : (frac - hold) / (1 - hold);
       journey.t = i + eased;
+      // Each chapter's text fades out while the camera travels, so the flight owns the screen.
+      sections.current.forEach((el, k) => {
+        if (!el) return;
+        const o = Math.min(1, Math.max(0, 1 - (Math.abs(journey.t - k) - 0.12) / 0.28));
+        el.style.opacity = o.toFixed(3);
+        el.style.pointerEvents = o < 0.05 ? "none" : "";
+      });
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(max > 0 ? window.scrollY / max : 0);
       setActive(Math.round(journey.t));
+      setDark(isDark(journey.t));
     };
 
     let raf = 0;
@@ -69,7 +78,7 @@ function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[
       lenis?.destroy();
     };
   }, [sections]);
-  return { active, progress };
+  return { active, progress, dark };
 }
 
 function useReveal() {
@@ -134,7 +143,7 @@ function Ext({ href, children, solid }: { href: string; children: React.ReactNod
 
 export default function Journey() {
   const sections = useRef<(HTMLElement | null)[]>([]);
-  const { active, progress } = useJourneyScroll(sections);
+  const { active, progress, dark } = useJourneyScroll(sections);
   useReveal();
 
   // Deep links: /#platform, /#pagerewind ... jump straight to a chapter.
@@ -161,7 +170,7 @@ export default function Journey() {
   const issues = contributions.filter((c) => c.status === "issue").length;
 
   return (
-    <div className="j-root">
+    <div className={`j-root ${dark ? "is-dark" : ""}`}>
       <div className="j-stage" aria-hidden>
         <CanvasErrorBoundary fallback={<div className="j-stage__fallback" />}>
           <Suspense fallback={null}>

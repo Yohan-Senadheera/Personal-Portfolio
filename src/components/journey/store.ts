@@ -24,3 +24,8 @@ export function near(i: number, width = 0.75) {
   const d = Math.abs(journey.t - i);
   return d >= width ? 0 : 1 - d / width;
 }
+
+/** The tunnel, night city and galaxy are dark: the UI switches to light text there. */
+export function isDark(t: number) {
+  return (t > 1.25 && t < 1.82) || (t > 2.45 && t < 4.5);
+}
