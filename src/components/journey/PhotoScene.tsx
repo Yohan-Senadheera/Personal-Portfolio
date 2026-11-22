@@ -16,16 +16,18 @@ const name = (i: number) => `K${String(i).padStart(2, "0")}`;
 type Cut = { out: [number, number]; in: [number, number]; dip?: number; flash?: number };
 // Anchors in image coordinates (x right, y down, 0..1).
 const CUTS: Cut[] = [
-  { out: [0.66, 0.46], in: [0.505, 0.5] }, //  K00 city        -> K01 tower
-  { out: [0.505, 0.5], in: [0.62, 0.55] }, //  K01 lit window  -> K02 office
-  { out: [0.9, 0.63], in: [0.7, 0.6] }, //     K02 laptop      -> K03 screen
-  { out: [0.7, 0.59], in: [0.5, 0.49], flash: 0.25 }, //  K03 screen -> K04 data centre
-  { out: [0.5, 0.48], in: [0.5, 0.5], flash: 0.6 }, //    K04 aisle end -> K05 sunrise
-  { out: [0.5, 0.82], in: [0.54, 0.7], dip: 0.9 }, //     K05 clouds below -> K06 3 AM phone
-  { out: [0.54, 0.7], in: [0.45, 0.83] }, //   K06 phone       -> K07 phone on the desk at dawn
-  { out: [0.48, 0.47], in: [0.36, 0.67] }, //  K07 monitor     -> K08 lab robot
-  { out: [0.55, 0.2], in: [0.35, 0.25], flash: 0.2 }, //  K08 trees -> K09 campus
-  { out: [0.75, 0.1], in: [0.25, 0.2] }, //    K09 sky         -> K10 rooftop
+  // Every cut flies into a real object that the next still also has (the Lotus Tower, the lit window,
+  // the server glow, the sun, the phone...), and the next still opens from inside that same object.
+  { out: [0.5, 0.42], in: [0.18, 0.62] }, //                K00 Lotus Tower         -> K01 the same tower, now in the distance
+  { out: [0.505, 0.5], in: [0.73, 0.3] }, //                K01 the lit window      -> K02 him, inside that window
+  { out: [0.29, 0.47], in: [0.34, 0.4] }, //                K02 Lotus Tower outside -> K03 the same tower over his shoulder
+  { out: [0.66, 0.62], in: [0.5, 0.47], flash: 0.3 }, //    K03 green graphs        -> K04 the green-lit aisle and its glow
+  { out: [0.5, 0.47], in: [0.5, 0.49], flash: 0.55 }, //    K04 glow at the aisle end -> K05 the sun
+  { out: [0.5, 0.49], in: [0.53, 0.7], dip: 0.94 }, //      K05 the sun sets to black -> K06 the 3 AM phone
+  { out: [0.53, 0.7], in: [0.45, 0.83] }, //                K06 the phone           -> K07 the same phone, quiet at dawn
+  { out: [0.1, 0.35], in: [0.45, 0.25] }, //                K07 morning window      -> K08 the lab windows
+  { out: [0.48, 0.22], in: [0.3, 0.2] }, //                 K08 the trees outside   -> K09 the campus trees
+  { out: [0.55, 0.1], in: [0.3, 0.12] }, //                 K09 the morning sky     -> K10 the sunset sky
 ];
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
@@ -53,7 +55,7 @@ const FRAG = /* glsl */ `
   uniform vec2 aspect;       // x: screen aspect, y: image aspect
   uniform vec2 focusAB;      // horizontal focus for A and B
   uniform vec2 anchorA, anchorB;
-  uniform float scaleA, scaleB, mixB, blurA, blurB, dip, flash, time;
+  uniform float scaleA, scaleB, zoomA, zoomB, mixB, blurA, blurB, dip, flash, time;
   uniform vec2 sway;         // camera offset (mouse + drift)
 
   vec2 cover(vec2 uv, float focus) {
@@ -65,11 +67,12 @@ const FRAG = /* glsl */ `
     return r;
   }
 
-  vec3 shot(sampler2D t, sampler2D d, vec2 base, vec2 anchor, float scale, float blur) {
+  vec3 shot(sampler2D t, sampler2D d, vec2 base, vec2 anchor, float scale, float zoom, float blur) {
     // image coords have y down; textures have y up
     vec2 a = vec2(anchor.x, 1.0 - anchor.y);
     float depth = texture2D(d, base).r;                       // 1 = near
-    float s = 1.0 + (scale - 1.0) * (0.55 + 0.9 * depth);      // near things rush past faster
+    // slow dolly: near things grow a little faster (depth); the deep fly-in is even so nothing warps
+    float s = (1.0 + (scale - 1.0) * (0.55 + 0.9 * depth)) * zoom;
     vec2 p = a + (base - a) / s + sway * (depth - 0.35);
     vec3 c = vec3(0.0);
     for (int k = 0; k < 6; k++) {                             // zoom blur toward the anchor while moving fast
@@ -83,10 +86,10 @@ const FRAG = /* glsl */ `
   float grain(vec2 uv) { return fract(sin(dot(uv * 1000.0 + time, vec2(12.9898, 78.233))) * 43758.5453); }
 
   void main() {
-    vec3 a = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, blurA);
+    vec3 a = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA);
     vec3 col = a;
     if (mixB > 0.0) {
-      vec3 b = shot(tB, dB, cover(vUv, focusAB.y), anchorB, scaleB, blurB);
+      vec3 b = shot(tB, dB, cover(vUv, focusAB.y), anchorB, scaleB, zoomB, blurB);
       col = mix(a, b, mixB);
     }
     col *= 1.0 - dip;
@@ -143,6 +146,8 @@ function Photos() {
           anchorB: { value: new THREE.Vector2(0.5, 0.5) },
           scaleA: { value: 1 },
           scaleB: { value: 1 },
+          zoomA: { value: 1 },
+          zoomB: { value: 1 },
           mixB: { value: 0 },
           blurA: { value: 0 },
           blurB: { value: 0 },
@@ -184,17 +189,23 @@ function Photos() {
     u.dA.value = dep[i];
     u.focusAB.value.x = FOCUS_X[i];
     u.anchorA.value.set(...(cut ? cut.out : [0.5, 0.5]));
-    u.scaleA.value = 1 + 0.07 * dwell + (cut ? easeIn(p) * 5 : 0);
-    u.blurA.value = cut ? 0.1 * smooth(0.2, 0.9, p) : 0;
+    // Fly all the way in (about 15x) so the anchor fills the frame before the cut.
+    const pa = THREE.MathUtils.clamp(p / 0.56, 0, 1);
+    u.scaleA.value = 1 + 0.07 * dwell;
+    u.zoomA.value = 1 + (cut ? easeIn(pa) * 14 : 0);
+    u.blurA.value = cut ? 0.12 * smooth(0.25, 1, pa) : 0;
 
     if (cut && p > 0) {
       u.tB.value = tex[i + 1];
       u.dB.value = dep[i + 1];
       u.focusAB.value.y = FOCUS_X[i + 1];
       u.anchorB.value.set(...cut.in);
-      u.scaleB.value = 1 + (1 - easeOut(p)) * 2.4;
-      u.blurB.value = 0.14 * (1 - smooth(0.4, 1, p));
-      u.mixB.value = smooth(0.45, 0.8, p);
+      // The next still opens from deep inside its matching region and pulls out to its full frame.
+      const q = THREE.MathUtils.clamp((p - 0.5) / 0.5, 0, 1);
+      u.scaleB.value = 1;
+      u.zoomB.value = 1 + (1 - easeOut(q)) * 10;
+      u.blurB.value = 0.12 * (1 - smooth(0, 0.7, q));
+      u.mixB.value = smooth(0.5, 0.6, p);
       u.dip.value = (cut.dip ?? 0) * bell(p);
       u.flash.value = (cut.flash ?? 0) * bell((p - 0.3) / 0.5);
     } else {
