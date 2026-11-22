@@ -10,7 +10,7 @@ export const profile = {
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/yohan-senadheera",
 
-  summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, and contributor to upstream Argo Workflows. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an undergraduate teaching assistant.`,
+  summary: `Computer Engineering graduate and former Site Reliability Engineering Intern at WSO2. Worked on a pull-based multi-cloud CI/CD platform on Argo, Kubernetes and Helm (validated on EKS and AKS) with zero inbound connections into production, and automated CA-signed certificate issuance across 20+ microservices. Author of Terraform modules merged into WSO2's public Azure module library, with a docs PR merged into Argo Workflows and open PRs to the Kubernetes and Prometheus Python clients and OpenChoreo. Built PageRewind, an open-source on-call and incident platform running live on AWS. Also built a Kubernetes reliability lab with Prometheus, Grafana and self-healing, and a private 5G core on Kubernetes. Reviewed code and designs for 40+ students as an undergraduate teaching assistant.`,
 
   about: {
     whatIBuild: [
@@ -94,7 +94,7 @@ export const profile = {
       whatIDid:
         "Designed the pull-based architecture, wrote a generator that produces dispatcher, executor and sensor files from one pipeline registry, replaced 50+ inline sed-based secret injections with External Secrets Operator, and wrote the Terraform modules (multi-AZ, replicated workflow controllers and NATS) for the control and data planes. Ran the knowledge-transfer session and wrote the handover document.",
       result:
-        "Validated on EKS and AKS. Argo Terraform modules for Azure and AWS are submitted to WSO2's public repositories and in review.",
+        "Validated on EKS and AKS and production-ready for teams to adopt, with provisioning of the whole Argo setup automated in Terraform. The Argo Terraform modules for Azure and AWS are submitted to WSO2's public repositories and in review.",
       links: {
         repo: "https://github.com/wso2/azure-terraform-modules/pull/224",
       },
@@ -120,7 +120,7 @@ export const profile = {
       whatIDid:
         "Built the Bash and Azure CLI pipeline that generates CSRs, triggers the central CA pipeline across organisations, polls it to completion and uploads the signed certificate to the key vault. Designed cross-organisation trust with Workload Identity Federation in place of personal access tokens, using separate least-privilege identities. Contributed the authentication and authorisation Terraform modules to WSO2's public Azure module library (PRs #217, #221, #226, merged).",
       result:
-        "Stage and production onboarded; static personal access tokens removed from the signing workflow.",
+        "Running in production, with stage and production onboarded; static personal access tokens removed from the signing workflow.",
       links: {
         repo: "https://github.com/wso2/azure-terraform-modules/pull/226",
       },
@@ -154,26 +154,30 @@ export const profile = {
     },
     {
       title: "PageRewind",
-      subtitle: "Open-Source On-Call and Incident Tool for Kubernetes",
+      subtitle: "Open-Source On-Call and Incident Platform for Kubernetes",
       type: "Individual Project",
       timeframe: "Nov 2026 – Present",
       description:
-        "A self-hosted on-call and incident tool for Kubernetes teams. Each page arrives with the recent logs from the affected workload and a timeline of what changed just before the alert, so the on-call engineer starts with the evidence. Planned as Java (Spring Boot) microservices with Alertmanager intake, a Helm chart and Docker Compose install, and an AWS reference deployment with Terraform, GitHub Actions and Argo CD. Early stage: the plan and architecture are written and the repository is started; the build is in progress.",
+        "On-call engineers lose the first minutes of an incident gathering context. PageRewind is five Java (Spring Boot) microservices that turn alerts into incidents, page the on-call engineer on Telegram or email, and escalate when nobody answers. A transactional outbox, idempotent consumers and quorum queues mean no alert is lost: 100 duplicate alerts become one incident.",
       tech: [
-        "Java",
+        "Java 21",
         "Spring Boot",
-        "Kubernetes",
-        "Alertmanager",
-        "Prometheus",
+        "PostgreSQL",
+        "RabbitMQ",
+        "Redis",
+        "Testcontainers",
         "Terraform",
-        "Argo CD",
         "AWS",
+        "k3s",
+        "Argo CD",
+        "GitHub Actions",
       ],
       whatIDid:
-        "Wrote the product plan and architecture (services, data flow and delivery pipeline) and set up the open-source repository. Building the first services next.",
-      result: "In progress. Nothing is released yet.",
+        "Designed and built the services, the messaging layer and the delivery pipeline. Terraform builds a k3s cluster on AWS and Argo CD deploys every change through GitOps. Backed by 160+ tests, a CI end-to-end test of the full stack and 8 architecture decision records.",
+      result: "v0.1.0 released and running live on AWS.",
       links: {
         repo: "https://github.com/Yohan-Senadheera/pagerewind",
+        demo: "https://status.pagerewind.dev",
       },
       featured: true,
     },
@@ -259,18 +263,18 @@ export const profile = {
       featured: false,
     },
     {
-      title: "Personalized AI Feedback for Higher Education",
+      title: "AI-Driven Automated Feedback and Tutoring System",
       subtitle: "Final Year Project",
       type: "Group Project",
-      timeframe: "Aug 2024 – Oct 2026",
+      timeframe: "Oct 2025 – Apr 2026",
       description:
-        "Personalized adaptive learning system with virtual teaching assistant. The team handled data processing, model training, and LMS integration.",
-      tech: ["Python", "Node.js", "GPT-3.5", "Moodle"],
+        "An automated grading and feedback system for university programming courses: a four-agent LLM pipeline grades submissions and returns grades and feedback inside Moodle.",
+      tech: ["Python", "FastAPI", "PostgreSQL", "LLM agents", "Moodle", "Docker"],
       whatIDid:
-        "Implemented AI modules and virtual teaching assistant integration",
-      result: "Completed as the final-year project, with university LMS integration",
+        "Designed the architecture and the four-agent LLM grading pipeline, and built the Moodle integration and the evaluation. Co-authored the paper.",
+      result: "In the evaluation, the rubric agent cut grading error by 47%.",
       links: {
-        repo: "https://github.com/Yohan-Senadheera/ai-feedback-tutoring-system",
+        repo: "https://github.com/cepdnaclk/e20-4yp-ai-driven-automated-feedback-and-tutoring-system-for-higher-education",
       },
       featured: false,
     },
@@ -463,6 +467,12 @@ export const profile = {
   ],
 
   certifications: [
+    {
+      title: "Terraform: Top 10% globally (public skills test)",
+      issuer: "TestDome",
+      date: "Nov 2026",
+      status: "completed",
+    },
     {
       title: "WSO2 Certified Identity Server Practitioner",
       issuer: "WSO2",

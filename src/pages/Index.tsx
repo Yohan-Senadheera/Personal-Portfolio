@@ -395,7 +395,7 @@ const script: TermLine[] = [
   { kind: "out", text: "sre-linux-courses      1/1    Completed" },
   { kind: "out", text: "cka-course             1/1    Completed" },
   { kind: "out", text: "cka-exam               0/1    ContainerCreating" },
-  { kind: "out", text: "pagerewind             0/1    ContainerCreating" },
+  { kind: "out", text: "pagerewind             1/1    Running" },
 ];
 
 const fetchInfo: [string, string][] = [

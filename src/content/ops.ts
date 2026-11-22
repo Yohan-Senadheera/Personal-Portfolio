@@ -1,4 +1,4 @@
-export const statusAsOf = "27 Oct 2026";
+export const statusAsOf = "22 Nov 2026";
 
 export const metrics = [
   {
@@ -18,9 +18,9 @@ export const metrics = [
     note: "pull-based Argo CI/CD platform tested end to end on EKS and AKS",
   },
   {
-    value: "9",
+    value: "17",
     label: "public contributions",
-    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 2 PRs (1 merged) + 2 issues upstream in Argo Workflows",
+    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 3 PRs (1 merged and backported) + 2 issues in Argo Workflows, 7 PRs in review to the Kubernetes and Prometheus Python clients and OpenChoreo",
   },
   {
     value: "4",
@@ -76,7 +76,7 @@ export const contributions: Contribution[] = [
   {
     repo: "argoproj/argo-workflows",
     ref: "#17131",
-    title: "docs: SSO group claims are not revalidated mid-session",
+    title: "docs: SSO group claims are not revalidated mid-session (backported to 4.0 and 4.1)",
     status: "merged",
     url: "https://github.com/argoproj/argo-workflows/pull/17131",
   },
@@ -86,6 +86,62 @@ export const contributions: Contribution[] = [
     title: "fix(ui): report denied workflow actions instead of success",
     status: "review",
     url: "https://github.com/argoproj/argo-workflows/pull/17142",
+  },
+  {
+    repo: "argoproj/argo-workflows",
+    ref: "#17527",
+    title: "fix(ui): keep workflow details tab icons clickable when the toolbar is full",
+    status: "review",
+    url: "https://github.com/argoproj/argo-workflows/pull/17527",
+  },
+  {
+    repo: "kubernetes-client/python",
+    ref: "#2794",
+    title: "Trust ca_cert_data in the websocket client",
+    status: "review",
+    url: "https://github.com/kubernetes-client/python/pull/2794",
+  },
+  {
+    repo: "kubernetes-client/python",
+    ref: "#2795",
+    title: "Honor assert_hostname in the asyncio client",
+    status: "review",
+    url: "https://github.com/kubernetes-client/python/pull/2795",
+  },
+  {
+    repo: "kubernetes-client/gen",
+    ref: "#314",
+    title: "Honor assert_hostname in the asyncio Python client",
+    status: "review",
+    url: "https://github.com/kubernetes-client/gen/pull/314",
+  },
+  {
+    repo: "prometheus/client_python",
+    ref: "#1261",
+    title: "Do not log a traceback when a TLS client disconnects mid-response",
+    status: "review",
+    url: "https://github.com/prometheus/client_python/pull/1261",
+  },
+  {
+    repo: "openchoreo/community-modules",
+    ref: "#909",
+    title: "OTel collector: add extra volumes and mounts",
+    status: "review",
+    url: "https://github.com/openchoreo/community-modules/pull/909",
+  },
+  {
+    repo: "openchoreo/community-modules",
+    ref: "#910",
+    title: "Prometheus: add remote write tlsConfig",
+    status: "review",
+    url: "https://github.com/openchoreo/community-modules/pull/910",
+  },
+  {
+    repo: "openchoreo/community-modules",
+    ref: "#911",
+    title: "Fluent Bit: add TLS options",
+    status: "review",
+    url: "https://github.com/openchoreo/community-modules/pull/911",
   },
   {
     repo: "argoproj/argo-workflows",
@@ -111,10 +167,10 @@ export const statusLabel: Record<Contribution["status"], string> = {
 };
 
 export const projectBadge: Record<string, string> = {
-  "Pull-Based Multi-Cloud CI/CD Platform": "Validated on EKS + AKS",
-  "PKI Certificate Automation": "Stage + prod onboarded",
+  "Pull-Based Multi-Cloud CI/CD Platform": "Production-ready",
+  "PKI Certificate Automation": "Running in production",
   "Cloud Reliability Platform (SRE Lab)": "Chaos-tested lab",
-  PageRewind: "In progress",
+  PageRewind: "Live · v0.1.0",
   "Private 5G Network Implementation": "Industry project",
   "P-E-BO Desk Companion": "Award-winning",
 };
