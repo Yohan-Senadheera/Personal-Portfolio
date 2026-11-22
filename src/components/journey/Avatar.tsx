@@ -79,13 +79,13 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
     return { idle, greet, wave };
   }, [mixer, idleFbx, greetFbx, waveFbx]);
 
-  const state = useRef<"greet" | "idle" | "wave">("greet");
+  const state = useRef<"greet" | "idle" | "wave">("idle");
 
   useEffect(() => {
     const { idle, greet } = actions;
-    // Say hello once, then settle into a natural idle.
-    state.current = "greet";
-    greet.reset().fadeIn(0.4).play();
+    // Open calmly: a natural breathing idle (the scripted greeting looked stiff on this rig).
+    state.current = "idle";
+    idle.reset().setEffectiveWeight(1).play();
     const onDone = (e: { action: THREE.AnimationAction }) => {
       if (e.action === greet && state.current === "greet") {
         state.current = "idle";
@@ -100,7 +100,7 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
     };
   }, [actions, mixer]);
 
-  const look = useRef({ x: 0, y: 0 });
+  const look = useRef({ x: -0.9, y: -0.15 });
 
   useFrame((_, dt) => {
     const d = Math.min(dt, 0.05);
@@ -119,7 +119,7 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
     mixer.update(d);
 
     // Small, smooth head turns toward the pointer while the visitor is with him.
-    const k = 1 - Math.pow(0.004, d);
+    const k = 1 - Math.pow(0.05, d);
     const w = Math.max(near(0, 0.6), near(LAST, 0.6)) * (state.current === "idle" ? 1 : 0.4);
     look.current.x += (journey.mouse.x * w - look.current.x) * k;
     look.current.y += (journey.mouse.y * w - look.current.y) * k;
