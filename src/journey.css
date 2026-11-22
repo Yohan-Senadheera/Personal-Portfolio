@@ -1130,3 +1130,8 @@ body:has(.j-root) {
     padding-top: 84px;
   }
 }
+
+/* Let clicks fall through the scroll layer to links printed in the 3D world; only the panels catch them. */
+.j-scroll {
+  pointer-events: none;
+}
