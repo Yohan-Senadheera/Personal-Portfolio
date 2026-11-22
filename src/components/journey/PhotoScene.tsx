@@ -19,7 +19,7 @@ const CUTS: Cut[] = [
   // Every cut flies into a real object that the next still also has (the Lotus Tower, the lit window,
   // the server glow, the sun, the phone...), and the next still opens from inside that same object.
   { out: [0.5, 0.42], in: [0.18, 0.62] }, //                K00 Lotus Tower         -> K01 the same tower, now in the distance
-  { out: [0.505, 0.5], in: [0.73, 0.3] }, //                K01 the lit window      -> K02 him, inside that window
+  { out: [0.505, 0.5], in: [0.86, 0.2] }, //                K01 the lit window      -> K02 him, inside that window
   { out: [0.29, 0.47], in: [0.34, 0.4] }, //                K02 Lotus Tower outside -> K03 the same tower over his shoulder
   { out: [0.66, 0.62], in: [0.5, 0.47], flash: 0.3 }, //    K03 green graphs        -> K04 the green-lit aisle and its glow
   { out: [0.5, 0.47], in: [0.5, 0.49], flash: 0.55 }, //    K04 glow at the aisle end -> K05 the sun
@@ -29,6 +29,10 @@ const CUTS: Cut[] = [
   { out: [0.48, 0.22], in: [0.3, 0.2] }, //                 K08 the trees outside   -> K09 the campus trees
   { out: [0.55, 0.1], in: [0.3, 0.12] }, //                 K09 the morning sky     -> K10 the sunset sky
 ];
+
+/** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
+const CLIPS = new Set<number>([0]);
+const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
 const FOCUS_X = [0.5, 0.6, 0.74, 0.68, 0.5, 0.5, 0.52, 0.72, 0.42, 0.76, 0.74];
@@ -51,7 +55,8 @@ const VERT = /* glsl */ `
 const FRAG = /* glsl */ `
   precision highp float;
   varying vec2 vUv;
-  uniform sampler2D tA, dA, tB, dB;
+  uniform sampler2D tA, dA, tB, dB, tV;
+  uniform float useV;
   uniform vec2 aspect;       // x: screen aspect, y: image aspect
   uniform vec2 focusAB;      // horizontal focus for A and B
   uniform vec2 anchorA, anchorB;
@@ -86,6 +91,14 @@ const FRAG = /* glsl */ `
   float grain(vec2 uv) { return fract(sin(dot(uv * 1000.0 + time, vec2(12.9898, 78.233))) * 43758.5453); }
 
   void main() {
+    if (useV > 0.5) {
+      vec3 v0 = texture2D(tV, cover(vUv, 0.5)).rgb;
+      vec2 vv = vUv - 0.5;
+      v0 *= 1.0 - 0.28 * dot(vv, vv) * 2.0;
+      v0 += (grain(vUv) - 0.5) * 0.035;
+      gl_FragColor = vec4(v0, 1.0);
+      return;
+    }
     vec3 a = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA);
     vec3 col = a;
     if (mixB > 0.0) {
@@ -155,10 +168,31 @@ function Photos() {
           flash: { value: 0 },
           time: { value: 0 },
           sway: { value: new THREE.Vector2() },
+          tV: { value: null as THREE.Texture | null },
+          useV: { value: 0 },
         },
       }),
     [tex, dep],
   );
+
+  // One <video> per clip, scrubbed by scroll. All-intra encodes make seeking instant.
+  const vids = useMemo(() => {
+    const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture }>();
+    CLIPS.forEach((i) => {
+      const el = document.createElement("video");
+      el.src = clipUrl(i);
+      el.muted = true;
+      el.playsInline = true;
+      el.preload = "auto";
+      el.crossOrigin = "anonymous";
+      const t = new THREE.VideoTexture(el);
+      t.colorSpace = THREE.NoColorSpace;
+      t.minFilter = THREE.LinearFilter;
+      t.generateMipmaps = false;
+      m.set(i, { el, tex: t });
+    });
+    return m;
+  }, []);
 
   const shown = useRef(0);
   const intro = useRef(0); // the opening flight over Colombo into the office, played once on load
@@ -171,7 +205,7 @@ function Photos() {
     u.aspect.value.set(size.width / size.height, tex[0].image ? tex[0].image.width / tex[0].image.height : 16 / 9);
 
     // Opening flight K00 -> K02 (about 5 s), unless the visitor starts scrolling first.
-    if (intro.current < 1 && journey.t < 0.02 && !journey.calm) intro.current = Math.min(1, intro.current + d / 5.2);
+    if (intro.current < 1 && journey.t < 0.02 && !journey.calm) intro.current = Math.min(1, intro.current + d / 7);
     else intro.current = 1;
     const target = intro.current < 1 ? 2 * smooth(0, 1, intro.current) : stillAt(journey.t);
     const k = journey.calm ? 1 : 1 - Math.exp(-d * 4);
@@ -191,11 +225,23 @@ function Photos() {
     u.anchorA.value.set(...(cut ? cut.out : [0.5, 0.5]));
     // Fly all the way in (about 15x) so the anchor fills the frame before the cut.
     const pa = THREE.MathUtils.clamp(p / 0.56, 0, 1);
-    u.scaleA.value = 1 + 0.07 * dwell;
+    const vid = vids.get(i);
+    const vidReady = !!vid && vid.el.readyState >= 2 && vid.el.duration > 0;
+    // A still that hands over to a video eases its dolly back to the exact frame the video starts on.
+    u.scaleA.value = 1 + 0.07 * (vidReady ? bell(f / 0.5) : dwell);
     u.zoomA.value = 1 + (cut ? easeIn(pa) * 14 : 0);
     u.blurA.value = cut ? 0.12 * smooth(0.25, 1, pa) : 0;
 
-    if (cut && p > 0) {
+    if (vidReady && p > 0) {
+      const tt = p * (vid!.el.duration - 0.05);
+      if (Math.abs(vid!.el.currentTime - tt) > 1 / 40) vid!.el.currentTime = tt;
+      u.tV.value = vid!.tex;
+      u.useV.value = 1;
+      u.mixB.value = 0;
+      u.dip.value = 0;
+      u.flash.value = 0;
+    } else if (cut && p > 0) {
+      u.useV.value = 0;
       u.tB.value = tex[i + 1];
       u.dB.value = dep[i + 1];
       u.focusAB.value.y = FOCUS_X[i + 1];
@@ -209,6 +255,7 @@ function Photos() {
       u.dip.value = (cut.dip ?? 0) * bell(p);
       u.flash.value = (cut.flash ?? 0) * bell((p - 0.3) / 0.5);
     } else {
+      u.useV.value = 0;
       u.mixB.value = 0;
       u.dip.value = 0;
       u.flash.value = 0;
