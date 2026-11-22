@@ -1,9 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { useProgress } from "@react-three/drei";
-import { CHAPTERS, isDark, journey } from "@/components/journey/store";
+import { CHAPTERS, flashAt, isDark, journey } from "@/components/journey/store";
 import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 import { contributions, statusLabel } from "@/content/ops";
+import { profile } from "@/content/profile";
+import { medium } from "@/content/fun";
 import "@/journey.css";
 
 const JourneyCanvas = lazy(() =>
@@ -19,9 +21,31 @@ const LINKS = {
   status: "https://status.pagerewind.dev",
 };
 
+const FEATURED_ELSEWHERE = ["Pull-Based Multi-Cloud CI/CD Platform", "PKI Certificate Automation", "PageRewind"];
+const OTHER_PROJECTS = profile.projects.filter((p) => !FEATURED_ELSEWHERE.includes(p.title));
+// The CV no longer lists the bank traineeship or the explorers' club; keep the site in step.
+const LEADERSHIP = profile.experience.filter(
+  (e) => (e.type === "leadership" || e.type === "technical") && !e.organization.includes("Explorers"),
+);
+const AWARDS = [
+  ...profile.awards.map((a) => ({
+    title: a.title,
+    sub: [("subtitle" in a ? a.subtitle : ""), ("project" in a ? a.project : "") || ("organization" in a ? a.organization : ""), a.date]
+      .filter(Boolean)
+      .join(" · "),
+  })),
+  ...profile.certifications
+    .filter((c) => "subtitle" in c)
+    .map((c) => ({ title: c.title, sub: [("subtitle" in c ? c.subtitle : ""), c.issuer, c.date].filter(Boolean).join(" · ") })),
+];
+const COURSES = profile.certifications.filter((c) => !("subtitle" in c));
+
 /* ------------------------------------------------------------------ hooks */
 
-function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[]>) {
+function useJourneyScroll(
+  sections: React.MutableRefObject<(HTMLElement | null)[]>,
+  flash: React.MutableRefObject<HTMLDivElement | null>,
+) {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [dark, setDark] = useState(false);
@@ -55,6 +79,11 @@ function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[
       setProgress(max > 0 ? window.scrollY / max : 0);
       setActive(Math.round(journey.t));
       setDark(isDark(journey.t));
+      if (flash.current) {
+        const f = flashAt(journey.t);
+        flash.current.style.background = f.color;
+        flash.current.style.opacity = (f.o * 0.92).toFixed(3);
+      }
     };
 
     let raf = 0;
@@ -77,7 +106,7 @@ function useJourneyScroll(sections: React.MutableRefObject<(HTMLElement | null)[
       window.removeEventListener("pointermove", onMove);
       lenis?.destroy();
     };
-  }, [sections]);
+  }, [sections, flash]);
   return { active, progress, dark };
 }
 
@@ -107,11 +136,16 @@ function Loader() {
   const { progress, active } = useProgress();
   const [gone, setGone] = useState(false);
   useEffect(() => {
-    if (!active && progress >= 100) {
-      const t = setTimeout(() => setGone(true), 500);
+    if (progress >= 100 || !active) {
+      const t = setTimeout(() => setGone(true), progress >= 100 ? 600 : 1500);
       return () => clearTimeout(t);
     }
   }, [active, progress]);
+  // Never hold the page hostage: the world keeps streaming in behind the text.
+  useEffect(() => {
+    const t = setTimeout(() => setGone(true), 9000);
+    return () => clearTimeout(t);
+  }, []);
   return (
     <div className={`j-loader ${gone ? "is-gone" : ""}`} aria-hidden={gone}>
       <div className="j-loader__mark">YS</div>
@@ -143,7 +177,8 @@ function Ext({ href, children, solid }: { href: string; children: React.ReactNod
 
 export default function Journey() {
   const sections = useRef<(HTMLElement | null)[]>([]);
-  const { active, progress, dark } = useJourneyScroll(sections);
+  const flash = useRef<HTMLDivElement | null>(null);
+  const { active, progress, dark } = useJourneyScroll(sections, flash);
   useReveal();
 
   // Deep links: /#platform, /#pagerewind ... jump straight to a chapter.
@@ -178,6 +213,7 @@ export default function Journey() {
           </Suspense>
         </CanvasErrorBoundary>
       </div>
+      <div className="j-flash" ref={flash} aria-hidden />
       <Loader />
 
       <header className="j-top">
@@ -363,10 +399,51 @@ export default function Journey() {
         </section>
 
         {/* 5 · experience */}
-        <section id="path" ref={reg(5)} className="j-ch">
+        <section id="projects" ref={reg(5)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--xl j-reveal">
+            <p className="j-kicker">05 · Projects</p>
+            <h2 className="j-h2">More things I&rsquo;ve built.</h2>
+            <div className="j-projects">
+              {OTHER_PROJECTS.map((p) => {
+                const links = p.links as { repo?: string; demo?: string };
+                return (
+                  <article key={p.title} className="j-project">
+                    <div className="j-project__top">
+                      <span>{p.type}</span>
+                      <span>{p.timeframe}</span>
+                    </div>
+                    <h3>{p.title}</h3>
+                    <p>{p.description}</p>
+                    <div className="j-project__tech">
+                      {p.tech.slice(0, 5).map((t) => (
+                        <span key={t}>{t}</span>
+                      ))}
+                    </div>
+                    <div className="j-project__links">
+                      {links.repo && (
+                        <a href={links.repo} target="_blank" rel="noopener noreferrer">
+                          Code <Arrow />
+                        </a>
+                      )}
+                      {links.demo && (
+                        <a href={links.demo} target="_blank" rel="noopener noreferrer">
+                          Site <Arrow />
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* 6 · experience */}
+        <section id="path" ref={reg(6)} className="j-ch">
           <div className="j-panel j-panel--right j-panel--wide j-reveal">
-            <p className="j-kicker">05 · Experience</p>
+            <p className="j-kicker">06 · Experience</p>
             <h2 className="j-h2">The path so far.</h2>
+            <div className="j-scrollbox">
             <ol className="j-timeline">
               <li>
                 <span>Apr – Oct 2026</span>
@@ -386,53 +463,84 @@ export default function Journey() {
             </ol>
             <div className="j-grid2">
               <div>
-                <h3>Also built</h3>
+                <h3>Leadership</h3>
                 <ul className="j-mini">
-                  <li>
-                    <a href="https://github.com/Yohan-Senadheera/cloud-reliability-platform" target="_blank" rel="noopener noreferrer">
-                      Cloud reliability lab <Arrow />
-                    </a>
-                    <span>Prometheus, Grafana, chaos-tested self-healing</span>
-                  </li>
-                  <li>
-                    <span className="j-mini__t">Private 5G with SLTMobitel</span>
-                    <span>5G core on Kubernetes, edge UPF on a Raspberry Pi</span>
-                  </li>
-                  <li>
-                    <a href="https://github.com/cepdnaclk/e20-3yp-P-E-BO-Desk-Companion" target="_blank" rel="noopener noreferrer">
-                      P-E-BO desk companion <Arrow />
-                    </a>
-                    <span>IESL Inventor of the Year Top 10 · ICIIS 2025 3rd place</span>
-                  </li>
+                  {LEADERSHIP.map((e) => (
+                    <li key={e.title + e.organization}>
+                      <span className="j-mini__t">{e.title}</span>
+                      <span>
+                        {e.organization} · {e.timeframe}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div>
-                <h3>Courses &amp; recognition</h3>
+                <h3>Awards &amp; competitions</h3>
                 <ul className="j-mini">
-                  <li>
-                    <span className="j-mini__t">Terraform: top 10% globally</span>
-                    <span>TestDome public skills test, Nov 2026</span>
-                  </li>
-                  <li>
-                    <span className="j-mini__t">WSO2 Certified Identity Server Practitioner</span>
-                    <span>Aug 2026</span>
-                  </li>
-                  <li>
-                    <span className="j-mini__t">CKA course (KodeKloud) · SRE &amp; Linux (LinkedIn Learning)</span>
-                    <span>Nov 2026 · CKA exam next</span>
-                  </li>
-                  <li>
-                    <span className="j-mini__t">Team Captain, Shooting Sports</span>
-                    <span>Inter-University Air Rifle Champions 2024</span>
-                  </li>
+                  {AWARDS.map((a) => (
+                    <li key={a.title + a.sub}>
+                      <span className="j-mini__t">{a.title}</span>
+                      <span>{a.sub}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
+            </div>
             </div>
           </div>
         </section>
 
-        {/* 6 · contact */}
-        <section id="contact" ref={reg(6)} className="j-ch j-ch--contact">
+        {/* 7 · toolbox */}
+        <section id="toolbox" ref={reg(7)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--xl j-reveal">
+            <p className="j-kicker">07 · Toolbox</p>
+            <h2 className="j-h2">What I work with.</h2>
+            <div className="j-scrollbox">
+            <div className="j-skills">
+              {Object.entries(profile.skills).map(([group, items]) => (
+                <div key={group}>
+                  <h3>{group}</h3>
+                  <p>{(items as readonly string[]).join(" · ")}</p>
+                </div>
+              ))}
+            </div>
+            <div className="j-grid2">
+              <div>
+                <h3>Courses &amp; certificates</h3>
+                <ul className="j-mini">
+                  {COURSES.map((c) => (
+                    <li key={c.title}>
+                      <span className="j-mini__t">{c.title}</span>
+                      <span>
+                        {c.issuer} · {c.date}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3>Writing</h3>
+                <ul className="j-mini">
+                  {medium.articles.map((a) => (
+                    <li key={a.url}>
+                      <a href={a.url} target="_blank" rel="noopener noreferrer">
+                        {a.title} <Arrow />
+                      </a>
+                      <span>
+                        {a.tag} · {a.date}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 8 · contact */}
+        <section id="contact" ref={reg(8)} className="j-ch j-ch--contact">
           <div className="j-contact j-reveal">
             <p className="j-status">
               <i /> Open to SRE, DevOps and platform roles · can start immediately

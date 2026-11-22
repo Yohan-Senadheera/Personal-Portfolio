@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
-import { journey, near } from "./store";
+import { journey, LAST, near } from "./store";
 
 const URL = "/avatar/yohan.glb";
 
@@ -79,7 +79,7 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
   // and toward the camera when the journey comes home.
   useFrame((_, dt) => {
     const k = 1 - Math.pow(0.004, Math.min(dt, 0.05));
-    const home = Math.max(near(0, 0.6), near(6, 0.6));
+    const home = Math.max(near(0, 0.6), near(LAST, 0.6));
     const tx = journey.mouse.x * home;
     const ty = journey.mouse.y * home;
     look.current.x += (tx - look.current.x) * k;
