@@ -21,8 +21,6 @@ const LINKS = {
   status: "https://status.pagerewind.dev",
 };
 
-const FEATURED_ELSEWHERE = ["Pull-Based Multi-Cloud CI/CD Platform", "PKI Certificate Automation", "PageRewind"];
-const OTHER_PROJECTS = profile.projects.filter((p) => !FEATURED_ELSEWHERE.includes(p.title));
 // The CV no longer lists the bank traineeship or the explorers' club; keep the site in step.
 const LEADERSHIP = profile.experience.filter(
   (e) => (e.type === "leadership" || e.type === "technical") && !e.organization.includes("Explorers"),
@@ -73,7 +71,9 @@ function useJourneyScroll(
         if (!el) return;
         const o = Math.min(1, Math.max(0, 1 - (Math.abs(journey.t - k) - 0.12) / 0.28));
         el.style.opacity = o.toFixed(3);
-        el.style.pointerEvents = o < 0.05 ? "none" : "";
+        el.style.pointerEvents = "none";
+        const panel = el.firstElementChild as HTMLElement | null;
+        if (panel) panel.style.pointerEvents = o < 0.05 ? "none" : "auto";
       });
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(max > 0 ? window.scrollY / max : 0);
@@ -277,7 +277,7 @@ export default function Journey() {
 
         {/* 1 · at a glance */}
         <section id="glance" ref={reg(1)} className="j-ch j-ch--glance">
-          <div className="j-glance j-reveal">
+          <div className="j-panel j-panel--left j-panel--glance j-reveal">
             <p className="j-kicker">01 · At a glance</p>
             <h2 className="j-h2">Real systems, real numbers.</h2>
             <div className="j-stats">
@@ -383,57 +383,38 @@ export default function Journey() {
               release branches.
             </p>
             <ul className="j-prs">
-              {contributions.map((c) => (
-                <li key={c.repo + c.ref}>
-                  <a href={c.url} target="_blank" rel="noopener noreferrer">
-                    <span className={`j-pill j-pill--${c.status}`}>{statusLabel[c.status]}</span>
-                    <span className="j-prs__repo">
-                      {c.repo} <em>{c.ref}</em>
-                    </span>
-                    <span className="j-prs__title">{c.title}</span>
-                  </a>
-                </li>
-              ))}
+              {contributions
+                .filter((c) => c.status === "merged")
+                .map((c) => (
+                  <li key={c.repo + c.ref}>
+                    <a href={c.url} target="_blank" rel="noopener noreferrer">
+                      <span className={`j-pill j-pill--${c.status}`}>{statusLabel[c.status]}</span>
+                      <span className="j-prs__repo">
+                        {c.repo} <em>{c.ref}</em>
+                      </span>
+                      <span className="j-prs__title">{c.title}</span>
+                    </a>
+                  </li>
+                ))}
             </ul>
+            <p className="j-note">Every card orbiting the star is one of these real pull requests.</p>
+            <div className="j-actions">
+              <Ext href="https://github.com/pulls?q=is%3Apr+author%3AYohan-Senadheera+is%3Apublic">All my pull requests</Ext>
+            </div>
           </div>
         </section>
 
         {/* 5 · experience */}
         <section id="projects" ref={reg(5)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--xl j-reveal">
+          <div className="j-panel j-panel--left j-panel--caption j-reveal">
             <p className="j-kicker">05 · Projects</p>
             <h2 className="j-h2">More things I&rsquo;ve built.</h2>
-            <div className="j-projects">
-              {OTHER_PROJECTS.map((p) => {
-                const links = p.links as { repo?: string; demo?: string };
-                return (
-                  <article key={p.title} className="j-project">
-                    <div className="j-project__top">
-                      <span>{p.type}</span>
-                      <span>{p.timeframe}</span>
-                    </div>
-                    <h3>{p.title}</h3>
-                    <p>{p.description}</p>
-                    <div className="j-project__tech">
-                      {p.tech.slice(0, 5).map((t) => (
-                        <span key={t}>{t}</span>
-                      ))}
-                    </div>
-                    <div className="j-project__links">
-                      {links.repo && (
-                        <a href={links.repo} target="_blank" rel="noopener noreferrer">
-                          Code <Arrow />
-                        </a>
-                      )}
-                      {links.demo && (
-                        <a href={links.demo} target="_blank" rel="noopener noreferrer">
-                          Site <Arrow />
-                        </a>
-                      )}
-                    </div>
-                  </article>
-                );
-              })}
+            <p>
+              Seven builds line the road ahead, from 5G cores to AI grading. Keep scrolling to drive past them; every sign links
+              to its code.
+            </p>
+            <div className="j-actions">
+              <Ext href={LINKS.github}>All code on GitHub</Ext>
             </div>
           </div>
         </section>
@@ -465,7 +446,7 @@ export default function Journey() {
               <div>
                 <h3>Leadership</h3>
                 <ul className="j-mini">
-                  {LEADERSHIP.map((e) => (
+                  {LEADERSHIP.slice(0, 4).map((e) => (
                     <li key={e.title + e.organization}>
                       <span className="j-mini__t">{e.title}</span>
                       <span>
@@ -478,7 +459,7 @@ export default function Journey() {
               <div>
                 <h3>Awards &amp; competitions</h3>
                 <ul className="j-mini">
-                  {AWARDS.map((a) => (
+                  {AWARDS.slice(0, 4).map((a) => (
                     <li key={a.title + a.sub}>
                       <span className="j-mini__t">{a.title}</span>
                       <span>{a.sub}</span>
@@ -493,23 +474,16 @@ export default function Journey() {
 
         {/* 7 · toolbox */}
         <section id="toolbox" ref={reg(7)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--xl j-reveal">
+          <div className="j-panel j-panel--left j-panel--wide j-reveal">
             <p className="j-kicker">07 · Toolbox</p>
             <h2 className="j-h2">What I work with.</h2>
+            <p className="j-note">My everyday tools are circling me on the right.</p>
             <div className="j-scrollbox">
-            <div className="j-skills">
-              {Object.entries(profile.skills).map(([group, items]) => (
-                <div key={group}>
-                  <h3>{group}</h3>
-                  <p>{(items as readonly string[]).join(" · ")}</p>
-                </div>
-              ))}
-            </div>
             <div className="j-grid2">
               <div>
                 <h3>Courses &amp; certificates</h3>
                 <ul className="j-mini">
-                  {COURSES.map((c) => (
+                  {COURSES.slice(0, 6).map((c) => (
                     <li key={c.title}>
                       <span className="j-mini__t">{c.title}</span>
                       <span>

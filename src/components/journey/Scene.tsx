@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { Avatar } from "./Avatar";
 import { journey, LAST } from "./store";
 import { profile } from "@/content/profile";
+import { contributions, statusLabel } from "@/content/ops";
 
 /* =================================================================== the world map
    0 studio (you) -> 1 server rack -> fibre tunnel -> 2 above the clouds (WSO2 platform)
@@ -35,7 +36,7 @@ type V = [number, number, number];
 
 const CAM: { t: number; pos: V; tgt: V }[] = [
   { t: 0, pos: [-1.35, 1.32, 5.5], tgt: [-1.35, 1.0, 0] },
-  { t: 1, pos: [2.6, 1.3, -1.15], tgt: [2.6, 1.55, -4.6] },
+  { t: 1, pos: [1.05, 1.35, -0.3], tgt: [1.35, 1.45, -4.6] },
   { t: 1.3, pos: [2.6, 1.17, -3.6], tgt: [2.6, 1.15, -12] },
   { t: 1.5, pos: [2.6, 1.15, -16], tgt: [2.6, 1.2, -32] },
   { t: 1.75, pos: [2.0, 2.2, -42], tgt: [1.5, 4, -62] },
@@ -46,12 +47,12 @@ const CAM: { t: number; pos: V; tgt: V }[] = [
   { t: 3.5, pos: [4, -20, -92], tgt: [0, 60, -104] },
   { t: 3.75, pos: [0, 92, -100], tgt: [0, 130, -112] },
   { t: 4, pos: [-6.5, 122, -97.5], tgt: [-2.4, 120, -110] },
-  { t: 4.5, pos: [-14, 30, -88], tgt: [-16, 2, -60] },
-  { t: 5, pos: [-24.5, 4.4, -77], tgt: [-12.5, 1.6, -58] },
-  { t: 5.5, pos: [-12, 3.2, -54], tgt: [-17, 1.6, -36] },
-  { t: 6, pos: [-8.6, 3.8, -40], tgt: [-19.4, 1.3, -22] },
-  { t: 6.55, pos: [-13, 2.6, -8], tgt: [-3, 1.3, 0] },
-  { t: 7, pos: [-7.2, 2.7, 9.8], tgt: [-2.6, 1.2, 0] },
+  { t: 4.5, pos: [-16, 26, -96], tgt: [-16, 2, -66] },
+  { t: 5, pos: [-15.3, 2.1, -75], tgt: [-15.6, 1.75, -63] },
+  { t: 5.5, pos: [-15.4, 2.1, -58], tgt: [-15.8, 1.75, -46] },
+  { t: 6, pos: [-15.2, 2.5, -40], tgt: [-16.4, 1.7, -26] },
+  { t: 6.55, pos: [-12, 2.6, -8], tgt: [-3, 1.3, 0] },
+  { t: 7, pos: [-3.9, 1.65, 5.4], tgt: [-1.35, 1.2, 0] },
   { t: 7.6, pos: [-4, 1.8, 7.6], tgt: [-1.2, 1.1, 0] },
   { t: 8, pos: [-1.2, 1.3, 4.9], tgt: [-1.2, 1.05, 0] },
 ];
@@ -263,6 +264,37 @@ function Tag({ position, show, children, tone = "ink" }: { position: V | THREE.V
         {children}
       </div>
     </Html>
+  );
+}
+
+/** HTML printed onto a surface in the world: it turns, recedes and hides its back like the object. */
+function Face({ position, width, show, children, far = 26 }: { position: V; width: number; show: [number, number]; children: ReactNode; far?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const anchor = useRef<THREE.Group>(null);
+  const wp = useMemo(() => new THREE.Vector3(), []);
+  const { camera } = useThree();
+  useFrame(() => {
+    const [c, w] = show;
+    const d = Math.abs(journey.t - c);
+    let o = d >= w ? 0 : 1 - d / w;
+    if (anchor.current) {
+      anchor.current.getWorldPosition(wp);
+      o *= THREE.MathUtils.clamp((far - wp.distanceTo(camera.position)) / 6, 0, 1);
+    }
+    if (ref.current) {
+      ref.current.style.opacity = o.toFixed(3);
+      ref.current.style.visibility = o < 0.01 ? "hidden" : "visible";
+    }
+  });
+  // 360 CSS px span `width` world units.
+  return (
+    <group ref={anchor} position={position}>
+      <Html transform distanceFactor={(width * 400) / 360} zIndexRange={[3, 0]} style={{ pointerEvents: "auto" }}>
+        <div ref={ref} className="j-face-wrap">
+          {children}
+        </div>
+      </Html>
+    </group>
   );
 }
 
@@ -498,10 +530,6 @@ function Rack() {
         <planeGeometry args={[1.06, 2.0]} />
         <meshBasicMaterial color={new THREE.Color(CYAN).multiplyScalar(2.6)} transparent opacity={0} toneMapped={false} />
       </mesh>
-      <Tag position={[0, 2.75, 0.3]} show={[1, 0.5]} tone="dark">
-        <b>prod-rack-01</b>
-        <span>keep scrolling to step inside</span>
-      </Tag>
     </group>
   );
 }
@@ -949,9 +977,10 @@ function Galaxy({ lite }: { lite: boolean }) {
   const disk = useRef<THREE.Points>(null);
   const cards = useMemo(
     () =>
-      Array.from({ length: 17 }, (_, i) => ({
-        kind: i < 4 ? "merged" : i < 15 ? "review" : "issue",
-        a: (i / 17) * Math.PI * 2 + (i % 2) * 0.18,
+      contributions.map((c, i, all) => ({
+        kind: c.status,
+        c,
+        a: (i / all.length) * Math.PI * 2 + (i % 2) * 0.18,
         r: i % 2 ? 6.6 : 5.0,
         y: Math.sin(i * 2.1) * 0.9,
       })),
@@ -977,9 +1006,14 @@ function Galaxy({ lite }: { lite: boolean }) {
     geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
     return geo;
   }, [lite]);
+  const cam = useThree((st) => st.camera);
   useFrame((s) => {
     const t = s.clock.elapsedTime;
-    if (orbit.current) orbit.current.rotation.y = t * 0.1;
+    if (orbit.current) {
+      orbit.current.rotation.y = t * 0.1;
+      // keep every card turned toward the viewer so its text always reads the right way round
+      orbit.current.children.forEach((c) => c.lookAt(cam.position));
+    }
     if (disk.current) disk.current.rotation.y = t * 0.03;
   });
   return (
@@ -1001,28 +1035,22 @@ function Galaxy({ lite }: { lite: boolean }) {
         </sprite>
         <pointLight color="#ffe6c4" intensity={14} distance={30} decay={2} />
         <group ref={orbit} rotation={[0.25, 0, 0.12]}>
-          {cards.map((c, i) => {
-            const col = c.kind === "merged" ? GREEN : c.kind === "review" ? BLUE : "#8b93a3";
-            return (
-              <group key={i} position={[Math.cos(c.a) * c.r, c.y, Math.sin(c.a) * c.r]} rotation={[0, -c.a + Math.PI / 2, 0]}>
-                <RoundedBox args={c.kind === "merged" ? [1.3, 0.82, 0.03] : [1.05, 0.66, 0.025]} radius={0.05} smoothness={3}>
-                  <meshPhysicalMaterial color="#c9d2e6" roughness={0.18} metalness={0.3} clearcoat={1} />
-                </RoundedBox>
-                <mesh position={[-0.22, 0.14, 0.02]}>
-                  <boxGeometry args={[0.5, 0.06, 0.003]} />
-                  <primitive object={glowMat(col, c.kind === "merged" ? 2.6 : 1.5)} attach="material" />
-                </mesh>
-                <mesh position={[0, -0.06, 0.02]}>
-                  <boxGeometry args={[0.75, 0.03, 0.003]} />
-                  <meshBasicMaterial color="#9aa4bb" />
-                </mesh>
-                <mesh position={[-0.1, -0.15, 0.02]}>
-                  <boxGeometry args={[0.55, 0.03, 0.003]} />
-                  <meshBasicMaterial color="#9aa4bb" />
-                </mesh>
-              </group>
-            );
-          })}
+          {cards.map((c, i) => (
+            <group key={i} position={[Math.cos(c.a) * c.r, c.y, Math.sin(c.a) * c.r]}>
+              <RoundedBox args={[1.5, 0.9, 0.03]} radius={0.05} smoothness={3}>
+                <meshPhysicalMaterial color={c.kind === "merged" ? "#d8f3e2" : "#dde3f2"} roughness={0.25} metalness={0.15} clearcoat={1} />
+              </RoundedBox>
+              <Face position={[0, 0, 0.02]} width={1.4} show={[4, 0.5]}>
+                <div className={`j-face j-face--${c.kind}`}>
+                  <em>{statusLabel[c.c.status]}</em>
+                  <b>
+                    {c.c.repo.split("/")[1]} <span>{c.c.ref}</span>
+                  </b>
+                  <p>{c.c.title}</p>
+                </div>
+              </Face>
+            </group>
+          ))}
         </group>
         <Tag position={[0, 2.8, 0]} show={[4, 0.45]} tone="green">
           <b>4 merged · 11 in review · 2 issues</b>
@@ -1035,9 +1063,60 @@ function Galaxy({ lite }: { lite: boolean }) {
 
 /* =================================================================== 5 + 6 · the sunrise road: projects, then experience */
 
-const PROJECT_STONES = profile.projects
+/** One honest line per project (from the CV and project records). */
+const PROJECT_LINES: Record<string, string> = {
+  "Cloud Reliability Platform (SRE Lab)": "Kubernetes lab with Prometheus, Grafana and Alertmanager; self-healing proven by chaos tests.",
+  "Private 5G Network Implementation": "5G core (Aether SD-Core) on Kubernetes and an edge UPF on a Raspberry Pi, with SLTMobitel.",
+  "Mini 5G Edge Network Testbed (Cloud-Native Networking)": "Containerised network functions with Prometheus and Grafana monitoring.",
+  "P-E-BO Desk Companion": "AI desk robot: React Native app, Firebase and AWS Rekognition. ICIIS 2025 3rd place.",
+  "MONA Dashboard": "Machine production-rate dashboard: React, Node.js and MongoDB.",
+  "AI-Driven Automated Feedback and Tutoring System": "Four-agent LLM grading pipeline in Moodle; the rubric agent cut grading error by 47%.",
+  "Smart Home Energy Automation": "React Native app with Firebase real-time sync for an ESP32 home-energy system.",
+};
+const PROJECTS = profile.projects
   .filter((p) => !["Pull-Based Multi-Cloud CI/CD Platform", "PKI Certificate Automation", "PageRewind"].includes(p.title))
-  .map((p) => ({ label: p.title.replace(/\s*\(.*\)$/, ""), sub: p.timeframe }));
+  .map((p) => ({
+    title: p.title.replace(/\s*\(.*\)$/, ""),
+    when: p.timeframe,
+    line: PROJECT_LINES[p.title] ?? p.description,
+    tech: p.tech.slice(0, 4) as readonly string[],
+    link: (p.links as { repo?: string; demo?: string }).repo ?? (p.links as { demo?: string }).demo,
+  }));
+
+function Sign({ at, left, i, p }: { at: V; left: boolean; i: number; p: (typeof PROJECTS)[number] }) {
+  return (
+    <group position={at} rotation={[0, left ? 2.62 : -2.62, 0]}>
+      {[-0.95, 0.95].map((x) => (
+        <mesh key={x} position={[x, 0.85, -0.04]} castShadow>
+          <cylinderGeometry args={[0.035, 0.04, 1.7, 12]} />
+          <meshStandardMaterial color="#6f747c" metalness={0.9} roughness={0.35} />
+        </mesh>
+      ))}
+      <RoundedBox args={[2.3, 1.5, 0.06]} radius={0.04} smoothness={3} position={[0, 2.25, -0.04]} castShadow>
+        <meshStandardMaterial color="#1c1f25" metalness={0.5} roughness={0.4} />
+      </RoundedBox>
+      <Face position={[0, 2.25, 0.0]} width={2.16} show={[5.4, 0.9]} far={20}>
+        <div className="j-sign">
+          <em>
+            {String(i + 1).padStart(2, "0")} · {p.when}
+          </em>
+          <b>{p.title}</b>
+          <p>{p.line}</p>
+          <div>
+            {p.tech.map((t) => (
+              <span key={t}>{t}</span>
+            ))}
+          </div>
+          {p.link && (
+            <a href={p.link} target="_blank" rel="noopener noreferrer">
+              View code ↗
+            </a>
+          )}
+        </div>
+      </Face>
+    </group>
+  );
+}
 
 const MILESTONES = [
   { label: "2022", sub: "Computer Engineering · Peradeniya" },
@@ -1073,7 +1152,7 @@ function Stone({ at, h, seed, children, show, tone }: { at: V; h: number; seed: 
 
 function SunriseRoad() {
   const g = useRef<THREE.Group>(null);
-  useVisible(g, 4.4, 7.2);
+  useVisible(g, 4.4, 6.7);
   const dash = useRef<THREE.Group>(null);
   const len = ROAD.z1 - ROAD.z0;
   const mid = (ROAD.z0 + ROAD.z1) / 2;
@@ -1084,7 +1163,11 @@ function SunriseRoad() {
       const x = p.getX(i);
       const y = p.getY(i);
       const dRoad = Math.abs(x);
-      const h = Math.max(0, dRoad - 6) * 0.08 * (1 + noise3(x * 0.05, y * 0.05, 1) * 0.8) + noise3(x * 0.1, y * 0.1, 2) * 0.25;
+      let h = Math.max(0, dRoad - 6) * 0.08 * (1 + noise3(x * 0.05, y * 0.05, 1) * 0.8) + noise3(x * 0.1, y * 0.1, 2) * 0.25;
+      // sink the land around the studio so it never rises through the studio floor
+      const dStudio = Math.hypot(x - -ROAD.x, y - mid);
+      if (dStudio < 24) h = THREE.MathUtils.lerp(-0.6, h, dStudio / 24);
+      if (dRoad < 4) h = Math.min(h, -0.08);
       p.setZ(i, h);
     }
     geo.computeVertexNormals();
@@ -1098,7 +1181,7 @@ function SunriseRoad() {
       <mesh geometry={hills} rotation={[-Math.PI / 2, 0, 0]} position={[ROAD.x, -0.05, mid]} receiveShadow>
         <meshStandardMaterial color="#a89a7c" roughness={1} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[ROAD.x, 0.01, mid]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[ROAD.x, 0.04, mid]} receiveShadow>
         <planeGeometry args={[3.4, len + 10]} />
         <meshStandardMaterial color="#2b2d31" roughness={0.7} metalness={0.1} />
       </mesh>
@@ -1116,8 +1199,8 @@ function SunriseRoad() {
           </mesh>
         ))}
       </group>
-      {PROJECT_STONES.map((p, i) => (
-        <Stone key={p.label} at={[ROAD.x + (i % 2 ? 3.4 : -3.4), 0, ROAD.z0 + 6 + i * 3.6]} h={1.6 + (i % 3) * 0.35} seed={i * 3 + 1} show={[5, 0.45]} />
+      {PROJECTS.map((p, i) => (
+        <Sign key={p.title} i={i} p={p} left={i % 2 === 0} at={[ROAD.x + (i % 2 === 0 ? -2.7 : 2.7), 0, ROAD.z0 + 9 + i * 4.2]} />
       ))}
       {MILESTONES.map((m, i) => (
         <Stone key={m.label} at={[ROAD.x + (i % 2 ? 3.2 : -3.2), 0, ROAD.z0 + 38 + i * 5]} h={1.7 + i * 0.25} seed={40 + i} show={[6, 0.45]} tone={i === MILESTONES.length - 1 ? "green" : "ink"}>
@@ -1125,6 +1208,37 @@ function SunriseRoad() {
           <span>{m.sub}</span>
         </Stone>
       ))}
+    </group>
+  );
+}
+
+/* =================================================================== 7 · toolbox: the tools orbit him */
+
+const SKILLS = [
+  "Kubernetes", "Terraform", "Argo CD", "Argo Workflows", "Helm", "Docker", "AWS", "Azure", "GitOps",
+  "Prometheus", "Grafana", "Alertmanager", "Linux", "Bash", "Python", "Java", "PKI · mTLS", "OIDC",
+  "Workload Identity", "External Secrets", "TCP/IP", "CI/CD",
+];
+
+function SkillOrbit() {
+  const g = useRef<THREE.Group>(null);
+  useFrame((st) => {
+    if (g.current) {
+      g.current.rotation.y = st.clock.elapsedTime * 0.12;
+      g.current.visible = journey.t > 6.5 && journey.t < 7.6;
+    }
+  });
+  return (
+    <group ref={g} position={[0, 0.15, 0]}>
+      {SKILLS.map((k, i) => {
+        const a = i * 2.39996;
+        const r = 1.15 + (i % 3) * 0.22;
+        return (
+          <Tag key={k} position={[Math.cos(a) * r, 0.35 + (i / SKILLS.length) * 1.9, Math.sin(a) * r]} show={[7, 0.45]} tone={i % 4 === 0 ? "blue" : "ink"}>
+            <b>{k}</b>
+          </Tag>
+        );
+      })}
     </group>
   );
 }
@@ -1167,6 +1281,9 @@ function World({ lite }: { lite: boolean }) {
       <pointLight position={[-0.8, 1.8, 2.2]} intensity={1.4} distance={6} color="#fff1e0" />
 
       {on("studio") && <Studio lite={lite} />}
+      <Zone from={6.4} to={7.7}>
+        <SkillOrbit />
+      </Zone>
       {on("rack") && <Rack />}
       {on("tunnel") && (
         <Zone from={0.75} to={2.0}>
@@ -1196,7 +1313,7 @@ function World({ lite }: { lite: boolean }) {
         </Zone>
       )}
       {on("road") && (
-        <Zone from={4.2} to={7.4}>
+        <Zone from={4.2} to={6.9}>
           <SunriseRoad />
         </Zone>
       )}
