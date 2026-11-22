@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# full-size source stills and test clips (web copies live in public/media/web)
+public/media/journey/

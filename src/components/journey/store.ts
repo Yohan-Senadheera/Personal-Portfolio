@@ -29,23 +29,12 @@ export function near(i: number, width = 0.75) {
   return d >= width ? 0 : 1 - d / width;
 }
 
-/** The tunnel, night city and galaxy are dark: the UI switches to light text there. */
+/** Night stills (city, office, data centre, 3 AM bedroom): the UI switches to light text there. */
 export function isDark(t: number) {
-  return (t > 1.25 && t < 1.8) || (t > 2.55 && t < 4.55);
+  return t < 1.6 || (t > 2.55 && t < 3.45);
 }
 
-/** Cinematic cuts: a soft white or black flash hides each change of world. */
-export function flashAt(t: number): { color: string; o: number } {
-  const cuts: [number, number, string][] = [
-    [1.77, 0.07, "#ffffff"],
-    [2.56, 0.09, "#eef3fb"],
-    [3.6, 0.08, "#000000"],
-    [4.55, 0.08, "#fff4ea"],
-  ];
-  let best = { color: "#ffffff", o: 0 };
-  for (const [c, w, color] of cuts) {
-    const o = Math.max(0, 1 - Math.abs(t - c) / w);
-    if (o > best.o) best = { color, o };
-  }
-  return best;
+/** The photo journey makes its own cuts; no page-level flash is needed. */
+export function flashAt(_t: number): { color: string; o: number } {
+  return { color: "#ffffff", o: 0 };
 }

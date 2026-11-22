@@ -1135,3 +1135,126 @@ body:has(.j-root) {
 .j-scroll {
   pointer-events: none;
 }
+
+/* ------------------------------------------------------------ photo journey: light text over night stills */
+
+.j-root.is-dark .j-cover,
+.j-root.is-dark .j-cover .j-role,
+.j-root.is-dark .j-cover .j-lede,
+.j-root.is-dark .j-cover .j-title {
+  color: #fff;
+}
+.j-root.is-dark .j-cover .j-status,
+.j-root.is-dark .j-cover .j-meta {
+  color: rgba(255, 255, 255, 0.78);
+}
+.j-root.is-dark .j-cover .j-lede em {
+  color: #8fb3ff;
+}
+.j-root.is-dark .j-cover .j-btn:not(.j-btn--solid) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.j-root.is-dark .j-cover .j-btn--solid {
+  background: #fff;
+  color: var(--ink);
+  border-color: #fff;
+}
+.j-root.is-dark .j-scrollcue {
+  color: rgba(255, 255, 255, 0.7);
+}
+.j-root.is-dark .j-scrollcue i {
+  background: linear-gradient(#fff, transparent);
+}
+.j-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0) 55%);
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+.j-root.is-dark .j-stage::after {
+  opacity: 1;
+}
+.j-contact {
+  text-shadow: 0 1px 18px rgba(255, 240, 220, 0.6);
+}
+
+.j-plist {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: grid;
+  gap: 2px;
+  max-height: 54vh;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.j-plist li {
+  padding: 9px 6px;
+  border-radius: 10px;
+}
+.j-plist li:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+.j-plist div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.j-plist b {
+  font-size: 14.5px;
+}
+.j-plist span {
+  font: 11px var(--mono);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.j-plist p {
+  font-size: 13px !important;
+  margin: 2px 0 3px !important;
+  line-height: 1.45 !important;
+}
+.j-plist a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 600 12.5px var(--sans);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(47, 91, 255, 0.5);
+  text-underline-offset: 3px;
+}
+.j-panel--caption {
+  width: min(520px, 100%);
+}
+
+/* contact: a soft frosted backing so the details read over the sunset */
+.j-contact {
+  text-shadow: none;
+}
+.j-contact > * {
+  position: relative;
+}
+.j-contact::before {
+  content: "";
+  position: absolute;
+  left: -36px;
+  right: -36px;
+  top: 50%;
+  height: 560px;
+  transform: translateY(-50%);
+  background: rgba(250, 246, 240, 0.72);
+  backdrop-filter: blur(14px);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px -40px rgba(18, 21, 27, 0.5);
+}
+@media (max-width: 760px) {
+  .j-contact::before {
+    left: -10px;
+    right: -10px;
+  }
+}

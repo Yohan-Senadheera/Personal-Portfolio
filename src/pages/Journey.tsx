@@ -9,7 +9,7 @@ import { medium } from "@/content/fun";
 import "@/journey.css";
 
 const JourneyCanvas = lazy(() =>
-  import("@/components/journey/Scene").then((m) => ({ default: m.JourneyCanvas })),
+  import("@/components/journey/PhotoScene").then((m) => ({ default: m.PhotoCanvas })),
 );
 
 const EMAIL = "yohansenadheera@gmail.com";
@@ -37,6 +37,24 @@ const AWARDS = [
     .map((c) => ({ title: c.title, sub: [("subtitle" in c ? c.subtitle : ""), c.issuer, c.date].filter(Boolean).join(" · ") })),
 ];
 const COURSES = profile.certifications.filter((c) => !("subtitle" in c));
+
+const PROJECT_LINES: Record<string, string> = {
+  "Cloud Reliability Platform (SRE Lab)": "Kubernetes lab with Prometheus, Grafana and Alertmanager; self-healing proven by chaos tests.",
+  "Private 5G Network Implementation": "5G core (Aether SD-Core) on Kubernetes and an edge UPF on a Raspberry Pi, with SLTMobitel.",
+  "Mini 5G Edge Network Testbed (Cloud-Native Networking)": "Containerised network functions with Prometheus and Grafana monitoring.",
+  "P-E-BO Desk Companion": "AI desk robot: React Native app, Firebase and AWS Rekognition. ICIIS 2025 3rd place.",
+  "MONA Dashboard": "Machine production-rate dashboard: React, Node.js and MongoDB.",
+  "AI-Driven Automated Feedback and Tutoring System": "Four-agent LLM grading pipeline in Moodle; the rubric agent cut grading error by 47%.",
+  "Smart Home Energy Automation": "React Native app with Firebase real-time sync for an ESP32 home-energy system.",
+};
+const PROJECTS = profile.projects
+  .filter((p) => !["Pull-Based Multi-Cloud CI/CD Platform", "PKI Certificate Automation", "PageRewind"].includes(p.title))
+  .map((p) => ({
+    title: p.title.replace(/\s*\(.*\)$/, ""),
+    when: p.timeframe,
+    line: PROJECT_LINES[p.title] ?? p.description,
+    link: (p.links as { repo?: string; demo?: string }).repo ?? (p.links as { demo?: string }).demo,
+  }));
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -345,7 +363,7 @@ export default function Journey() {
 
         {/* 3 · PageRewind */}
         <section id="pagerewind" ref={reg(3)} className="j-ch">
-          <div className="j-panel j-panel--right j-reveal">
+          <div className="j-panel j-panel--left j-reveal">
             <p className="j-kicker">03 · PageRewind · Nov 2026 – now</p>
             <h2 className="j-h2">100 alerts. One incident. The right person paged.</h2>
             <p>
@@ -383,9 +401,7 @@ export default function Journey() {
               release branches.
             </p>
             <ul className="j-prs">
-              {contributions
-                .filter((c) => c.status === "merged")
-                .map((c) => (
+              {contributions.map((c) => (
                   <li key={c.repo + c.ref}>
                     <a href={c.url} target="_blank" rel="noopener noreferrer">
                       <span className={`j-pill j-pill--${c.status}`}>{statusLabel[c.status]}</span>
@@ -397,7 +413,6 @@ export default function Journey() {
                   </li>
                 ))}
             </ul>
-            <p className="j-note">Every card orbiting the star is one of these real pull requests.</p>
             <div className="j-actions">
               <Ext href="https://github.com/pulls?q=is%3Apr+author%3AYohan-Senadheera+is%3Apublic">All my pull requests</Ext>
             </div>
@@ -409,10 +424,22 @@ export default function Journey() {
           <div className="j-panel j-panel--left j-panel--caption j-reveal">
             <p className="j-kicker">05 · Projects</p>
             <h2 className="j-h2">More things I&rsquo;ve built.</h2>
-            <p>
-              Seven builds line the road ahead, from 5G cores to AI grading. Keep scrolling to drive past them; every sign links
-              to its code.
-            </p>
+            <ul className="j-plist">
+              {PROJECTS.map((p) => (
+                <li key={p.title}>
+                  <div>
+                    <b>{p.title}</b>
+                    <span>{p.when}</span>
+                  </div>
+                  <p>{p.line}</p>
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer">
+                      View code <Arrow />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
             <div className="j-actions">
               <Ext href={LINKS.github}>All code on GitHub</Ext>
             </div>
@@ -477,7 +504,14 @@ export default function Journey() {
           <div className="j-panel j-panel--left j-panel--wide j-reveal">
             <p className="j-kicker">07 · Toolbox</p>
             <h2 className="j-h2">What I work with.</h2>
-            <p className="j-note">My everyday tools are circling me on the right.</p>
+            <div className="j-skills">
+              {Object.entries(profile.skills).map(([group, items]) => (
+                <div key={group}>
+                  <h3>{group}</h3>
+                  <p>{(items as readonly string[]).join(" · ")}</p>
+                </div>
+              ))}
+            </div>
             <div className="j-scrollbox">
             <div className="j-grid2">
               <div>
