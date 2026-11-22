@@ -1,26 +1,30 @@
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useAnimations, useGLTF } from "@react-three/drei";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import * as THREE from "three";
 import { journey, LAST, near } from "./store";
 
-const URL = "/avatar/yohan.glb";
+const MODEL = "/avatar/yohan.glb";
+const CLIPS = {
+  idle: "/avatar/anim/idle.fbx",
+  greet: "/avatar/anim/greeting.fbx",
+  wave: "/avatar/anim/wave.fbx",
+};
 
-/** Sculpture finish: warm matte stone with a soft sheen. Keeps the cloth and face normal detail. */
-function sculpt(src: THREE.MeshStandardMaterial) {
-  return new THREE.MeshPhysicalMaterial({
-    color: "#e4dccd",
-    roughness: 0.62,
-    metalness: 0,
-    sheen: 0.6,
-    sheenRoughness: 0.5,
-    sheenColor: new THREE.Color("#ffffff"),
-    clearcoat: 0.08,
-    clearcoatRoughness: 0.6,
-    normalMap: src.normalMap ?? null,
-    normalScale: new THREE.Vector2(1.1, 1.1),
-    envMapIntensity: 1.0,
-  });
+/**
+ * Mixamo clips target "mixamorig:Hips"-style bones in centimetres. The Avaturn rig uses the same
+ * bone names without the prefix, in metres. Keep only rotations so the clips sit cleanly on this body.
+ */
+function retarget(clip: THREE.AnimationClip, name: string) {
+  const tracks = clip.tracks
+    .filter((t) => t.name.endsWith(".quaternion"))
+    .map((t) => {
+      const c = t.clone();
+      c.name = c.name.replace(/^mixamorig:?/, "");
+      return c;
+    });
+  return new THREE.AnimationClip(name, clip.duration, tracks);
 }
 
 const _q = new THREE.Quaternion();
@@ -42,8 +46,8 @@ function rotateWorld(bone: THREE.Object3D, axis: THREE.Vector3, angle: number) {
 
 export function Avatar(props: JSX.IntrinsicElements["group"]) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF(URL);
-  const { actions } = useAnimations(animations, group);
+  const { scene } = useGLTF(MODEL);
+  const [idleFbx, greetFbx, waveFbx] = useLoader(FBXLoader, [CLIPS.idle, CLIPS.greet, CLIPS.wave]);
 
   const bones = useMemo(() => {
     scene.traverse((o) => {
@@ -52,11 +56,11 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
         m.castShadow = true;
         m.receiveShadow = true;
         m.frustumCulled = false;
-        const src = m.material as THREE.MeshStandardMaterial;
-        if (!(src as unknown as { __sculpt?: boolean }).__sculpt) {
-          const mat = sculpt(src);
-          (mat as unknown as { __sculpt?: boolean }).__sculpt = true;
-          m.material = mat;
+        const mat = m.material as THREE.MeshStandardMaterial;
+        if (mat && "roughness" in mat) {
+          mat.envMapIntensity = 0.85;
+          mat.roughness = Math.max(mat.roughness, 0.55);
+          mat.metalness = 0;
         }
       }
     });
@@ -64,32 +68,67 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
     return { head: get("Head"), neck: get("Neck"), spine: get("Spine2") };
   }, [scene]);
 
+  const mixer = useMemo(() => new THREE.AnimationMixer(scene), [scene]);
+  const actions = useMemo(() => {
+    const idle = mixer.clipAction(retarget(idleFbx.animations[0], "idle"));
+    const greet = mixer.clipAction(retarget(greetFbx.animations[0], "greet"));
+    const wave = mixer.clipAction(retarget(waveFbx.animations[0], "wave"));
+    greet.setLoop(THREE.LoopOnce, 1);
+    greet.clampWhenFinished = true;
+    wave.setLoop(THREE.LoopRepeat, Infinity);
+    return { idle, greet, wave };
+  }, [mixer, idleFbx, greetFbx, waveFbx]);
+
+  const state = useRef<"greet" | "idle" | "wave">("greet");
+
   useEffect(() => {
-    const idle = Object.values(actions)[0];
-    idle?.reset().fadeIn(0.8).play();
-    if (idle) idle.timeScale = 0.85;
-    return () => {
-      idle?.fadeOut(0.3);
+    const { idle, greet } = actions;
+    // Say hello once, then settle into a natural idle.
+    state.current = "greet";
+    greet.reset().fadeIn(0.4).play();
+    const onDone = (e: { action: THREE.AnimationAction }) => {
+      if (e.action === greet && state.current === "greet") {
+        state.current = "idle";
+        idle.reset().fadeIn(0.7).play();
+        greet.fadeOut(0.7);
+      }
     };
-  }, [actions]);
+    mixer.addEventListener("finished", onDone as never);
+    return () => {
+      mixer.removeEventListener("finished", onDone as never);
+      mixer.stopAllAction();
+    };
+  }, [actions, mixer]);
 
   const look = useRef({ x: 0, y: 0 });
 
-  // Runs after the mixer: small, smooth head and torso turns toward the pointer,
-  // and toward the camera when the journey comes home.
   useFrame((_, dt) => {
-    const k = 1 - Math.pow(0.004, Math.min(dt, 0.05));
-    const home = Math.max(near(0, 0.6), near(LAST, 0.6));
-    const tx = journey.mouse.x * home;
-    const ty = journey.mouse.y * home;
-    look.current.x += (tx - look.current.x) * k;
-    look.current.y += (ty - look.current.y) * k;
+    const d = Math.min(dt, 0.05);
+
+    // Wave when the journey comes home.
+    const home = near(LAST, 0.5) > 0.6;
+    if (home && state.current === "idle") {
+      state.current = "wave";
+      actions.wave.reset().fadeIn(0.5).play();
+      actions.idle.fadeOut(0.5);
+    } else if (!home && state.current === "wave") {
+      state.current = "idle";
+      actions.idle.reset().fadeIn(0.6).play();
+      actions.wave.fadeOut(0.6);
+    }
+    mixer.update(d);
+
+    // Small, smooth head turns toward the pointer while the visitor is with him.
+    const k = 1 - Math.pow(0.004, d);
+    const w = Math.max(near(0, 0.6), near(LAST, 0.6)) * (state.current === "idle" ? 1 : 0.4);
+    look.current.x += (journey.mouse.x * w - look.current.x) * k;
+    look.current.y += (journey.mouse.y * w - look.current.y) * k;
     const { x, y } = look.current;
-    if (bones.spine) rotateWorld(bones.spine, Y, x * 0.06 - 0.05);
-    if (bones.neck) rotateWorld(bones.neck, Y, x * 0.16);
+    if (bones.spine) rotateWorld(bones.spine, Y, x * 0.05);
+    if (bones.neck) rotateWorld(bones.neck, Y, x * 0.14);
     if (bones.head) {
-      rotateWorld(bones.head, Y, x * 0.2);
-      rotateWorld(bones.head, X, -y * 0.1);
+      rotateWorld(bones.head, Y, x * 0.18);
+      rotateWorld(bones.head, X, -y * 0.08);
     }
   });
 
@@ -100,4 +139,4 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
   );
 }
 
-useGLTF.preload(URL);
+useGLTF.preload(MODEL);

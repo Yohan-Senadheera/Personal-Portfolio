@@ -461,7 +461,7 @@ function Rack() {
 
   return (
     <group ref={g} position={RACK}>
-      <RoundedBox args={[1.25, 2.3, 1.05]} radius={0.025} smoothness={3} position={[0, 1.15, 0]} castShadow receiveShadow>
+      <RoundedBox args={[1.25, 2.3, 0.96]} radius={0.025} smoothness={3} position={[0, 1.15, 0]} castShadow receiveShadow>
         <meshStandardMaterial color="#17191e" metalness={0.6} roughness={0.42} />
       </RoundedBox>
       {[-0.56, 0.56].map((x) => (
