@@ -32,11 +32,11 @@ const CUTS: Cut[] = [
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
-const CLIPS = new Set<number>([0, 3, 4]);
+const CLIPS = new Set<number>([0, 4]); // 04 (laptop -> data centre) comes back once remade from the new K03
 const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
-const FOCUS_X = [0.5, 0.6, 0.74, 0.68, 0.5, 0.5, 0.52, 0.72, 0.42, 0.5, 0.74];
+const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.74];
 
 // The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, toolbox, contact.
 const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 10.6];
