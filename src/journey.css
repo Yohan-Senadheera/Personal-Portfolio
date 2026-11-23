@@ -2173,3 +2173,313 @@ body:has(.j-root) {
     font-size: 28px;
   }
 }
+
+/* ================================================================ interactive: pods + rotation */
+
+/* ---------------- pods */
+.i-pods {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) 1.4fr;
+  gap: 16px;
+  margin-top: 6px;
+  align-items: start;
+}
+.i-pods__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.i-pod {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  padding: 14px 14px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 13, 20, 0.72);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+.i-pod:hover,
+.i-pod.is-sel {
+  transform: translateY(-3px);
+  border-color: #8fb3ff;
+  background: rgba(20, 30, 55, 0.88);
+  box-shadow: 0 14px 40px -18px rgba(61, 107, 255, 0.8);
+}
+.i-pod b {
+  font: 600 15px var(--mono);
+  word-break: break-word;
+}
+.i-pod em {
+  font: 12px var(--mono);
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.6);
+}
+.i-pod__dot {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #8b93a3;
+}
+.i-pod.is-run .i-pod__dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+  animation: j-ping 2s infinite;
+}
+.i-pod.is-run em {
+  color: #7ee2a0;
+}
+.i-describe {
+  border-radius: 14px;
+  background: rgba(10, 13, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  animation: i-in 0.35s ease;
+}
+@keyframes i-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.i-describe dl {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 16px 20px 6px;
+  max-height: 52vh;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.i-describe dt {
+  font: 600 13px var(--mono);
+  color: #8fb3ff;
+}
+.i-describe dd {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: #d6deeb;
+}
+.i-describe .i-hl {
+  font: 700 18px var(--display);
+  color: #fff;
+}
+.i-run {
+  color: #7ee2a0 !important;
+}
+.i-done {
+  color: #c9d1df !important;
+}
+.i-ok {
+  color: #7ee2a0 !important;
+}
+.i-ev {
+  font: 600 12px var(--mono);
+  color: #7ee2a0;
+  margin-right: 6px;
+}
+.i-open {
+  display: inline-block;
+  margin: 8px 20px 16px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: 600 14px var(--mono);
+  text-decoration: none;
+}
+.i-open:hover {
+  background: #8fb3ff;
+}
+
+/* ---------------- rotation schedule */
+.i-rot {
+  margin-top: 6px;
+  display: grid;
+  gap: 14px;
+}
+.i-rot__chart {
+  padding: 18px 18px 12px;
+  border-radius: 14px;
+  background: rgba(10, 13, 20, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+}
+.i-rot__years {
+  position: relative;
+  height: 22px;
+  margin-left: 112px;
+  font: 13px var(--mono);
+  color: rgba(255, 255, 255, 0.6);
+}
+.i-rot__years span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+.i-rot__now {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-style: normal;
+  color: #7ee2a0;
+}
+.i-rot__lane {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  min-height: 40px;
+  padding: 2px 0;
+}
+.i-rot__lane label {
+  font: 600 13px var(--mono);
+  color: #8fd3a8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.i-rot__track {
+  position: relative;
+  height: 42px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.i-rot__grid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.i-shift {
+  position: absolute;
+  top: 7px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 7px;
+  border: 1px solid rgba(143, 179, 255, 0.6);
+  background: linear-gradient(90deg, rgba(61, 107, 255, 0.55), rgba(61, 107, 255, 0.3));
+  color: #fff;
+  font: 600 12px var(--sans);
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+}
+.i-shift span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.i-shift:hover,
+.i-shift.is-sel {
+  filter: brightness(1.35);
+  transform: translateY(-2px);
+  border-color: #fff;
+}
+.i-rot__lane:nth-child(2) .i-shift {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.6), rgba(34, 197, 94, 0.3));
+  border-color: rgba(126, 226, 160, 0.7);
+}
+.i-rot__lane:nth-child(3) .i-shift {
+  background: linear-gradient(90deg, rgba(245, 177, 61, 0.55), rgba(245, 177, 61, 0.28));
+  border-color: rgba(245, 177, 61, 0.7);
+}
+.i-rot__lane:nth-child(5) .i-shift {
+  background: linear-gradient(90deg, rgba(199, 155, 255, 0.5), rgba(199, 155, 255, 0.25));
+  border-color: rgba(199, 155, 255, 0.7);
+}
+.i-mark {
+  position: absolute;
+  top: 6px;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 215, 120, 0.8);
+  background: rgba(60, 45, 10, 0.85);
+  color: #ffd778;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.i-mark:hover,
+.i-mark.is-sel {
+  transform: scale(1.25);
+  background: #ffd778;
+  color: #3a2a00;
+}
+.i-rot__card {
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(251, 250, 247, 0.96);
+  color: #12151b;
+  animation: i-in 0.3s ease;
+}
+.i-rot__card em {
+  font: 600 12px var(--mono);
+  font-style: normal;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6a707b;
+}
+.i-rot__card b {
+  display: block;
+  margin: 4px 0 2px;
+  font: 700 20px var(--display);
+}
+.i-rot__card span {
+  font: 13.5px var(--mono);
+  color: #3d6bff;
+}
+.i-rot__card p {
+  margin: 8px 0 0 !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: #3a3f4a !important;
+}
+.n-next {
+  margin-top: 14px !important;
+  font-size: 16px !important;
+}
+.n-next b {
+  color: #8fd3a8;
+}
+
+@media (max-width: 900px) {
+  .i-pods {
+    grid-template-columns: 1fr;
+  }
+  .i-pods__grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .i-pods__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .i-rot__years {
+    margin-left: 80px;
+  }
+  .i-rot__lane {
+    grid-template-columns: 80px 1fr;
+  }
+  .i-shift span {
+    display: none;
+  }
+}

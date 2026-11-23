@@ -6,7 +6,8 @@ import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 import { contributions, statusLabel } from "@/content/ops";
 import { profile } from "@/content/profile";
 import { medium } from "@/content/fun";
-import { Clock, Diagram, GitLog, Page, Postmortem, PRFeed, Skills, Terminal } from "@/components/journey/Night";
+import { Clock, Diagram, Page, PRFeed, Skills, Terminal } from "@/components/journey/Night";
+import { monthValue, PodBoard, Rotation, type Marker, type Pod, type Shift } from "@/components/journey/Interactive";
 import "@/journey.css";
 
 const JourneyCanvas = lazy(() =>
@@ -78,6 +79,65 @@ const GLANCE_LINES = [
   { cmd: "curl -s status.pagerewind.dev" },
   { out: "PageRewind v0.1.0 · operational · live on AWS", ok: true },
 ];
+
+/* ---------------- 09:30 · projects as pods */
+const SLUGS: Record<string, string> = {
+  "Cloud Reliability Platform (SRE Lab)": "reliability-lab",
+  "Private 5G Network Implementation": "private-5g-core",
+  "Mini 5G Edge Network Testbed (Cloud-Native Networking)": "5g-edge-testbed",
+  "P-E-BO Desk Companion": "pebo-robot",
+  "MONA Dashboard": "mona-dashboard",
+  "AI-Driven Automated Feedback and Tutoring System": "ai-grader",
+  "Smart Home Energy Automation": "smart-home",
+};
+const PODS: Pod[] = profile.projects
+  .filter((p) => p.title in SLUGS)
+  .map((p) => ({
+    slug: SLUGS[p.title],
+    title: p.title.replace(/\s*\(.*\)$/, ""),
+    when: p.timeframe,
+    kind: p.type,
+    running: /present/i.test(p.timeframe),
+    description: p.description,
+    did: p.whatIDid,
+    result: p.result,
+    tech: p.tech,
+    link: (p.links as { repo?: string; demo?: string }).repo ?? (p.links as { demo?: string }).demo,
+  }));
+
+/* ---------------- 16:30 · experience as an on-call rotation */
+const LANES = ["Work", "Teaching", "Leadership", "Education", "Awards"];
+const laneOf = (t: string) => (t === "work" ? "Work" : t === "teaching" ? "Teaching" : "Leadership");
+const range = (tf: string) => {
+  const [a, b] = tf.split(/–|-/).map((x) => x.trim());
+  const start = monthValue(a);
+  const end = b ? monthValue(b) : start;
+  return start !== null && end !== null ? { start, end: Math.max(end, start + 1 / 12) } : null;
+};
+const SHIFTS: Shift[] = [
+  ...profile.experience
+    .filter((e) => !e.organization.includes("Explorers") && !e.organization.includes("People"))
+    .flatMap((e) => {
+      const r = range(e.timeframe);
+      const note = e.organization === "WSO2"
+        ? "Customer Success SRE. Built the Argo pipeline layer of a pull-based multi-cloud CI/CD platform (AKS and EKS), automated CA-signed certificate rotation across 20+ microservices (in production), replaced 50+ inline secrets with External Secrets Operator, and wrote Terraform modules for WSO2's public library."
+        : e.description;
+      return r ? [{ lane: laneOf(e.type), title: e.title, org: e.organization, ...r, note }] : [];
+    }),
+  ...profile.education
+    .filter((ed) => ed.institution === "University of Peradeniya")
+    .flatMap((ed) => {
+      const r = range(ed.timeframe);
+      return r
+        ? [{ lane: "Education", title: "BSc Eng (Hons) Computer Engineering", org: ed.institution, ...r, note: "Final-year project: a four-agent LLM grading pipeline in Moodle; the rubric agent cut grading error by 47%." }]
+        : [];
+    }),
+];
+const MARKERS: Marker[] = AWARDS.flatMap((a) => {
+  const m = a.sub.match(/([A-Z][a-z]{2} \d{4})/);
+  const at = m ? monthValue(m[1]) : null;
+  return at ? [{ lane: "Awards", title: a.title, at, note: a.sub }] : [];
+});
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -387,7 +447,8 @@ export default function Journey() {
           <div className="j-panel j-panel--left j-panel--wide n-panel">
             <p className="j-kicker">09:30 · The lab</p>
             <h2 className="j-h2">Things I built on the way here.</h2>
-            <GitLog on={active === 5} items={PROJECTS.map((p) => ({ ...p, sha: sha(p.title) }))} />
+            <p className="n-copy">Each project is a pod. Pick one to describe it.</p>
+            <PodBoard pods={PODS} />
           </div>
         </section>
 
@@ -395,40 +456,12 @@ export default function Journey() {
         <section id="path" ref={reg(6)} className="j-ch">
           <div className="j-panel j-panel--left j-panel--wide n-panel">
             <p className="j-kicker">16:30 · Peradeniya</p>
-            <h2 className="j-h2">Postmortem: the path so far.</h2>
-            <Postmortem on={active === 6}>
-              <h3>Timeline</h3>
-              <ol>
-                <li>
-                  <span>Apr – Oct 2026</span> SRE Intern, WSO2 (Customer Success): multi-cloud CI/CD on Argo, PKI automation,
-                  Terraform modules.
-                </li>
-                <li>
-                  <span>Nov 2024 – Aug 2025</span> Undergraduate Teaching Assistant, Peradeniya: mentored 40+ students.
-                </li>
-                <li>
-                  <span>Feb 2022 – Oct 2026</span> BSc Eng (Hons) Computer Engineering, University of Peradeniya.
-                </li>
-              </ol>
-              <h3>What went well</h3>
-              <ul>
-                {AWARDS.slice(0, 3).map((a) => (
-                  <li key={a.title}>
-                    {a.title} <span>{a.sub}</span>
-                  </li>
-                ))}
-                {LEADERSHIP.slice(0, 2).map((e) => (
-                  <li key={e.title + e.organization}>
-                    {e.title}, {e.organization}
-                  </li>
-                ))}
-              </ul>
-              <h3>Action items</h3>
-              <ul className="n-actions">
-                <li>Take the CKA exam (course done).</li>
-                <li>Join a team that runs real production. Owner: you?</li>
-              </ul>
-            </Postmortem>
+            <h2 className="j-h2">The path so far.</h2>
+            <p className="n-copy">Four years as a rotation schedule. Tap a shift or a star.</p>
+            <Rotation lanes={LANES} shifts={SHIFTS} markers={MARKERS} />
+            <p className="n-next">
+              <b>Next shift:</b> take the CKA exam, and join a team that runs real production.
+            </p>
           </div>
         </section>
 
