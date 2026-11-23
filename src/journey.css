@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 .j-root {
   --bg: #f3f1ec;
@@ -1945,5 +1945,231 @@ body:has(.j-root) {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* ================================================================ readability pass: bigger type, wider panels */
+
+.n-night {
+  --display: "Sora", "Inter", system-ui, sans-serif;
+}
+.n-night .j-title {
+  font: 800 clamp(64px, 8.6vw, 140px) / 0.95 var(--display);
+  letter-spacing: -0.035em;
+}
+.n-night .j-title--sm {
+  font-size: clamp(48px, 6vw, 96px);
+}
+.n-night .j-role {
+  font: 700 clamp(15px, 1.3vw, 19px) var(--display);
+  letter-spacing: 0.1em;
+}
+.n-night .j-lede {
+  font: 500 clamp(24px, 2.3vw, 36px) / 1.25 var(--display);
+}
+.n-night .j-lede em {
+  font-style: normal;
+  color: #8fb3ff;
+}
+.n-night .j-meta {
+  font-size: 17px;
+}
+.n-night .j-status {
+  font-size: 14px;
+}
+.n-night .j-btn {
+  font-size: 15.5px;
+  padding: 13px 22px;
+}
+.n-night .j-nav button {
+  font-size: 14.5px;
+}
+.n-night .j-email {
+  font: 600 clamp(26px, 2.8vw, 42px) var(--display);
+}
+
+/* panels use the empty half of the screen */
+.n-panel {
+  width: min(780px, 54vw);
+  padding-top: 13vh;
+}
+.n-panel.j-panel--wide {
+  width: min(880px, 60vw);
+}
+.n-night .j-kicker {
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+.n-night .j-h2 {
+  font: 700 clamp(36px, 3.6vw, 60px) / 1.06 var(--display);
+  letter-spacing: -0.025em;
+  margin-bottom: 22px;
+}
+.n-copy,
+.n-panel > p {
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+}
+.n-disclaimer {
+  font-size: 13.5px;
+}
+
+/* terminal */
+.n-term__bar span {
+  font-size: 14px;
+}
+.n-term pre {
+  font-size: 16.5px;
+  line-height: 1.7;
+  padding: 18px 22px 22px;
+  min-height: 330px;
+}
+.n-caret {
+  height: 18px;
+}
+
+/* diagram text scales with the wider panel; make the small labels a touch bigger */
+.n-diagram text {
+  font-size: 14px;
+}
+.n-diagram .n-d-small {
+  font-size: 11.5px;
+}
+.n-facts li {
+  font-size: 17px;
+}
+
+/* the page */
+.n-notif {
+  max-width: 520px;
+  padding: 16px 18px;
+  border-radius: 20px;
+}
+.n-notif__app {
+  font-size: 14px;
+}
+.n-notif b {
+  font-size: 18px;
+}
+.n-notif p {
+  font-size: 15.5px;
+}
+.n-storm {
+  max-width: 520px;
+  height: 180px;
+}
+.n-alert {
+  font-size: 13.5px;
+  padding: 7px 12px;
+}
+.n-incident b {
+  font-size: 20px;
+}
+.n-incident span {
+  font-size: 13.5px;
+}
+
+/* PR feed */
+.n-prs a {
+  grid-template-columns: 108px 1fr;
+  padding: 12px 16px;
+  column-gap: 14px;
+}
+.n-badge {
+  font-size: 12px;
+  padding: 5px 0;
+}
+.n-prs__repo {
+  font-size: 15.5px;
+}
+.n-prs__title {
+  font-size: 15px;
+}
+
+/* git log */
+.n-log li {
+  grid-template-columns: 86px 1fr auto;
+  gap: 16px;
+  padding: 12px 20px;
+}
+.n-log code {
+  font-size: 15px;
+}
+.n-log b {
+  font: 600 17.5px var(--display);
+}
+.n-log span {
+  font-size: 15.5px;
+}
+.n-log em {
+  font-size: 13px;
+}
+
+/* postmortem */
+.n-doc {
+  padding: 24px 30px 26px;
+}
+.n-doc header {
+  font-size: 13px;
+}
+.n-doc h3 {
+  font: 700 17px var(--display);
+  margin: 16px 0 8px;
+}
+.n-doc ol,
+.n-doc ul {
+  font-size: 16.5px;
+  gap: 7px;
+}
+.n-doc li span {
+  font-size: 13.5px;
+}
+
+/* kubectl get skills */
+.n-skills table {
+  font-size: 15px;
+  line-height: 1.55;
+}
+.n-skills th {
+  font-size: 13px;
+  padding: 10px 16px 8px;
+}
+.n-skills td {
+  padding: 7px 16px;
+}
+.n-reading {
+  font-size: 16px;
+}
+.n-reading b {
+  font-size: 13px;
+}
+
+/* clock */
+.n-clock b {
+  font-size: 44px;
+}
+.n-clock span,
+.n-clock em {
+  font-size: 13px;
+}
+
+@media (max-width: 1100px) {
+  .n-panel,
+  .n-panel.j-panel--wide {
+    width: min(760px, 92vw);
+  }
+}
+@media (max-width: 760px) {
+  .n-panel,
+  .n-panel.j-panel--wide {
+    width: 100%;
+    padding-top: 84px;
+  }
+  .n-term pre {
+    font-size: 13px;
+    min-height: 0;
+  }
+  .n-clock b {
+    font-size: 28px;
   }
 }
