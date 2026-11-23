@@ -1053,7 +1053,7 @@ function Galaxy({ lite }: { lite: boolean }) {
           ))}
         </group>
         <Tag position={[0, 2.8, 0]} show={[4, 0.45]} tone="green">
-          <b>4 merged · 11 in review · 2 issues</b>
+          <b>5 merged · 11 in review · 2 issues</b>
           <span>Argo · Kubernetes · Prometheus · WSO2 · OpenChoreo</span>
         </Tag>
       </group>
