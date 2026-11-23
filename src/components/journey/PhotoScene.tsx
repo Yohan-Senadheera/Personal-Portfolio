@@ -281,17 +281,17 @@ function Photos() {
       } else if (it.phase === 0) {
         showVideo(c0);
         u.vMix.value = 1;
-        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 0.06) {
+        // The drone has settled at the window ~1.8 s before the clip ends: start the page turn then, while it still drifts.
+        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 1.8) {
           it.phase = "turn";
           it.since = state.clock.elapsedTime;
         }
       }
       if (it.phase === "turn") {
         // Hold the video's own last frame and slide his office up over it: no photo of the building in between.
-        if (!c0.el.paused) c0.el.pause();
         showVideo(c0);
         u.vMix.value = 1;
-        const q = Math.min(1, (state.clock.elapsedTime - it.since) / 1.6);
+        const q = Math.min(1, (state.clock.elapsedTime - it.since) / 1.5);
         u.tB.value = tex[2];
         u.dB.value = dep[2];
         u.focusAB.value.y = FOCUS_X[2];
@@ -302,6 +302,7 @@ function Photos() {
         u.mixB.value = smooth(0, 1, q);
         if (q >= 1) {
           it.phase = "done";
+          c0.el.pause();
           shown.current = 2;
           vmix.current = 0;
         } else return;
