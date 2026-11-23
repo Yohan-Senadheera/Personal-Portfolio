@@ -31,7 +31,7 @@ const CUTS: Cut[] = [
 ];
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
-const CLIPS = new Set<number>([0]);
+const CLIPS = new Set<number>([0, 1, 2, 3, 4]);
 const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
@@ -205,7 +205,7 @@ function Photos() {
     u.aspect.value.set(size.width / size.height, tex[0].image ? tex[0].image.width / tex[0].image.height : 16 / 9);
 
     // Opening flight K00 -> K02 (about 5 s), unless the visitor starts scrolling first.
-    if (intro.current < 1 && journey.t < 0.02 && !journey.calm) intro.current = Math.min(1, intro.current + d / 7);
+    if (intro.current < 1 && journey.t < 0.02 && !journey.calm) intro.current = Math.min(1, intro.current + d / 11);
     else intro.current = 1;
     const target = intro.current < 1 ? 2 * smooth(0, 1, intro.current) : stillAt(journey.t);
     const k = journey.calm ? 1 : 1 - Math.exp(-d * 4);
