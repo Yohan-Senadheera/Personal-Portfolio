@@ -95,7 +95,7 @@ const FRAG = /* glsl */ `
       vec3 v0 = texture2D(tV, cover(vUv, 0.5)).rgb;
       vec2 vv = vUv - 0.5;
       v0 *= 1.0 - 0.28 * dot(vv, vv) * 2.0;
-      v0 += (grain(vUv) - 0.5) * 0.035;
+      v0 += (grain(vUv) - 0.5) * 0.015;
       gl_FragColor = vec4(v0, 1.0);
       return;
     }
@@ -177,19 +177,20 @@ function Photos() {
 
   // One <video> per clip, scrubbed by scroll. All-intra encodes make seeking instant.
   const vids = useMemo(() => {
-    const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture; ok: boolean }>();
+    const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture; ok: boolean; asked: boolean }>();
     CLIPS.forEach((i) => {
       const el = document.createElement("video");
       el.src = clipUrl(i);
       el.muted = true;
       el.playsInline = true;
-      el.preload = "auto";
+      // The opening clips load at once; the rest load as the visitor gets near them.
+      el.preload = i < 2 ? "auto" : "none";
       el.crossOrigin = "anonymous";
       const t = new THREE.VideoTexture(el);
       t.colorSpace = THREE.NoColorSpace;
       t.minFilter = THREE.LinearFilter;
       t.generateMipmaps = false;
-      const v = { el, tex: t, ok: false };
+      const v = { el, tex: t, ok: false, asked: i < 2 };
       // Once a clip has decoded a frame it stays "ready": a seek briefly drops readyState, and falling
       // back to the photo for that frame is what made the picture flicker.
       el.addEventListener("loadeddata", () => (v.ok = true), { once: true });
@@ -276,6 +277,15 @@ function Photos() {
     const dwell = Math.min(f / 0.5, 1);
     const p = i < N - 1 ? THREE.MathUtils.clamp((f - 0.5) / 0.5, 0, 1) : 0;
 
+    // Start loading clips within about one chapter of where the visitor is.
+    vids.forEach((v, ci) => {
+      if (!v.asked && ci >= i - 1 && ci <= i + 2) {
+        v.asked = true;
+        v.el.preload = "auto";
+        v.el.load();
+      }
+    });
+
     const out = vids.get(i); // video leaving this still
     const inc = vids.get(i - 1); // video that arrived at this still
     if (p > 0 && out?.ok) {
@@ -336,7 +346,7 @@ function Photos() {
 
 export function PhotoCanvas() {
   return (
-    <Canvas dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: "high-performance" }} flat linear>
+    <Canvas dpr={[1, 2]} gl={{ antialias: false, powerPreference: "high-performance" }} flat linear>
       <Photos />
     </Canvas>
   );
