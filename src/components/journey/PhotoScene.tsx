@@ -95,9 +95,22 @@ const FRAG = /* glsl */ `
 
   void main() {
     if (useV > 0.5) {
-      vec3 v0 = texture2D(tV, cover(vUv, focusAB.x)).rgb;
-      // At rest, fade to the matching full-resolution still: AI video is softer than the photographs.
-      if (vMix < 0.999) v0 = mix(shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA), v0, vMix);
+      vec3 v0;
+      float rv = mixB;
+      if (rv > 0.0 && vUv.y < rv) {
+        // The next photo slides up from the bottom over the video.
+        vec2 ub = vec2(vUv.x, vUv.y + (1.0 - rv));
+        v0 = shot(tB, dB, cover(ub, focusAB.y), anchorB, scaleB, zoomB, blurB);
+      } else {
+        vec2 uv0 = vec2(vUv.x, vUv.y - rv * 0.18);
+        v0 = texture2D(tV, cover(uv0, focusAB.x)).rgb;
+        // At rest, fade to the matching full-resolution still: AI video is softer than the photographs.
+        if (vMix < 0.999) v0 = mix(shot(tA, dA, cover(uv0, focusAB.x), anchorA, scaleA, zoomA, blurA), v0, vMix);
+        if (rv > 0.0) {
+          v0 *= 1.0 - 0.45 * rv;
+          v0 *= 1.0 - 0.5 * smoothstep(0.07, 0.0, vUv.y - rv);
+        }
+      }
       vec2 vv = vUv - 0.5;
       v0 *= 1.0 - 0.28 * dot(vv, vv) * 2.0;
       v0 += (grain(vUv) - 0.5) * 0.015;
@@ -291,7 +304,7 @@ function Photos() {
         // Hold the video's own last frame and slide his office up over it: no photo of the building in between.
         showVideo(c0);
         u.vMix.value = 1;
-        const q = Math.min(1, (state.clock.elapsedTime - it.since) / 1.5);
+        const q = Math.min(1, (state.clock.elapsedTime - it.since) / 2.0);
         u.tB.value = tex[2];
         u.dB.value = dep[2];
         u.focusAB.value.y = FOCUS_X[2];
