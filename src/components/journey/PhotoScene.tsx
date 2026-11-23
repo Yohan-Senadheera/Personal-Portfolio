@@ -56,7 +56,7 @@ const FRAG = /* glsl */ `
   precision highp float;
   varying vec2 vUv;
   uniform sampler2D tA, dA, tB, dB, tV;
-  uniform float useV;
+  uniform float useV, vMix;
   uniform vec2 aspect;       // x: screen aspect, y: image aspect
   uniform vec2 focusAB;      // horizontal focus for A and B
   uniform vec2 anchorA, anchorB;
@@ -92,7 +92,9 @@ const FRAG = /* glsl */ `
 
   void main() {
     if (useV > 0.5) {
-      vec3 v0 = texture2D(tV, cover(vUv, 0.5)).rgb;
+      vec3 v0 = texture2D(tV, cover(vUv, focusAB.x)).rgb;
+      // At rest, fade to the matching full-resolution still: AI video is softer than the photographs.
+      if (vMix < 0.999) v0 = mix(shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA), v0, vMix);
       vec2 vv = vUv - 0.5;
       v0 *= 1.0 - 0.28 * dot(vv, vv) * 2.0;
       v0 += (grain(vUv) - 0.5) * 0.015;
@@ -170,6 +172,7 @@ function Photos() {
           sway: { value: new THREE.Vector2() },
           tV: { value: null as THREE.Texture | null },
           useV: { value: 0 },
+          vMix: { value: 1 },
         },
       }),
     [tex, dep],
@@ -200,6 +203,7 @@ function Photos() {
   }, []);
 
   const shown = useRef(2);
+  const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
   const intro = useRef<{ phase: "wait" | number | "done"; since: number }>({ phase: "wait", since: 0 });
   const sway = useRef(new THREE.Vector2());
@@ -261,6 +265,7 @@ function Photos() {
           } else it.phase = "done";
         }
       }
+      u.vMix.value = 1;
       if (it.phase !== "done") return;
       shown.current = 2;
     }
@@ -285,6 +290,18 @@ function Photos() {
         v.el.load();
       }
     });
+
+    // Resting on a still that a clip arrived at (or leaves from): show the sharp photo instead of the video frame.
+    const settled = p === 0 && Math.abs(target - s) < 0.002;
+    u.tA.value = tex[i];
+    u.dA.value = dep[i];
+    u.focusAB.value.x = FOCUS_X[i];
+    u.anchorA.value.set(0.5, 0.5);
+    u.scaleA.value = 1;
+    u.zoomA.value = 1;
+    u.blurA.value = 0;
+    vmix.current += ((settled ? 0 : 1) - vmix.current) * (1 - Math.exp(-d * (settled ? 4 : 12)));
+    u.vMix.value = journey.calm ? (settled ? 0 : 1) : vmix.current;
 
     const out = vids.get(i); // video leaving this still
     const inc = vids.get(i - 1); // video that arrived at this still
