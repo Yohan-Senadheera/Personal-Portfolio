@@ -177,7 +177,7 @@ function Photos() {
 
   // One <video> per clip, scrubbed by scroll. All-intra encodes make seeking instant.
   const vids = useMemo(() => {
-    const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture }>();
+    const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture; ok: boolean }>();
     CLIPS.forEach((i) => {
       const el = document.createElement("video");
       el.src = clipUrl(i);
@@ -189,14 +189,35 @@ function Photos() {
       t.colorSpace = THREE.NoColorSpace;
       t.minFilter = THREE.LinearFilter;
       t.generateMipmaps = false;
-      m.set(i, { el, tex: t });
+      const v = { el, tex: t, ok: false };
+      // Once a clip has decoded a frame it stays "ready": a seek briefly drops readyState, and falling
+      // back to the photo for that frame is what made the picture flicker.
+      el.addEventListener("loadeddata", () => (v.ok = true), { once: true });
+      m.set(i, v);
     });
     return m;
   }, []);
 
-  const shown = useRef(0);
-  const intro = useRef(0); // the opening flight over Colombo into the office, played once on load
+  const shown = useRef(2);
+  // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
+  const intro = useRef<{ phase: "wait" | number | "done"; since: number }>({ phase: "wait", since: 0 });
   const sway = useRef(new THREE.Vector2());
+
+  const seek = (v: { el: HTMLVideoElement }, time: number) => {
+    const el = v.el;
+    if (!el.paused) el.pause();
+    if (el.seeking) return; // let the current seek land first; queuing seeks causes judder
+    if (Math.abs(el.currentTime - time) > 1 / 60) el.currentTime = time;
+  };
+
+  const showVideo = (v: { tex: THREE.VideoTexture }) => {
+    const u = mat.uniforms;
+    u.tV.value = v.tex;
+    u.useV.value = 1;
+    u.mixB.value = 0;
+    u.dip.value = 0;
+    u.flash.value = 0;
+  };
 
   useFrame((state, dt) => {
     const d = Math.min(dt, 0.05);
@@ -204,10 +225,47 @@ function Photos() {
     u.time.value = state.clock.elapsedTime;
     u.aspect.value.set(size.width / size.height, tex[0].image ? tex[0].image.width / tex[0].image.height : 16 / 9);
 
-    // Opening flight K00 -> K02 (about 5 s), unless the visitor starts scrolling first.
-    if (intro.current < 1 && journey.t < 0.02 && !journey.calm) intro.current = Math.min(1, intro.current + d / 11);
-    else intro.current = 1;
-    const target = intro.current < 1 ? 2 * smooth(0, 1, intro.current) : stillAt(journey.t);
+    // ---------------- opening flight: Colombo -> the tower -> through the window -> him
+    const it = intro.current;
+    if (it.phase !== "done") {
+      const c0 = vids.get(0);
+      const c1 = vids.get(1);
+      const scrolled = journey.t >= 0.02 || journey.calm;
+      if (scrolled || !c0 || !c1) {
+        it.phase = "done";
+        c0?.el.pause();
+        c1?.el.pause();
+      } else if (it.phase === "wait") {
+        if (c0.ok) {
+          it.phase = 0;
+          c0.el.currentTime = 0;
+          void c0.el.play().catch(() => (it.phase = "done"));
+        } else if (state.clock.elapsedTime > 4) it.phase = "done"; // slow network: skip the intro
+        else {
+          u.useV.value = 0;
+          u.tA.value = tex[0];
+          u.dA.value = dep[0];
+          u.scaleA.value = 1;
+          u.zoomA.value = 1;
+          u.mixB.value = 0;
+        }
+      } else {
+        const cur = it.phase === 0 ? c0 : c1;
+        showVideo(cur);
+        if (cur.el.ended || cur.el.currentTime >= cur.el.duration - 0.06) {
+          if (it.phase === 0 && c1.ok) {
+            it.phase = 1;
+            c1.el.currentTime = 0;
+            void c1.el.play().catch(() => (it.phase = "done"));
+          } else it.phase = "done";
+        }
+      }
+      if (it.phase !== "done") return;
+      shown.current = 2;
+    }
+
+    // ---------------- scroll
+    const target = stillAt(journey.t);
     const k = journey.calm ? 1 : 1 - Math.exp(-d * 4);
     shown.current += (target - shown.current) * k;
     const s = shown.current;
@@ -215,50 +273,49 @@ function Photos() {
     const i = Math.min(Math.floor(s), N - 1);
     const f = s - i;
     const cut = CUTS[i];
-    // First half of each still: a slow dolly while its chapter is read. Second half: fly into the next still.
     const dwell = Math.min(f / 0.5, 1);
     const p = i < N - 1 ? THREE.MathUtils.clamp((f - 0.5) / 0.5, 0, 1) : 0;
 
-    u.tA.value = tex[i];
-    u.dA.value = dep[i];
-    u.focusAB.value.x = FOCUS_X[i];
-    u.anchorA.value.set(...(cut ? cut.out : [0.5, 0.5]));
-    // Fly all the way in (about 15x) so the anchor fills the frame before the cut.
-    const pa = THREE.MathUtils.clamp(p / 0.56, 0, 1);
-    const vid = vids.get(i);
-    const vidReady = !!vid && vid.el.readyState >= 2 && vid.el.duration > 0;
-    // A still that hands over to a video eases its dolly back to the exact frame the video starts on.
-    u.scaleA.value = 1 + 0.07 * (vidReady ? bell(f / 0.5) : dwell);
-    u.zoomA.value = 1 + (cut ? easeIn(pa) * 14 : 0);
-    u.blurA.value = cut ? 0.12 * smooth(0.25, 1, pa) : 0;
-
-    if (vidReady && p > 0) {
-      const tt = p * (vid!.el.duration - 0.05);
-      if (Math.abs(vid!.el.currentTime - tt) > 1 / 40) vid!.el.currentTime = tt;
-      u.tV.value = vid!.tex;
-      u.useV.value = 1;
-      u.mixB.value = 0;
-      u.dip.value = 0;
-      u.flash.value = 0;
-    } else if (cut && p > 0) {
-      u.useV.value = 0;
-      u.tB.value = tex[i + 1];
-      u.dB.value = dep[i + 1];
-      u.focusAB.value.y = FOCUS_X[i + 1];
-      u.anchorB.value.set(...cut.in);
-      // The next still opens from deep inside its matching region and pulls out to its full frame.
-      const q = THREE.MathUtils.clamp((p - 0.5) / 0.5, 0, 1);
-      u.scaleB.value = 1;
-      u.zoomB.value = 1 + (1 - easeOut(q)) * 10;
-      u.blurB.value = 0.12 * (1 - smooth(0, 0.7, q));
-      u.mixB.value = smooth(0.5, 0.6, p);
-      u.dip.value = (cut.dip ?? 0) * bell(p);
-      u.flash.value = (cut.flash ?? 0) * bell((p - 0.3) / 0.5);
+    const out = vids.get(i); // video leaving this still
+    const inc = vids.get(i - 1); // video that arrived at this still
+    if (p > 0 && out?.ok) {
+      seek(out, p * (out.el.duration - 0.05));
+      showVideo(out);
+    } else if (p === 0 && inc?.ok) {
+      // Hold on the last frame of the clip that brought us here, so there is no jump to the photo.
+      seek(inc, inc.el.duration - 0.05);
+      showVideo(inc);
+    } else if (p === 0 && out?.ok) {
+      seek(out, 0);
+      showVideo(out);
     } else {
+      // ---------------- photo fallback (stills that have no clip yet)
       u.useV.value = 0;
-      u.mixB.value = 0;
-      u.dip.value = 0;
-      u.flash.value = 0;
+      u.tA.value = tex[i];
+      u.dA.value = dep[i];
+      u.focusAB.value.x = FOCUS_X[i];
+      u.anchorA.value.set(...(cut ? cut.out : [0.5, 0.5]));
+      const pa = THREE.MathUtils.clamp(p / 0.56, 0, 1);
+      u.scaleA.value = 1 + 0.07 * dwell;
+      u.zoomA.value = 1 + (cut ? easeIn(pa) * 14 : 0);
+      u.blurA.value = cut ? 0.12 * smooth(0.25, 1, pa) : 0;
+      if (cut && p > 0) {
+        u.tB.value = tex[i + 1];
+        u.dB.value = dep[i + 1];
+        u.focusAB.value.y = FOCUS_X[i + 1];
+        u.anchorB.value.set(...cut.in);
+        const q = THREE.MathUtils.clamp((p - 0.5) / 0.5, 0, 1);
+        u.scaleB.value = 1;
+        u.zoomB.value = 1 + (1 - easeOut(q)) * 10;
+        u.blurB.value = 0.12 * (1 - smooth(0, 0.7, q));
+        u.mixB.value = smooth(0.5, 0.6, p);
+        u.dip.value = (cut.dip ?? 0) * bell(p);
+        u.flash.value = (cut.flash ?? 0) * bell((p - 0.3) / 0.5);
+      } else {
+        u.mixB.value = 0;
+        u.dip.value = 0;
+        u.flash.value = 0;
+      }
     }
 
     // Hand-held feel: a little drift plus the pointer.
