@@ -1,4 +1,4 @@
-export const statusAsOf = "22 Nov 2026";
+export const statusAsOf = "23 Nov 2026";
 
 export const metrics = [
   {
@@ -18,9 +18,9 @@ export const metrics = [
     note: "pull-based Argo CI/CD platform tested end to end on EKS and AKS",
   },
   {
-    value: "17",
+    value: "18",
     label: "public contributions",
-    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 3 PRs (1 merged and backported) + 2 issues in Argo Workflows, 7 PRs in review to the Kubernetes and Prometheus Python clients and OpenChoreo",
+    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 3 PRs (1 merged and backported) + 2 issues in Argo Workflows, the Kubernetes Python client (1 merged), Prometheus, OpenChoreo and OpenAPI Generator (7 in review)",
   },
   {
     value: "4",
@@ -98,8 +98,15 @@ export const contributions: Contribution[] = [
     repo: "kubernetes-client/python",
     ref: "#2794",
     title: "Trust ca_cert_data in the websocket client",
-    status: "review",
+    status: "merged",
     url: "https://github.com/kubernetes-client/python/pull/2794",
+  },
+  {
+    repo: "OpenAPITools/openapi-generator",
+    ref: "#25796",
+    title: "[python] honor assert_hostname in the asyncio and httpx clients",
+    status: "review",
+    url: "https://github.com/OpenAPITools/openapi-generator/pull/25796",
   },
   {
     repo: "kubernetes-client/python",
