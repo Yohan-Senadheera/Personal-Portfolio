@@ -349,7 +349,7 @@ export default function Journey() {
         <section id="cover" ref={reg(0)} className="j-ch j-ch--cover">
           <div className="j-cover">
             <p className="j-status">
-              <i /> 22:00 · Colombo · on call · available now
+              <i /> Available now · Colombo, Sri Lanka
             </p>
             <h1 className="j-title">
               Yohan
@@ -382,7 +382,7 @@ export default function Journey() {
         <section id="glance" ref={reg(1)} className="j-ch">
           <div className="j-panel j-panel--left n-panel">
             <p className="j-kicker">23:40 · The office</p>
-            <h2 className="j-h2">Everything is green.</h2>
+            <h2 className="j-h2">Before the night: everything is green.</h2>
             <Terminal
               on={active === 1}
               title="yohan@on-call: ~"
@@ -395,7 +395,11 @@ export default function Journey() {
         <section id="platform" ref={reg(2)} className="j-ch">
           <div className="j-panel j-panel--left n-panel">
             <p className="j-kicker">01:15 · In the cloud · WSO2, Apr – Oct 2026</p>
-            <h2 className="j-h2">Deploys that never reach into production.</h2>
+            <h2 className="j-h2">Production pulls its own deploys. Nothing gets in.</h2>
+            <p className="n-copy">
+              At WSO2 I built the pipeline layer of a CI/CD platform where each production cluster pulls its own
+              deployments, so no pipeline or outside system ever needs a way in.
+            </p>
             <Diagram on={active === 2} />
             <ul className="n-facts">
               <li>Pull-based CI/CD on Argo: every data plane dials out, nothing opens inbound. Production-ready, provisioned in Terraform.</li>
@@ -487,6 +491,7 @@ export default function Journey() {
         {/* 8 · 18:30 · hand-off */}
         <section id="contact" ref={reg(8)} className="j-ch j-ch--contact">
           <div className="j-contact">
+            <div className="n-contact-card">
             <p className="j-status">
               <i /> 18:30 · Incident resolved · open to SRE, DevOps and platform roles · can start immediately
             </p>
@@ -509,6 +514,7 @@ export default function Journey() {
             <p className="j-foot">
               © 2026 Yohan Senadheera · <a href="/classic">classic site</a>
             </p>
+            </div>
           </div>
         </section>
       </main>

@@ -2483,3 +2483,111 @@ body:has(.j-root) {
     display: none;
   }
 }
+
+/* ================================================================ clarity pass */
+
+/* terminal: solid, high contrast, numbers stand out */
+.n-term,
+.n-log,
+.i-describe,
+.i-rot__chart {
+  background: rgba(7, 9, 14, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.n-term pre {
+  color: #eef2f8;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.n-cmd {
+  color: #9aa6bb;
+  margin-top: 6px;
+}
+.n-cmd:first-child {
+  margin-top: 0;
+}
+.n-ok {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  color: #eef2f8;
+}
+.n-ok strong {
+  min-width: 64px;
+  font: 800 28px/1.2 var(--display);
+  color: #5ee38f;
+}
+.n-ok span {
+  font: 500 16.5px/1.4 var(--sans);
+  color: #eef2f8;
+}
+.n-night .j-h2,
+.n-night .j-kicker,
+.n-copy,
+.n-panel > p {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.75);
+}
+
+/* last page: one clean card, aligned to the same left edge as every chapter */
+.n-night .j-contact::before {
+  display: none !important;
+}
+.n-night .j-ch--contact .j-contact {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: none;
+  padding: 0;
+  background: none;
+}
+.n-contact-card {
+  width: min(680px, 92vw);
+  padding: 36px 40px 30px;
+  border-radius: 24px;
+  background: rgba(7, 9, 14, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.9);
+}
+.n-contact-card .j-status {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.n-contact-card .j-title {
+  margin: 0;
+  color: #fff;
+}
+.n-contact-card .j-email {
+  margin: 22px 0 6px;
+  color: #fff;
+  text-decoration-color: #8fb3ff;
+}
+.n-contact-card .j-meta {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+.n-contact-card .j-actions {
+  margin-top: 22px;
+}
+.n-contact-card .j-foot {
+  margin-top: 26px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.n-contact-card .j-foot a {
+  color: rgba(255, 255, 255, 0.8);
+}
+.n-contact-card {
+  width: min(760px, 92vw);
+}
+.n-contact-card .j-title {
+  font-size: clamp(40px, 4.2vw, 68px) !important;
+  line-height: 1.02;
+}
+.n-contact-card .j-email {
+  font-size: clamp(20px, 1.9vw, 30px) !important;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}

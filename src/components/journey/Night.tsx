@@ -51,6 +51,7 @@ export const BEATS = [
 
 export function Clock({ active }: { active: number }) {
   const b = BEATS[Math.max(0, Math.min(BEATS.length - 1, active))];
+  if (active <= 0) return null; // the cover stays clean
   return (
     <div className={`n-clock n-clock--${b.state}`} aria-hidden>
       <b key={b.time}>{b.time}</b>
@@ -78,7 +79,14 @@ export function Terminal({ on, lines, title }: { on: boolean; lines: { cmd?: str
       <pre>
         {typed.map((t, i) => (
           <div key={i} className={lines[i].cmd ? "n-cmd" : lines[i].ok ? "n-ok" : "n-out"}>
-            {t}
+            {lines[i].cmd || !/^\S+\s{2,}/.test(t) ? (
+              t
+            ) : (
+              <>
+                <strong>{t.split(/\s{2,}/)[0]}</strong>
+                <span>{t.split(/\s{2,}/).slice(1).join("  ")}</span>
+              </>
+            )}
           </div>
         ))}
         <span className="n-caret" />
@@ -98,7 +106,7 @@ export function Diagram({ on }: { on: boolean }) {
         </marker>
       </defs>
       <g className="n-d-links">
-        <path d="M110 60 H215" markerEnd="url(#n-arr)" />
+        <path d="M110 60 H185" markerEnd="url(#n-arr)" />
         <path d="M120 240 C 190 240, 220 170, 245 128" markerEnd="url(#n-arr)" className="n-d-flow" />
         <path d="M440 240 C 370 240, 340 170, 315 128" markerEnd="url(#n-arr)" className="n-d-flow" />
         <path d="M280 128 V 205" className="n-d-dash" />
@@ -108,11 +116,11 @@ export function Diagram({ on }: { on: boolean }) {
           <rect width="90" height="44" rx="10" />
           <text x="45" y="27">Git</text>
         </g>
-        <g transform="translate(215 30)" className="n-d-core">
-          <rect width="130" height="98" rx="14" />
-          <text x="65" y="34">Control plane</text>
-          <text x="65" y="56" className="n-d-small">Argo Workflows · Events · CD</text>
-          <text x="65" y="76" className="n-d-small">External Secrets</text>
+        <g transform="translate(185 30)" className="n-d-core">
+          <rect width="190" height="98" rx="14" />
+          <text x="95" y="34">Control plane</text>
+          <text x="95" y="58" className="n-d-small">Argo Workflows · Events</text>
+          <text x="95" y="78" className="n-d-small">Argo CD · External Secrets</text>
         </g>
         <g transform="translate(40 218)">
           <rect width="150" height="48" rx="10" />
