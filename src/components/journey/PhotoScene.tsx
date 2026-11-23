@@ -36,7 +36,7 @@ const CLIPS = new Set<number>([0, 3, 4]);
 const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
-const FOCUS_X = [0.5, 0.6, 0.74, 0.68, 0.5, 0.5, 0.52, 0.72, 0.42, 0.76, 0.74];
+const FOCUS_X = [0.5, 0.6, 0.74, 0.68, 0.5, 0.5, 0.52, 0.72, 0.42, 0.5, 0.74];
 
 // The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, toolbox, contact.
 const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 10.6];
