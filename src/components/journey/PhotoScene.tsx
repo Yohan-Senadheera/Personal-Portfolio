@@ -217,7 +217,7 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number }>({ phase: "wait", since: 0 });
+  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 0.5 });
   const sway = useRef(new THREE.Vector2());
 
   const seek = (v: { el: HTMLVideoElement }, time: number) => {
@@ -261,12 +261,15 @@ function Photos() {
           it.phase = 0;
           c0.el.currentTime = 0;
           void c0.el.play().catch(() => {
-            it.phase = "done";
-            shown.current = 2;
+            // Autoplay blocked (e.g. Brave): tell the same story with the photographs.
+            it.phase = "reveal";
+            it.since = state.clock.elapsedTime;
+            it.from = 0;
           });
-        } else if (state.clock.elapsedTime > 8) {
-          it.phase = "done";
-          shown.current = 2;
+        } else if (state.clock.elapsedTime > 5) {
+          it.phase = "reveal";
+          it.since = state.clock.elapsedTime;
+          it.from = 0;
         } else {
           u.useV.value = 0;
           u.tA.value = tex[0];
@@ -285,8 +288,8 @@ function Photos() {
       }
       if (it.phase === "reveal") {
         // After the drone shot: the tower photo slides up, then his office.
-        const q = (state.clock.elapsedTime - it.since) / 4.5;
-        forced = 0.5 + 1.5 * smooth(0, 1, q);
+        const q = (state.clock.elapsedTime - it.since) / (it.from === 0 ? 6 : 4.5);
+        forced = it.from + (2 - it.from) * smooth(0, 1, q);
         if (q >= 1) {
           it.phase = "done";
           forced = null;
