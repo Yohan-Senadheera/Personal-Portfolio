@@ -33,7 +33,7 @@ const CUTS: Cut[] = [
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
 const CLIPS = new Set<number>([4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
-// Key -1 is the opening drone shot (clip 01, trimmed to its clean first seconds), played once, not scrubbed.
+// Key -1 is the opening drone shot (clip 01: city -> lit window), played once, not scrubbed.
 const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
@@ -217,7 +217,7 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 0.5 });
+  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 1 });
   const sway = useRef(new THREE.Vector2());
 
   const seek = (v: { el: HTMLVideoElement }, time: number) => {
@@ -288,7 +288,7 @@ function Photos() {
       }
       if (it.phase === "reveal") {
         // After the drone shot: the tower photo slides up, then his office.
-        const q = (state.clock.elapsedTime - it.since) / (it.from === 0 ? 6 : 4.5);
+        const q = (state.clock.elapsedTime - it.since) / (it.from === 0 ? 6 : 2.5);
         forced = it.from + (2 - it.from) * smooth(0, 1, q);
         if (q >= 1) {
           it.phase = "done";
