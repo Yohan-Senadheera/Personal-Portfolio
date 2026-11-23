@@ -448,7 +448,7 @@ export default function Journey() {
 
         {/* 6 · experience */}
         <section id="path" ref={reg(6)} className="j-ch">
-          <div className="j-panel j-panel--right j-panel--wide j-reveal">
+          <div className="j-panel j-panel--left j-panel--wide j-reveal">
             <p className="j-kicker">06 · Experience</p>
             <h2 className="j-h2">The path so far.</h2>
             <div className="j-scrollbox">
