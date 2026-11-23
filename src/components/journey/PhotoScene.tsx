@@ -31,7 +31,8 @@ const CUTS: Cut[] = [
 ];
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
-const CLIPS = new Set<number>([0, 1, 2, 3, 4]);
+// Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
+const CLIPS = new Set<number>([0, 3, 4]);
 const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
@@ -77,8 +78,9 @@ const FRAG = /* glsl */ `
     vec2 a = vec2(anchor.x, 1.0 - anchor.y);
     float depth = texture2D(d, base).r;                       // 1 = near
     // slow dolly: near things grow a little faster (depth); the deep fly-in is even so nothing warps
-    float s = (1.0 + (scale - 1.0) * (0.55 + 0.9 * depth)) * zoom;
-    vec2 p = a + (base - a) / s + sway * (depth - 0.35);
+    // Even scaling only: depth-based motion distorted faces.
+    float s = scale * zoom;
+    vec2 p = a + (base - a) / s;
     vec3 c = vec3(0.0);
     for (int k = 0; k < 6; k++) {                             // zoom blur toward the anchor while moving fast
       float f = float(k) / 5.0;
@@ -101,11 +103,20 @@ const FRAG = /* glsl */ `
       gl_FragColor = vec4(v0, 1.0);
       return;
     }
-    vec3 a = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA);
-    vec3 col = a;
+    vec3 col;
     if (mixB > 0.0) {
-      vec3 b = shot(tB, dB, cover(vUv, focusAB.y), anchorB, scaleB, zoomB, blurB);
-      col = mix(a, b, mixB);
+      // Page turn: the next photo slides up over this one; this one drifts up a little and dims.
+      float r = mixB;
+      if (vUv.y < r) {
+        vec2 ub = vec2(vUv.x, vUv.y + (1.0 - r));
+        col = shot(tB, dB, cover(ub, focusAB.y), anchorB, scaleB, zoomB, blurB);
+      } else {
+        vec2 ua = vec2(vUv.x, vUv.y - r * 0.18);
+        col = shot(tA, dA, cover(ua, focusAB.x), anchorA, scaleA, zoomA, blurA) * (1.0 - 0.45 * r);
+        col *= 1.0 - 0.5 * smoothstep(0.07, 0.0, vUv.y - r);   // soft shadow cast by the rising page
+      }
+    } else {
+      col = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA);
     }
     col *= 1.0 - dip;
     col = mix(col, vec3(1.0, 0.97, 0.92), flash);
@@ -205,7 +216,7 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | number | "done"; since: number }>({ phase: "wait", since: 0 });
+  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number }>({ phase: "wait", since: 0 });
   const sway = useRef(new THREE.Vector2());
 
   const seek = (v: { el: HTMLVideoElement }, time: number) => {
@@ -230,23 +241,28 @@ function Photos() {
     u.time.value = state.clock.elapsedTime;
     u.aspect.value.set(size.width / size.height, tex[0].image ? tex[0].image.width / tex[0].image.height : 16 / 9);
 
-    // ---------------- opening flight: Colombo -> the tower -> through the window -> him
+    // ---------------- opening: the drone over Colombo (video), then his office slides up over the tower
     const it = intro.current;
+    let forced: number | null = null;
     if (it.phase !== "done") {
       const c0 = vids.get(0);
-      const c1 = vids.get(1);
       const scrolled = journey.t >= 0.02 || journey.calm;
-      if (scrolled || !c0 || !c1) {
+      if (scrolled || !c0) {
         it.phase = "done";
         c0?.el.pause();
-        c1?.el.pause();
+        shown.current = 2;
       } else if (it.phase === "wait") {
         if (c0.ok) {
           it.phase = 0;
           c0.el.currentTime = 0;
-          void c0.el.play().catch(() => (it.phase = "done"));
-        } else if (state.clock.elapsedTime > 4) it.phase = "done"; // slow network: skip the intro
-        else {
+          void c0.el.play().catch(() => {
+            it.phase = "done";
+            shown.current = 2;
+          });
+        } else if (state.clock.elapsedTime > 4) {
+          it.phase = "done";
+          shown.current = 2;
+        } else {
           u.useV.value = 0;
           u.tA.value = tex[0];
           u.dA.value = dep[0];
@@ -254,25 +270,29 @@ function Photos() {
           u.zoomA.value = 1;
           u.mixB.value = 0;
         }
-      } else {
-        const cur = it.phase === 0 ? c0 : c1;
-        showVideo(cur);
-        if (cur.el.ended || cur.el.currentTime >= cur.el.duration - 0.06) {
-          if (it.phase === 0 && c1.ok) {
-            it.phase = 1;
-            c1.el.currentTime = 0;
-            void c1.el.play().catch(() => (it.phase = "done"));
-          } else it.phase = "done";
+      } else if (it.phase === 0) {
+        showVideo(c0);
+        u.vMix.value = 1;
+        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 0.06) {
+          it.phase = "reveal";
+          it.since = state.clock.elapsedTime;
         }
       }
-      u.vMix.value = 1;
-      if (it.phase !== "done") return;
-      shown.current = 2;
+      if (it.phase === "reveal") {
+        const q = (state.clock.elapsedTime - it.since) / 3;
+        forced = 1 + smooth(0, 1, q);
+        if (q >= 1) {
+          it.phase = "done";
+          forced = null;
+          shown.current = 2;
+        }
+      }
+      if (it.phase !== "done" && forced === null) return;
     }
 
     // ---------------- scroll
-    const target = stillAt(journey.t);
-    const k = journey.calm ? 1 : 1 - Math.exp(-d * 4);
+    const target = forced ?? stillAt(journey.t);
+    const k = journey.calm || forced !== null ? 1 : 1 - Math.exp(-d * 4);
     shown.current += (target - shown.current) * k;
     const s = shown.current;
 
@@ -292,7 +312,7 @@ function Photos() {
     });
 
     // Resting on a still that a clip arrived at (or leaves from): show the sharp photo instead of the video frame.
-    const settled = p === 0 && Math.abs(target - s) < 0.002;
+    const settled = p === 0 && (forced !== null || Math.abs(target - s) < 0.002);
     u.tA.value = tex[i];
     u.dA.value = dep[i];
     u.focusAB.value.x = FOCUS_X[i];
@@ -321,23 +341,21 @@ function Photos() {
       u.tA.value = tex[i];
       u.dA.value = dep[i];
       u.focusAB.value.x = FOCUS_X[i];
-      u.anchorA.value.set(...(cut ? cut.out : [0.5, 0.5]));
-      const pa = THREE.MathUtils.clamp(p / 0.56, 0, 1);
-      u.scaleA.value = 1 + 0.07 * dwell;
-      u.zoomA.value = 1 + (cut ? easeIn(pa) * 14 : 0);
-      u.blurA.value = cut ? 0.12 * smooth(0.25, 1, pa) : 0;
+      u.anchorA.value.set(0.5, 0.5);
+      u.scaleA.value = 1;
+      u.zoomA.value = 1 + 0.04 * dwell; // a slow, even push-in while the chapter is read
+      u.blurA.value = 0;
       if (cut && p > 0) {
         u.tB.value = tex[i + 1];
         u.dB.value = dep[i + 1];
         u.focusAB.value.y = FOCUS_X[i + 1];
-        u.anchorB.value.set(...cut.in);
-        const q = THREE.MathUtils.clamp((p - 0.5) / 0.5, 0, 1);
+        u.anchorB.value.set(0.5, 0.5);
         u.scaleB.value = 1;
-        u.zoomB.value = 1 + (1 - easeOut(q)) * 10;
-        u.blurB.value = 0.12 * (1 - smooth(0, 0.7, q));
-        u.mixB.value = smooth(0.5, 0.6, p);
-        u.dip.value = (cut.dip ?? 0) * bell(p);
-        u.flash.value = (cut.flash ?? 0) * bell((p - 0.3) / 0.5);
+        u.zoomB.value = 1;
+        u.blurB.value = 0;
+        u.mixB.value = smooth(0, 1, p);
+        u.dip.value = 0;
+        u.flash.value = 0;
       } else {
         u.mixB.value = 0;
         u.dip.value = 0;
