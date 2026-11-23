@@ -217,7 +217,7 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | 0 | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 1 });
+  const intro = useRef<{ phase: "wait" | 0 | "turn" | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 1 });
   const sway = useRef(new THREE.Vector2());
 
   const seek = (v: { el: HTMLVideoElement }, time: number) => {
@@ -282,9 +282,29 @@ function Photos() {
         showVideo(c0);
         u.vMix.value = 1;
         if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 0.06) {
-          it.phase = "reveal";
+          it.phase = "turn";
           it.since = state.clock.elapsedTime;
         }
+      }
+      if (it.phase === "turn") {
+        // Hold the video's own last frame and slide his office up over it: no photo of the building in between.
+        if (!c0.el.paused) c0.el.pause();
+        showVideo(c0);
+        u.vMix.value = 1;
+        const q = Math.min(1, (state.clock.elapsedTime - it.since) / 1.6);
+        u.tB.value = tex[2];
+        u.dB.value = dep[2];
+        u.focusAB.value.y = FOCUS_X[2];
+        u.anchorB.value.set(0.5, 0.5);
+        u.scaleB.value = 1;
+        u.zoomB.value = 1;
+        u.blurB.value = 0;
+        u.mixB.value = smooth(0, 1, q);
+        if (q >= 1) {
+          it.phase = "done";
+          shown.current = 2;
+          vmix.current = 0;
+        } else return;
       }
       if (it.phase === "reveal") {
         // After the drone shot: the tower photo slides up, then his office.
