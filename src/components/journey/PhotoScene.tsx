@@ -252,14 +252,16 @@ function Photos() {
         c0?.el.pause();
         shown.current = 2;
       } else if (it.phase === "wait") {
-        if (c0.ok) {
+        const buffered = c0.el.buffered.length > 0 && c0.el.buffered.end(c0.el.buffered.length - 1) >= c0.el.duration - 0.1;
+        if (c0.ok && buffered) {
+          // Play only once the whole clip is downloaded, so it never pauses to buffer.
           it.phase = 0;
           c0.el.currentTime = 0;
           void c0.el.play().catch(() => {
             it.phase = "done";
             shown.current = 2;
           });
-        } else if (state.clock.elapsedTime > 4) {
+        } else if (state.clock.elapsedTime > 8) {
           it.phase = "done";
           shown.current = 2;
         } else {
