@@ -32,7 +32,7 @@ const CUTS: Cut[] = [
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
-const CLIPS = new Set<number>([0, 4]); // 04 (laptop -> data centre) comes back once remade from the new K03
+const CLIPS = new Set<number>([0, 3, 4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
 const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
