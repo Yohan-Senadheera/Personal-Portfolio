@@ -32,8 +32,9 @@ const CUTS: Cut[] = [
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
-const CLIPS = new Set<number>([0, 3, 4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
-const clipUrl = (i: number) => `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
+const CLIPS = new Set<number>([4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
+// Key -1 is the opening drone shot (clip 01, trimmed to its clean first seconds), played once, not scrubbed.
+const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
 const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.74];
@@ -192,19 +193,19 @@ function Photos() {
   // One <video> per clip, scrubbed by scroll. All-intra encodes make seeking instant.
   const vids = useMemo(() => {
     const m = new Map<number, { el: HTMLVideoElement; tex: THREE.VideoTexture; ok: boolean; asked: boolean }>();
-    CLIPS.forEach((i) => {
+    [-1, ...CLIPS].forEach((i) => {
       const el = document.createElement("video");
       el.src = clipUrl(i);
       el.muted = true;
       el.playsInline = true;
       // The opening clips load at once; the rest load as the visitor gets near them.
-      el.preload = i < 2 ? "auto" : "none";
+      el.preload = i < 0 ? "auto" : "none";
       el.crossOrigin = "anonymous";
       const t = new THREE.VideoTexture(el);
       t.colorSpace = THREE.NoColorSpace;
       t.minFilter = THREE.LinearFilter;
       t.generateMipmaps = false;
-      const v = { el, tex: t, ok: false, asked: i < 2 };
+      const v = { el, tex: t, ok: false, asked: i < 0 };
       // Once a clip has decoded a frame it stays "ready": a seek briefly drops readyState, and falling
       // back to the photo for that frame is what made the picture flicker.
       el.addEventListener("loadeddata", () => (v.ok = true), { once: true });
@@ -245,7 +246,7 @@ function Photos() {
     const it = intro.current;
     let forced: number | null = null;
     if (it.phase !== "done") {
-      const c0 = vids.get(0);
+      const c0 = vids.get(-1);
       const scrolled = journey.t >= 0.02 || journey.calm;
       if (scrolled || !c0) {
         it.phase = "done";
@@ -281,8 +282,9 @@ function Photos() {
         }
       }
       if (it.phase === "reveal") {
-        const q = (state.clock.elapsedTime - it.since) / 3;
-        forced = 1 + smooth(0, 1, q);
+        // After the drone shot: the tower photo slides up, then his office.
+        const q = (state.clock.elapsedTime - it.since) / 4.5;
+        forced = 0.5 + 1.5 * smooth(0, 1, q);
         if (q >= 1) {
           it.phase = "done";
           forced = null;
