@@ -6,6 +6,7 @@ import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 import { contributions, statusLabel } from "@/content/ops";
 import { profile } from "@/content/profile";
 import { medium } from "@/content/fun";
+import { Clock, Diagram, GitLog, Page, Postmortem, PRFeed, Skills, Terminal } from "@/components/journey/Night";
 import "@/journey.css";
 
 const JourneyCanvas = lazy(() =>
@@ -55,6 +56,28 @@ const PROJECTS = profile.projects
     line: PROJECT_LINES[p.title] ?? p.description,
     link: (p.links as { repo?: string; demo?: string }).repo ?? (p.links as { demo?: string }).demo,
   }));
+
+/** A short, stable fake commit hash for the project git log. */
+function sha(t: string) {
+  let h = 2166136261;
+  for (const ch of t) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  return (h >>> 0).toString(16).padStart(8, "0").slice(0, 7);
+}
+
+const MERGED = contributions.filter((c) => c.status === "merged").length;
+const REVIEW = contributions.filter((c) => c.status === "review").length;
+const GLANCE_LINES = [
+  { cmd: "kubectl get certificates -A | grep -c Ready" },
+  { out: "20+  services on CA-signed certs · auto-rotated · in production", ok: true },
+  { cmd: "grep -rc 'inline secret' pipelines/" },
+  { out: "0    inline secrets left · 50+ moved to External Secrets Operator", ok: true },
+  { cmd: "argo-platform inbound --env prod" },
+  { out: "0    inbound connections · AKS + EKS data planes dial out over mTLS", ok: true },
+  { cmd: "gh pr list --author Yohan-Senadheera --state all | wc -l" },
+  { out: `${contributions.length}   public contributions · ${MERGED} merged · ${REVIEW} in review`, ok: true },
+  { cmd: "curl -s status.pagerewind.dev" },
+  { out: "PageRewind v0.1.0 · operational · live on AWS", ok: true },
+];
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -223,7 +246,7 @@ export default function Journey() {
   const issues = contributions.filter((c) => c.status === "issue").length;
 
   return (
-    <div className={`j-root ${dark ? "is-dark" : ""}`}>
+    <div className="j-root is-dark n-night">
       <div className="j-stage" aria-hidden>
         <CanvasErrorBoundary fallback={<div className="j-stage__fallback" />}>
           <Suspense fallback={null}>
@@ -232,6 +255,7 @@ export default function Journey() {
         </CanvasErrorBoundary>
       </div>
       <div className="j-flash" ref={flash} aria-hidden />
+      <Clock active={active} />
       <Loader />
 
       <header className="j-top">
@@ -261,11 +285,11 @@ export default function Journey() {
       </aside>
 
       <main className="j-scroll">
-        {/* 0 · cover */}
+        {/* 0 · 22:00 · cover */}
         <section id="cover" ref={reg(0)} className="j-ch j-ch--cover">
           <div className="j-cover">
             <p className="j-status">
-              <i /> Available now · Colombo, Sri Lanka
+              <i /> 22:00 · Colombo · on call · available now
             </p>
             <h1 className="j-title">
               Yohan
@@ -281,11 +305,12 @@ export default function Journey() {
             </p>
             <div className="j-actions">
               <button className="j-btn j-btn--solid" onClick={() => goTo("glance")}>
-                Start the tour ↓
+                Live through one night ↓
               </button>
               <Ext href={LINKS.linkedin}>LinkedIn</Ext>
               <Ext href={LINKS.github}>GitHub</Ext>
             </div>
+            <p className="n-disclaimer">A night like this, dramatized. Every number and link in it is real.</p>
           </div>
           <div className="j-scrollcue" aria-hidden>
             <span>scroll</span>
@@ -293,265 +318,144 @@ export default function Journey() {
           </div>
         </section>
 
-        {/* 1 · at a glance */}
-        <section id="glance" ref={reg(1)} className="j-ch j-ch--glance">
-          <div className="j-panel j-panel--left j-panel--glance j-reveal">
-            <p className="j-kicker">01 · At a glance</p>
-            <h2 className="j-h2">Real systems, real numbers.</h2>
-            <div className="j-stats">
-              <article className="j-stat">
-                <b>20+</b>
-                <p>microservices moved to automated, CA-signed certificates. <strong>Running in production</strong> at WSO2.</p>
-              </article>
-              <article className="j-stat">
-                <b>50+</b>
-                <p>inline secret injections removed from pipelines with External Secrets Operator.</p>
-              </article>
-              <article className="j-stat">
-                <b>0</b>
-                <p>inbound connections into production. A pull-based Argo CI/CD platform on AKS and EKS.</p>
-              </article>
-              <article className="j-stat">
-                <b>{contributions.length}</b>
-                <p>public open-source contributions: Argo Workflows, Kubernetes and Prometheus clients, WSO2 Terraform.</p>
-              </article>
-            </div>
-            <div className="j-chips">
-              <span className="j-chip j-chip--green">PageRewind · live on AWS · v0.1.0</span>
-              <span className="j-chip">Terraform · top 10% globally (TestDome)</span>
-              <span className="j-chip">Kubernetes · Terraform · Argo · AWS · Azure</span>
-            </div>
+        {/* 1 · 23:40 · the office */}
+        <section id="glance" ref={reg(1)} className="j-ch">
+          <div className="j-panel j-panel--left n-panel">
+            <p className="j-kicker">23:40 · The office</p>
+            <h2 className="j-h2">Everything is green.</h2>
+            <Terminal
+              on={active === 1}
+              title="yohan@on-call: ~"
+              lines={GLANCE_LINES}
+            />
           </div>
         </section>
 
-        {/* 2 · WSO2 platform */}
+        {/* 2 · 01:15 · the platform */}
         <section id="platform" ref={reg(2)} className="j-ch">
-          <div className="j-panel j-panel--left j-reveal">
-            <p className="j-kicker">02 · WSO2 · Apr – Oct 2026</p>
-            <h2 className="j-h2">CI/CD that never reaches into production.</h2>
-            <p>
-              As an SRE intern I worked on a pull-based platform on Argo Workflows, Events and CD. Every AKS and EKS data plane
-              dials out to the control plane over a mutual-TLS NATS bus, so nothing opens inbound.
-            </p>
-            <ul className="j-list">
-              <li>
-                <b>Production-ready</b> for teams to adopt, with the whole Argo setup provisioned in Terraform (multi-AZ,
-                replicated controllers).
-              </li>
-              <li>
-                <b>Certificates:</b> automated CA-signed issuance and rotation across 20+ microservices, now running in production.
-              </li>
-              <li>
-                <b>Secrets:</b> 50+ inline injections replaced with External Secrets Operator; Workload Identity Federation instead
-                of stored tokens.
-              </li>
-              <li>
-                <b>Terraform:</b> 3 PRs merged into WSO2&rsquo;s public module library; the Argo modules for Azure and AWS are in
-                review.
-              </li>
+          <div className="j-panel j-panel--left n-panel">
+            <p className="j-kicker">01:15 · In the cloud · WSO2, Apr – Oct 2026</p>
+            <h2 className="j-h2">Deploys that never reach into production.</h2>
+            <Diagram on={active === 2} />
+            <ul className="n-facts">
+              <li>Pull-based CI/CD on Argo: every data plane dials out, nothing opens inbound. Production-ready, provisioned in Terraform.</li>
+              <li>CA-signed certificates for 20+ microservices, rotated automatically, running in production.</li>
+              <li>3 Terraform PRs merged into WSO2&rsquo;s public Azure module library.</li>
             </ul>
             <div className="j-actions">
-              <Ext href="https://medium.com/@yohansenadheera/how-i-went-cloud-agnostic-with-the-argo-ecosystem-4725b08290a9">
-                Read: going cloud-agnostic with Argo
-              </Ext>
-              <Ext href="https://medium.com/@yohansenadheera/replaced-manual-certificate-signing-across-20-microservices-with-a-pipeline-f166a00d63f6">
-                Read: certificates for 20+ services
-              </Ext>
+              <Ext href="https://medium.com/@yohansenadheera/how-i-went-cloud-agnostic-with-the-argo-ecosystem-4725b08290a9">Read: going cloud-agnostic</Ext>
+              <Ext href="https://medium.com/@yohansenadheera/replaced-manual-certificate-signing-across-20-microservices-with-a-pipeline-f166a00d63f6">Read: certs for 20+ services</Ext>
             </div>
           </div>
         </section>
 
-        {/* 3 · PageRewind */}
+        {/* 3 · 03:00 · the page */}
         <section id="pagerewind" ref={reg(3)} className="j-ch">
-          <div className="j-panel j-panel--left j-reveal">
-            <p className="j-kicker">03 · PageRewind · Nov 2026 – now</p>
-            <h2 className="j-h2">100 alerts. One incident. The right person paged.</h2>
-            <p>
-              My open-source on-call platform: five Java (Spring Boot) services that turn alerts into incidents, page the on-call
-              engineer on Telegram or email, and escalate when nobody answers.
+          <div className="j-panel j-panel--left n-panel">
+            <p className="j-kicker n-kicker--red">03:00 · The page</p>
+            <h2 className="j-h2">100 alerts. One incident. One person paged.</h2>
+            <Page on={active === 3} />
+            <p className="n-copy">
+              That&rsquo;s <b>PageRewind</b>, my open-source on-call platform: Java (Spring Boot) services with an outbox,
+              idempotent consumers and quorum queues, so no alert is lost and duplicates collapse. Live on AWS (Terraform, k3s,
+              Argo CD).
             </p>
-            <ul className="j-list">
-              <li>
-                <b>No lost alerts:</b> transactional outbox, idempotent consumers and quorum queues. 100 duplicates become one
-                incident.
-              </li>
-              <li>
-                <b>Live on AWS:</b> Terraform builds a k3s cluster and Argo CD deploys every change through GitOps.
-              </li>
-              <li>
-                <b>Tested:</b> 160+ tests, a full-stack end-to-end test in CI, and 8 architecture decision records.
-              </li>
-            </ul>
             <div className="j-actions">
               <Ext href={LINKS.status} solid>
                 See it live
               </Ext>
-              <Ext href={LINKS.pagerewind}>Code on GitHub</Ext>
+              <Ext href={LINKS.pagerewind}>Code</Ext>
             </div>
           </div>
         </section>
 
-        {/* 4 · open source */}
+        {/* 4 · 03:20 · the fix */}
         <section id="opensource" ref={reg(4)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--wide j-reveal">
-            <p className="j-kicker">04 · Open source</p>
-            <h2 className="j-h2">Fixing things at the source.</h2>
-            <p>
-              {merged} merged, {review} in review, {issues} issues. My Argo Workflows docs PR was merged and backported to two
-              release branches.
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">03:20 · The fix</p>
+            <h2 className="j-h2">Fix it at the source.</h2>
+            <p className="n-copy">
+              {merged} merged, {review} in review, {issues} issues, upstream in Argo, Kubernetes, Prometheus, OpenAPI Generator
+              and WSO2.
             </p>
-            <ul className="j-prs">
-              {contributions.map((c) => (
-                  <li key={c.repo + c.ref}>
-                    <a href={c.url} target="_blank" rel="noopener noreferrer">
-                      <span className={`j-pill j-pill--${c.status}`}>{statusLabel[c.status]}</span>
-                      <span className="j-prs__repo">
-                        {c.repo} <em>{c.ref}</em>
-                      </span>
-                      <span className="j-prs__title">{c.title}</span>
-                    </a>
+            <PRFeed on={active === 4} items={contributions.map((c) => ({ ...c, label: statusLabel[c.status] }))} />
+          </div>
+        </section>
+
+        {/* 5 · 09:30 · the lab */}
+        <section id="projects" ref={reg(5)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">09:30 · The lab</p>
+            <h2 className="j-h2">Things I built on the way here.</h2>
+            <GitLog on={active === 5} items={PROJECTS.map((p) => ({ ...p, sha: sha(p.title) }))} />
+          </div>
+        </section>
+
+        {/* 6 · 16:30 · postmortem */}
+        <section id="path" ref={reg(6)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">16:30 · Peradeniya</p>
+            <h2 className="j-h2">Postmortem: the path so far.</h2>
+            <Postmortem on={active === 6}>
+              <h3>Timeline</h3>
+              <ol>
+                <li>
+                  <span>Apr – Oct 2026</span> SRE Intern, WSO2 (Customer Success): multi-cloud CI/CD on Argo, PKI automation,
+                  Terraform modules.
+                </li>
+                <li>
+                  <span>Nov 2024 – Aug 2025</span> Undergraduate Teaching Assistant, Peradeniya: mentored 40+ students.
+                </li>
+                <li>
+                  <span>Feb 2022 – Oct 2026</span> BSc Eng (Hons) Computer Engineering, University of Peradeniya.
+                </li>
+              </ol>
+              <h3>What went well</h3>
+              <ul>
+                {AWARDS.slice(0, 3).map((a) => (
+                  <li key={a.title}>
+                    {a.title} <span>{a.sub}</span>
                   </li>
                 ))}
-            </ul>
-            <div className="j-actions">
-              <Ext href="https://github.com/pulls?q=is%3Apr+author%3AYohan-Senadheera+is%3Apublic">All my pull requests</Ext>
-            </div>
+                {LEADERSHIP.slice(0, 2).map((e) => (
+                  <li key={e.title + e.organization}>
+                    {e.title}, {e.organization}
+                  </li>
+                ))}
+              </ul>
+              <h3>Action items</h3>
+              <ul className="n-actions">
+                <li>Take the CKA exam (course done).</li>
+                <li>Join a team that runs real production. Owner: you?</li>
+              </ul>
+            </Postmortem>
           </div>
         </section>
 
-        {/* 5 · experience */}
-        <section id="projects" ref={reg(5)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--caption j-reveal">
-            <p className="j-kicker">05 · Projects</p>
-            <h2 className="j-h2">More things I&rsquo;ve built.</h2>
-            <ul className="j-plist">
-              {PROJECTS.map((p) => (
-                <li key={p.title}>
-                  <div>
-                    <b>{p.title}</b>
-                    <span>{p.when}</span>
-                  </div>
-                  <p>{p.line}</p>
-                  {p.link && (
-                    <a href={p.link} target="_blank" rel="noopener noreferrer">
-                      View code <Arrow />
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <div className="j-actions">
-              <Ext href={LINKS.github}>All code on GitHub</Ext>
-            </div>
-          </div>
-        </section>
-
-        {/* 6 · experience */}
-        <section id="path" ref={reg(6)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--wide j-reveal">
-            <p className="j-kicker">06 · Experience</p>
-            <h2 className="j-h2">The path so far.</h2>
-            <div className="j-scrollbox">
-            <ol className="j-timeline">
-              <li>
-                <span>Apr – Oct 2026</span>
-                <b>SRE Intern · WSO2</b>
-                <p>Customer Success. Multi-cloud CI/CD on Argo, PKI certificate automation, Terraform modules.</p>
-              </li>
-              <li>
-                <span>Nov 2024 – Aug 2025</span>
-                <b>Undergraduate Teaching Assistant · University of Peradeniya</b>
-                <p>Database Systems and Programming Methodology. Taught and mentored 40+ students.</p>
-              </li>
-              <li>
-                <span>Feb 2022 – Oct 2026</span>
-                <b>BSc Eng (Hons) Computer Engineering · University of Peradeniya</b>
-                <p>Final-year project: a four-agent LLM grading pipeline in Moodle; the rubric agent cut grading error by 47%.</p>
-              </li>
-            </ol>
-            <div className="j-grid2">
-              <div>
-                <h3>Leadership</h3>
-                <ul className="j-mini">
-                  {LEADERSHIP.slice(0, 4).map((e) => (
-                    <li key={e.title + e.organization}>
-                      <span className="j-mini__t">{e.title}</span>
-                      <span>
-                        {e.organization} · {e.timeframe}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3>Awards &amp; competitions</h3>
-                <ul className="j-mini">
-                  {AWARDS.slice(0, 4).map((a) => (
-                    <li key={a.title + a.sub}>
-                      <span className="j-mini__t">{a.title}</span>
-                      <span>{a.sub}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 7 · toolbox */}
+        {/* 7 · 18:10 · the rooftop */}
         <section id="toolbox" ref={reg(7)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--wide j-reveal">
-            <p className="j-kicker">07 · Toolbox</p>
-            <h2 className="j-h2">What I work with.</h2>
-            <div className="j-skills">
-              {Object.entries(profile.skills).map(([group, items]) => (
-                <div key={group}>
-                  <h3>{group}</h3>
-                  <p>{(items as readonly string[]).join(" · ")}</p>
-                </div>
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">18:10 · The rooftop</p>
+            <h2 className="j-h2">The tools I reach for.</h2>
+            <Skills on={active === 7} groups={Object.entries(profile.skills) as [string, readonly string[]][]} />
+            <div className="n-reading">
+              <b>Writing</b>
+              {medium.articles.map((a) => (
+                <a key={a.url} href={a.url} target="_blank" rel="noopener noreferrer">
+                  {a.title} <Arrow />
+                </a>
               ))}
-            </div>
-            <div className="j-scrollbox">
-            <div className="j-grid2">
-              <div>
-                <h3>Courses &amp; certificates</h3>
-                <ul className="j-mini">
-                  {COURSES.slice(0, 6).map((c) => (
-                    <li key={c.title}>
-                      <span className="j-mini__t">{c.title}</span>
-                      <span>
-                        {c.issuer} · {c.date}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3>Writing</h3>
-                <ul className="j-mini">
-                  {medium.articles.map((a) => (
-                    <li key={a.url}>
-                      <a href={a.url} target="_blank" rel="noopener noreferrer">
-                        {a.title} <Arrow />
-                      </a>
-                      <span>
-                        {a.tag} · {a.date}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+              <b>Courses</b>
+              <span>{COURSES.slice(0, 5).map((c) => c.title).join(" · ")}</span>
             </div>
           </div>
         </section>
 
-        {/* 8 · contact */}
+        {/* 8 · 18:30 · hand-off */}
         <section id="contact" ref={reg(8)} className="j-ch j-ch--contact">
-          <div className="j-contact j-reveal">
+          <div className="j-contact">
             <p className="j-status">
-              <i /> Open to SRE, DevOps and platform roles · can start immediately
+              <i /> 18:30 · Incident resolved · open to SRE, DevOps and platform roles · can start immediately
             </p>
             <h2 className="j-title j-title--sm">
               Let&rsquo;s keep your
@@ -570,7 +474,7 @@ export default function Journey() {
               <Ext href={LINKS.medium}>Medium</Ext>
             </div>
             <p className="j-foot">
-              © 2026 Yohan Senadheera · built with React Three Fiber · <a href="/classic">classic site</a>
+              © 2026 Yohan Senadheera · <a href="/classic">classic site</a>
             </p>
           </div>
         </section>
