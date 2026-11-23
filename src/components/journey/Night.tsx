@@ -273,3 +273,71 @@ export function Skills({ on, groups }: { on: boolean; groups: [string, readonly 
     </div>
   );
 }
+
+/* ---------------------------------------------------------------- 23:40 · the dashboard */
+
+function CountUp({ to, on, suffix }: { to: number; on: boolean; suffix: string }) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!on) return;
+    const t0 = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const k = Math.min(1, (t - t0) / 1100);
+      setV(Math.round(to * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [on, to]);
+  return (
+    <>
+      {on ? v : to}
+      {suffix}
+    </>
+  );
+}
+
+const SPARKS: Record<string, string> = {
+  up: "M0 34 L12 30 L24 31 L36 24 L48 25 L60 17 L72 15 L84 9 L100 4",
+  down: "M0 6 L12 9 L24 8 L36 16 L48 18 L60 25 L72 27 L84 33 L100 36",
+  flat: "M0 30 L100 30",
+};
+
+export function Dashboard({
+  on,
+  tiles,
+}: {
+  on: boolean;
+  tiles: readonly { value: number; suffix: string; label: string; sub: string; trend: string }[];
+}) {
+  return (
+    <div className={`n-dash ${on ? "is-on" : ""}`}>
+      <div className="n-dash__head">
+        <span>
+          <i /> All systems operational
+        </span>
+        <em>last 6 months · WSO2 + open source</em>
+      </div>
+      <div className="n-dash__grid">
+        {tiles.map((t, i) => (
+          <div className="n-tile" key={t.label} style={{ ["--i" as string]: i }}>
+            <div className="n-tile__top">
+              <i /> {t.label}
+            </div>
+            <b>
+              <CountUp to={t.value} on={on} suffix={t.suffix} />
+            </b>
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden>
+              <path d={SPARKS[t.trend] ?? SPARKS.flat} />
+            </svg>
+            <span>{t.sub}</span>
+          </div>
+        ))}
+      </div>
+      <a className="n-dash__foot" href="https://status.pagerewind.dev" target="_blank" rel="noopener noreferrer">
+        <i /> PageRewind v0.1.0 · operational · live on AWS ↗
+      </a>
+    </div>
+  );
+}

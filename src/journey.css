@@ -2591,3 +2591,125 @@ body:has(.j-root) {
   word-break: normal;
   overflow-wrap: anywhere;
 }
+
+/* ================================================================ smoother scroll + dashboard */
+.j-ch {
+  min-height: 135vh;
+}
+
+.n-dash {
+  margin-top: 8px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(7, 9, 14, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.9);
+}
+.n-dash__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.n-dash__head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 17px var(--display);
+  color: #5ee38f;
+}
+.n-dash__head span i,
+.n-tile__top i,
+.n-dash__foot i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 12px #22c55e;
+  display: inline-block;
+}
+.n-dash__head em {
+  font: 13px var(--mono);
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.55);
+}
+.n-dash__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.n-tile {
+  position: relative;
+  padding: 16px 18px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(94, 227, 143, 0.28);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.5s ease calc(var(--i) * 0.12s),
+    transform 0.5s ease calc(var(--i) * 0.12s);
+}
+.n-dash.is-on .n-tile {
+  opacity: 1;
+  transform: none;
+}
+.n-tile__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 14.5px var(--sans);
+  color: #eef2f8;
+}
+.n-tile b {
+  display: block;
+  margin: 6px 0 2px;
+  font: 800 54px/1 var(--display);
+  letter-spacing: -0.03em;
+  color: #5ee38f;
+}
+.n-tile svg {
+  display: block;
+  width: 100%;
+  height: 40px;
+  margin: 4px 0 6px;
+}
+.n-tile svg path {
+  fill: none;
+  stroke: #5ee38f;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  transition: stroke-dashoffset 1.4s ease 0.3s;
+}
+.n-dash.is-on .n-tile svg path {
+  stroke-dashoffset: 0;
+}
+.n-tile span {
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: rgba(238, 242, 248, 0.8);
+}
+.n-dash__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(94, 227, 143, 0.1);
+  color: #eef2f8;
+  font: 600 15px var(--sans);
+  text-decoration: none;
+}
+.n-dash__foot:hover {
+  background: rgba(94, 227, 143, 0.2);
+}
+@media (max-width: 760px) {
+  .n-tile b {
+    font-size: 38px;
+  }
+}

@@ -6,7 +6,7 @@ import { CanvasErrorBoundary } from "@/components/three/CanvasErrorBoundary";
 import { contributions, statusLabel } from "@/content/ops";
 import { profile } from "@/content/profile";
 import { medium } from "@/content/fun";
-import { Clock, Diagram, Page, PRFeed, Skills, Terminal } from "@/components/journey/Night";
+import { Clock, Dashboard, Diagram, Page, PRFeed, Skills } from "@/components/journey/Night";
 import { monthValue, PodBoard, Rotation, type Marker, type Pod, type Shift } from "@/components/journey/Interactive";
 import "@/journey.css";
 
@@ -67,6 +67,12 @@ function sha(t: string) {
 
 const MERGED = contributions.filter((c) => c.status === "merged").length;
 const REVIEW = contributions.filter((c) => c.status === "review").length;
+const GLANCE_TILES = [
+  { value: 20, suffix: "+", label: "services on CA-signed certs", sub: "auto-rotated · running in production", trend: "up" },
+  { value: 50, suffix: "+", label: "inline secrets removed", sub: "moved to External Secrets Operator", trend: "down" },
+  { value: 0, suffix: "", label: "inbound connections", sub: "AKS + EKS data planes dial out over mTLS", trend: "flat" },
+  { value: contributions.length, suffix: "", label: "public contributions", sub: `${MERGED} merged · ${REVIEW} in review`, trend: "up" },
+] as const;
 const GLANCE_LINES = [
   { cmd: "kubectl get certificates -A | grep -c Ready" },
   { out: "20+  services on CA-signed certs · auto-rotated · in production", ok: true },
@@ -153,6 +159,8 @@ function useJourneyScroll(
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       new URLSearchParams(window.location.search).has("calm");
     journey.calm = calm;
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!window.location.hash) window.scrollTo(0, 0);
     const lenis = calm ? null : new Lenis({ duration: 1.25, smoothWheel: true, wheelMultiplier: 0.9 });
 
     const update = () => {
@@ -164,13 +172,13 @@ function useJourneyScroll(
       const end = i < tops.length - 1 ? tops[i + 1] : start + 1;
       const frac = i < tops.length - 1 ? Math.min(1, Math.max(0, (y - start) / (end - start))) : 0;
       // Hold on each chapter for a moment, then travel.
-      const hold = 0.38;
+      const hold = 0.25;
       const eased = frac < hold ? 0 : (frac - hold) / (1 - hold);
       journey.t = i + eased;
       // Each chapter's text fades out while the camera travels, so the flight owns the screen.
       sections.current.forEach((el, k) => {
         if (!el) return;
-        const o = Math.min(1, Math.max(0, 1 - (Math.abs(journey.t - k) - 0.12) / 0.28));
+        const o = Math.min(1, Math.max(0, 1 - (Math.abs(journey.t - k) - 0.38) / 0.12));
         el.style.opacity = o.toFixed(3);
         el.style.pointerEvents = "none";
         const panel = el.firstElementChild as HTMLElement | null;
@@ -382,12 +390,9 @@ export default function Journey() {
         <section id="glance" ref={reg(1)} className="j-ch">
           <div className="j-panel j-panel--left n-panel">
             <p className="j-kicker">23:40 · The office</p>
-            <h2 className="j-h2">Before the night: everything is green.</h2>
-            <Terminal
-              on={active === 1}
-              title="yohan@on-call: ~"
-              lines={GLANCE_LINES}
-            />
+            <h2 className="j-h2">All systems green.</h2>
+            <p className="n-copy">The work I shipped, as the dashboard I check before the night starts.</p>
+            <Dashboard on={active === 1} tiles={GLANCE_TILES} />
           </div>
         </section>
 

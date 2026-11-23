@@ -253,7 +253,9 @@ function Photos() {
         c0?.el.pause();
         shown.current = 2;
       } else if (it.phase === "wait") {
-        const buffered = c0.el.buffered.length > 0 && c0.el.buffered.end(c0.el.buffered.length - 1) >= c0.el.duration - 0.1;
+        const buffered =
+          c0.el.readyState >= 4 ||
+          (c0.el.buffered.length > 0 && c0.el.buffered.end(c0.el.buffered.length - 1) >= c0.el.duration - 0.3);
         if (c0.ok && buffered) {
           // Play only once the whole clip is downloaded, so it never pauses to buffer.
           it.phase = 0;
