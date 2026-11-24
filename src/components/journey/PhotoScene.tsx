@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { journey, LAST } from "./store";
@@ -12,6 +12,12 @@ import { journey, LAST } from "./store";
 
 const N = 12;
 const name = (i: number) => `K${String(i).padStart(2, "0")}`;
+// WebP where it is clearly smaller at the same look; the rest stay JPG. ?v= changes whenever a still changes.
+const WEBP = new Set([1, 2, 3, 5, 6, 7, 8, 10, 11]);
+const stillUrl = (i: number) => `/media/web/${name(i)}.${WEBP.has(i) ? "webp?v=3" : "jpg?v=2"}`;
+const depthUrl = (i: number) => `/media/web/${name(i)}-d.png?v=2`;
+// The opening needs only the first stills; the rest load in the background, in story order.
+const FIRST = 3;
 
 type Cut = { out: [number, number]; in: [number, number]; dip?: number; flash?: number };
 // Anchors in image coordinates (x right, y down, 0..1).
@@ -180,25 +186,63 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
-function Photos() {
-  const { size } = useThree();
-  // ?v= changes whenever the stills change, so browsers never mix old and new cached photos.
-  const urls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}.jpg?v=2`), []);
-  const durls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}-d.png?v=2`), []);
-  const tex = useLoader(THREE.TextureLoader, urls);
-  const dep = useLoader(THREE.TextureLoader, durls);
+function prepStill(t: THREE.Texture) {
+  t.colorSpace = THREE.NoColorSpace; // flat + linear canvas: pass the photo colours straight through
+  t.minFilter = THREE.LinearFilter;
+  t.generateMipmaps = false;
+  return t;
+}
+function prepDepth(t: THREE.Texture) {
+  t.minFilter = THREE.LinearFilter;
+  t.generateMipmaps = false;
+  return t;
+}
 
-  useMemo(() => {
-    tex.forEach((t) => {
-      t.colorSpace = THREE.NoColorSpace; // flat + linear canvas: pass the photo colours straight through
-      t.minFilter = THREE.LinearFilter;
-      t.generateMipmaps = false;
-    });
-    dep.forEach((t) => {
-      t.minFilter = THREE.LinearFilter;
-      t.generateMipmaps = false;
-    });
-  }, [tex, dep]);
+function Photos() {
+  const { size, gl } = useThree();
+  const urls = useMemo(() => Array.from({ length: FIRST }, (_, i) => stillUrl(i)), []);
+  const durls = useMemo(() => Array.from({ length: FIRST }, (_, i) => depthUrl(i)), []);
+  const firstTex = useLoader(THREE.TextureLoader, urls);
+  const firstDep = useLoader(THREE.TextureLoader, durls);
+
+  // Slots for all stills; the ones not loaded yet are null and fall back to the nearest earlier still.
+  const [tex, dep] = useMemo(() => {
+    const t: (THREE.Texture | null)[] = Array(N).fill(null);
+    const d: (THREE.Texture | null)[] = Array(N).fill(null);
+    firstTex.forEach((x, i) => (t[i] = prepStill(x)));
+    firstDep.forEach((x, i) => (d[i] = prepDepth(x)));
+    return [t, d];
+  }, [firstTex, firstDep]);
+  const at = (i: number) => {
+    let k = Math.min(i, N - 1);
+    while (k > 0 && !(tex[k] && dep[k])) k--;
+    return k;
+  };
+
+  // Start the background stills only after the opening clip has what it needs, so they never slow it down.
+  const [bg, setBg] = useState(false);
+  useEffect(() => {
+    if (!bg) return;
+    let alive = true;
+    const loader = new THREE.TextureLoader();
+    (async () => {
+      for (let i = FIRST; i < N && alive; i++) {
+        try {
+          const [t, d] = await Promise.all([loader.loadAsync(stillUrl(i)), loader.loadAsync(depthUrl(i))]);
+          if (!alive) return;
+          tex[i] = prepStill(t);
+          dep[i] = prepDepth(d);
+          gl.initTexture(t); // upload now, so the first scroll onto it does not stutter
+          gl.initTexture(d);
+        } catch {
+          // leave the slot empty: that chapter keeps showing the previous still
+        }
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [bg, tex, dep, gl]);
 
   const mat = useMemo(
     () =>
@@ -208,10 +252,10 @@ function Photos() {
         depthTest: false,
         depthWrite: false,
         uniforms: {
-          tA: { value: tex[0] },
-          dA: { value: dep[0] },
-          tB: { value: tex[1] },
-          dB: { value: dep[1] },
+          tA: { value: tex[0]! },
+          dA: { value: dep[0]! },
+          tB: { value: tex[1]! },
+          dB: { value: dep[1]! },
           aspect: { value: new THREE.Vector2(1, 1) },
           focusAB: { value: new THREE.Vector2(0.5, 0.5) },
           anchorA: { value: new THREE.Vector2(0.5, 0.5) },
@@ -295,10 +339,12 @@ function Photos() {
     const d = Math.min(dt, 0.05);
     const u = mat.uniforms;
     u.time.value = state.clock.elapsedTime;
-    u.aspect.value.set(size.width / size.height, tex[0].image ? tex[0].image.width / tex[0].image.height : 16 / 9);
+    const img0 = tex[0]!.image as HTMLImageElement | undefined;
+    u.aspect.value.set(size.width / size.height, img0 ? img0.width / img0.height : 16 / 9);
 
     // ---------------- opening: the drone over Colombo (video), then his office slides up over the tower
     const it = intro.current;
+    if (!bg && it.phase !== "wait") setBg(true);
     let forced: number | null = null;
     if (it.phase !== "done") {
       const c0 = vids.get(-1);
@@ -347,8 +393,8 @@ function Photos() {
           it.from = 0;
         } else {
           u.useV.value = 0;
-          u.tA.value = tex[0];
-          u.dA.value = dep[0];
+          u.tA.value = tex[0]!;
+          u.dA.value = dep[0]!;
           u.scaleA.value = 1;
           u.zoomA.value = 1;
           u.mixB.value = 0;
@@ -377,8 +423,8 @@ function Photos() {
         showVideo(c0);
         u.vMix.value = 1;
         const q = Math.min(1, (state.clock.elapsedTime - it.since) / 2.0);
-        u.tB.value = tex[2];
-        u.dB.value = dep[2];
+        u.tB.value = tex[2]!;
+        u.dB.value = dep[2]!;
         u.focusAB.value.y = FOCUS_X[2];
         u.anchorB.value.set(0.5, 0.5);
         u.scaleB.value = 1;
@@ -433,8 +479,8 @@ function Photos() {
     u.softA.value = softAt(i);
     u.softB.value = i + 1 === N - 1 ? SOFT : 0;
     const settled = p === 0 && (forced !== null || Math.abs(target - s) < 0.002);
-    u.tA.value = tex[i];
-    u.dA.value = dep[i];
+    u.tA.value = tex[at(i)]!;
+    u.dA.value = dep[at(i)]!;
     u.focusAB.value.x = FOCUS_X[i];
     u.anchorA.value.set(0.5, 0.5);
     u.scaleA.value = 1;
@@ -458,16 +504,16 @@ function Photos() {
     } else {
       // ---------------- photo fallback (stills that have no clip yet)
       u.useV.value = 0;
-      u.tA.value = tex[i];
-      u.dA.value = dep[i];
+      u.tA.value = tex[at(i)]!;
+      u.dA.value = dep[at(i)]!;
       u.focusAB.value.x = FOCUS_X[i];
       u.anchorA.value.set(0.5, 0.5);
       u.scaleA.value = 1;
       u.zoomA.value = 1 + 0.04 * dwell; // a slow, even push-in while the chapter is read
       u.blurA.value = 0;
       if (cut && p > 0) {
-        u.tB.value = tex[i + 1];
-        u.dB.value = dep[i + 1];
+        u.tB.value = tex[at(i + 1)]!;
+        u.dB.value = dep[at(i + 1)]!;
         u.focusAB.value.y = FOCUS_X[i + 1];
         u.anchorB.value.set(0.5, 0.5);
         u.scaleB.value = 1;
