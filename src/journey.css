@@ -2713,3 +2713,195 @@ body:has(.j-root) {
     font-size: 38px;
   }
 }
+
+/* ================================================================ phone layout: photo first, then a readable card */
+@media (max-width: 760px) {
+  /* the clock duplicates each chapter's kicker and sat on top of the content */
+  .n-clock {
+    display: none !important;
+  }
+  /* text must not fade while it is still being read on a tall phone page */
+  .j-ch {
+    opacity: 1 !important;
+    min-height: auto;
+    padding-bottom: 16svh;
+  }
+  .n-night .j-stage::after {
+    background: linear-gradient(180deg, rgba(4, 6, 12, 0.35) 0%, rgba(4, 6, 12, 0.05) 18%, rgba(4, 6, 12, 0.1) 45%, rgba(4, 6, 12, 0.7) 75%, rgba(4, 6, 12, 0.85) 100%);
+  }
+
+  /* each chapter: the scene shows on the top half, the content sits in a dark card below it */
+  .n-night .j-panel,
+  .n-night .n-panel,
+  .n-night .n-panel.j-panel--wide {
+    position: relative;
+    width: auto;
+    margin: 44svh -4px 0;
+    padding: 20px 16px 18px;
+    border-radius: 20px;
+    background: rgba(6, 8, 13, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.9);
+  }
+  .n-night .j-kicker {
+    font-size: 12px;
+  }
+  .n-night .j-h2 {
+    font-size: 28px !important;
+    line-height: 1.08;
+  }
+  .n-copy,
+  .n-panel > p {
+    font-size: 15px !important;
+    line-height: 1.55;
+  }
+
+  /* cover: his photo on top, the name at the bottom */
+  .n-night .j-cover {
+    justify-content: flex-end;
+    padding-top: 0;
+    padding-bottom: 34px;
+    min-height: 100svh;
+  }
+  .n-night .j-cover .j-title {
+    font-size: clamp(42px, 13vw, 56px);
+  }
+  .n-night .j-cover .j-lede {
+    font-size: 20px;
+  }
+  .n-night .j-cover .j-meta {
+    font-size: 13px;
+  }
+  .n-night .j-cover .j-note,
+  .n-night .j-cover > p:last-child {
+    display: none;
+  }
+
+  /* contact: same idea, smaller card at the bottom */
+  .n-night .j-ch--contact .j-contact {
+    justify-content: flex-end;
+    padding-bottom: 24px;
+    min-height: 100svh;
+  }
+  .n-contact-card {
+    width: 100%;
+    padding: 20px 18px 16px;
+  }
+  .n-contact-card .j-title {
+    font-size: 32px !important;
+  }
+  .n-contact-card .j-email {
+    font-size: 17px !important;
+    margin-top: 14px;
+  }
+  .n-contact-card .j-status {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  /* dashboard */
+  .n-dash {
+    padding: 12px;
+  }
+  .n-dash__head em {
+    display: none;
+  }
+  .n-dash__head span {
+    font-size: 15px;
+  }
+  .n-dash__grid {
+    gap: 8px;
+  }
+  .n-tile {
+    padding: 12px;
+  }
+  .n-tile__top {
+    font-size: 12.5px;
+  }
+  .n-tile b {
+    font-size: 32px !important;
+  }
+  .n-tile svg {
+    height: 26px;
+  }
+  .n-tile span {
+    font-size: 12px;
+  }
+  .n-dash__foot {
+    font-size: 13px;
+  }
+
+  /* diagram: only the main labels, larger */
+  .n-diagram .n-d-small {
+    display: none;
+  }
+  .n-diagram text {
+    font-size: 17px;
+  }
+
+  /* skills: one card per group instead of a squeezed table */
+  .n-skills thead {
+    display: none;
+  }
+  .n-skills table,
+  .n-skills tbody {
+    display: block;
+  }
+  .n-skills tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .n-skills td {
+    padding: 0 !important;
+    white-space: normal !important;
+  }
+  .n-skills td:last-child {
+    grid-column: 1 / -1;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(238, 242, 248, 0.85);
+  }
+
+  /* experience chart: tighter */
+  .i-rot__lane label {
+    font-size: 10px;
+  }
+  .i-rot__card {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 760px) {
+  /* solid top bar so headings don't run underneath it */
+  .n-night .j-top {
+    background: rgba(6, 8, 13, 0.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  /* PR list: badge on top, text wraps inside the card */
+  .n-prs a {
+    grid-template-columns: 1fr;
+    grid-template-areas: "b" "repo" "title";
+    row-gap: 4px;
+    padding: 10px 12px;
+  }
+  .n-prs .n-badge {
+    justify-self: start;
+    padding: 3px 10px;
+    font-size: 10.5px;
+  }
+  .n-prs__repo,
+  .n-prs__title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .n-prs__repo {
+    font-size: 13.5px;
+  }
+  .n-prs__title {
+    font-size: 13.5px;
+  }
+}
