@@ -34,8 +34,8 @@ const OFF_CALL: readonly OffCard[] = [
   {
     icon: "🥾",
     title: "Hiking and travel",
-    when: "Senior Member, University Explorers' Club · 2024 – 2026",
-    text: "Hiking and travelling around Sri Lanka. Some of the trails and places I've been to:",
+    when: "With friends, and with the University Explorers' Club (Senior Member, 2024 – 2026)",
+    text: "Hiking and travelling around Sri Lanka, some trips with the club and many with friends. Some of the trails and places I've been to:",
     places: ["Devil's Staircase", "Madulsima", "Peacock Hill", "Chariot Path", "Meemure", "Gartmore", "and many more"],
     wide: true,
   },
