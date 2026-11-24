@@ -1,6 +1,4 @@
-// Sri Lanka take-home pay: EPF, ETF and APIT (tax on employment income).
-// Source: Inland Revenue Department, APIT Tax Table No. 01 (2025/2026), still in force as of 24 Nov 2026.
-// Personal relief Rs. 150,000 a month (Rs. 1,800,000 a year).
+// APIT rates from IRD Tax Table No. 01 (2025/26).
 
 export const RULES_AS_OF = "24 November 2026";
 export const IRD_TABLE_URL =
@@ -90,7 +88,6 @@ export function calc(o: Offer): Result {
   const apit = monthlyApit(gross);
   const takeHome = gross - epfEmployee - apit;
   const bonus = Math.max(0, o.basic) * Math.max(0, o.bonusMonths);
-  // Bonus tax: the extra annual tax the bonus causes (employers deduct it with Table 02; this is the year-end effect).
   const regularYear = annualTax(gross * 12);
   const withBonus = annualTax(gross * 12 + bonus);
   const bonusTax = withBonus.total - regularYear.total;

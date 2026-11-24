@@ -1,5 +1,4 @@
-// 1. Send the old pages.dev address to the real domain, so search engines index yohan.is-a.dev only.
-// 2. Give each tool page its own title and description in the HTML, so link previews and crawlers see them.
+// Redirect pages.dev to the real domain, and set per-page meta tags for the tool pages.
 
 type El = { setAttribute(n: string, v: string): void; setInnerContent(c: string): void };
 declare const HTMLRewriter: {

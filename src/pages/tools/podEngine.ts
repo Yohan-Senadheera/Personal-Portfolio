@@ -1,4 +1,4 @@
-// Pod Doctor: reads `kubectl describe pod` output and explains what is wrong, in plain English.
+// Diagnoses `kubectl describe pod` output.
 
 export type Severity = "critical" | "warn" | "info" | "ok";
 
@@ -43,7 +43,6 @@ export type Pod = {
   events: PodEvent[];
 };
 
-/* ------------------------------------------------------------------ parsing */
 
 function field(block: string, key: string): string | undefined {
   const m = block.match(new RegExp(`^\\s*${key}:[ \\t]*(.*)$`, "m"));
@@ -165,7 +164,6 @@ export function parsePod(text: string): Pod {
   };
 }
 
-/* ------------------------------------------------------------------ diagnosis */
 
 const EXIT: Record<number, [string, string]> = {
   0: ["exited successfully", "The process finished and exited with code 0. Kubernetes restarts containers in a Deployment whenever they stop, so a container that finishes its work looks like a crash."],
@@ -199,7 +197,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
   const all = text;
   const ev = (e: PodEvent) => `${e.type}  ${e.reason}  ${e.age}  ${e.message}`.replace(/\s+/g, " ").trim();
 
-  /* ---------- scheduling */
   const sched = msgs(/FailedScheduling|nodes are available/);
   const schedText = sched.map((e) => e.message).join(" ") || (all.match(/\d+\/\d+ nodes are available[^\n]*/)?.[0] ?? "");
   if (schedText) {
@@ -341,7 +338,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     }
   }
 
-  /* ---------- quota */
   if (/exceeded quota/.test(all)) {
     add({
       id: "quota",
@@ -354,7 +350,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- image pull */
   const pullEv = msgs(/Failed to pull image|ErrImagePull|ImagePullBackOff|InvalidImageName|Back-off pulling image/);
   const pullC = pod.containers.filter((c) => has(c.stateReason, /ErrImagePull|ImagePullBackOff|InvalidImageName/));
   if (pullEv.length || pullC.length) {
@@ -446,7 +441,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     }
   }
 
-  /* ---------- config errors */
   for (const m of all.matchAll(/(secret|configmap)s? "([^"]+)" not found/gi)) {
     const kind = m[1].toLowerCase() === "secret" ? "Secret" : "ConfigMap";
     add({
@@ -496,7 +490,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- volumes */
   const multi = msgs(/Multi-Attach error/);
   if (multi.length) {
     add({
@@ -526,7 +519,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- start errors */
   const startText = [...pod.containers.map((c) => `${c.stateReason ?? ""} ${c.lastReason ?? ""}`), ...pod.events.map((e) => e.message)].join(" ");
   if (/exec format error/.test(startText)) {
     add({
@@ -551,7 +543,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- crashes */
   for (const c of pod.containers) {
     const crashing =
       has(c.stateReason, /^(CrashLoopBackOff|Error|OOMKilled)$/) ||
@@ -617,7 +608,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- probes */
   const probe = (kind: "Liveness" | "Readiness" | "Startup") => {
     const evs = pod.events.filter((e) => new RegExp(`${kind} probe (failed|errored)`).test(e.message));
     if (!evs.length) return;
@@ -666,7 +656,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
   probe("Liveness");
   probe("Readiness");
 
-  /* ---------- eviction */
   if (pod.reason === "Evicted" || /The node was low on resource/.test(all)) {
     const res = all.match(/low on resource: ([\w-]+)/)?.[1] ?? "a resource";
     add({
@@ -686,7 +675,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- sandbox / networking */
   const sandbox = msgs(/FailedCreatePodSandBox/);
   if (sandbox.length) {
     const m = sandbox.map((e) => e.message).join(" ");
@@ -706,7 +694,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- node */
   if (/NodeNotReady|node\.kubernetes\.io\/(unreachable|not-ready)/.test(all) && !findings.some((f) => f.id === "sched-taint")) {
     add({
       id: "node",
@@ -719,7 +706,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- hooks */
   const hook = msgs(/FailedPostStartHook|FailedPreStopHook/);
   if (hook.length) {
     add({
@@ -733,7 +719,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- running but not ready */
   const notReady = pod.containers.filter((c) => !c.init && c.state === "Running" && c.ready === false);
   if (notReady.length && !findings.some((f) => f.id.startsWith("probe-"))) {
     add({
@@ -747,7 +732,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- pending with nothing to go on */
   if (!findings.length && pod.status === "Pending" && !warn.length) {
     add({
       id: "pending-quiet",
@@ -760,7 +744,6 @@ export function diagnose(text: string): { pod: Pod; findings: Finding[] } {
     });
   }
 
-  /* ---------- healthy */
   if (!findings.length && pod.status === "Running" && pod.containers.length && pod.containers.filter((c) => !c.init).every((c) => c.ready !== false)) {
     const restarts = pod.containers.reduce((n, c) => n + (c.restarts ?? 0), 0);
     add({

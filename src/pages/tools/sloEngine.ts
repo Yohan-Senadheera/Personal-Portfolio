@@ -1,5 +1,4 @@
-// SLO -> error budget and multi-window, multi-burn-rate Prometheus alerts
-// (the approach from Google's SRE Workbook, chapter "Alerting on SLOs").
+// Multi-window, multi-burn-rate alerts (Google SRE Workbook, "Alerting on SLOs").
 
 export type SloInput = {
   service: string;
