@@ -255,7 +255,14 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | 0 | "turn" | "reveal" | "done"; since: number; from: number }>({ phase: "wait", since: 0, from: 1 });
+  const intro = useRef<{ phase: "wait" | 0 | "turn" | "reveal" | "done"; since: number; from: number; last: number; moved: number; nudged: number }>({
+    phase: "wait",
+    since: 0,
+    from: 1,
+    last: -1,
+    moved: 0,
+    nudged: 0,
+  });
   const sway = useRef(new THREE.Vector2());
 
   const seek = (v: { el: HTMLVideoElement }, time: number) => {
@@ -297,6 +304,9 @@ function Photos() {
         if (c0.ok && buffered) {
           // Play only once the whole clip is downloaded, so it never pauses to buffer.
           it.phase = 0;
+          it.since = state.clock.elapsedTime;
+          it.last = -1;
+          it.moved = state.clock.elapsedTime;
           c0.el.currentTime = 0;
           void c0.el.play().catch(() => {
             // Autoplay blocked (e.g. Brave): tell the same story with the photographs.
@@ -319,8 +329,18 @@ function Photos() {
       } else if (it.phase === 0) {
         showVideo(c0);
         u.vMix.value = 1;
+        // Watchdog: if the browser stalls the video (e.g. while resizing to full screen), nudge it, then move on.
+        const now = state.clock.elapsedTime;
+        if (c0.el.currentTime !== it.last) {
+          it.last = c0.el.currentTime;
+          it.moved = now;
+        } else if (now - it.moved > 0.8 && now - it.nudged > 0.8 && !c0.el.ended) {
+          it.nudged = now;
+          void c0.el.play().catch(() => {});
+        }
+        const stalled = now - it.moved > 2.5 || now - it.since > (isFinite(c0.el.duration) ? c0.el.duration : 5) + 3;
         // The drone has settled at the window ~1.2 s before the clip ends: start the page turn then, while it still drifts.
-        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 1.2) {
+        if (stalled || c0.el.ended || c0.el.currentTime >= c0.el.duration - 1.2) {
           it.phase = "turn";
           it.since = state.clock.elapsedTime;
         }
