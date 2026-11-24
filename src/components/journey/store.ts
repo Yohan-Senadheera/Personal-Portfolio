@@ -17,8 +17,8 @@ export const CHAPTERS = [
   { id: "opensource", label: "Open source" },
   { id: "projects", label: "Projects" },
   { id: "path", label: "Experience" },
-  { id: "toolbox", label: "Toolbox" },
   { id: "offcall", label: "Off call" },
+  { id: "toolbox", label: "Toolbox" },
   { id: "contact", label: "Contact" },
 ] as const;
 

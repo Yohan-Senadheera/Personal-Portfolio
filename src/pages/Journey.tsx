@@ -567,29 +567,10 @@ export default function Journey() {
           </div>
         </section>
 
-        {/* 7 · 18:10 · the rooftop */}
-        <section id="toolbox" ref={reg(7)} className="j-ch">
+        {/* 7 · 17:30 · off call */}
+        <section id="offcall" ref={reg(7)} className="j-ch">
           <div className="j-panel j-panel--left j-panel--wide n-panel">
-            <p className="j-kicker">18:10 · The rooftop</p>
-            <h2 className="j-h2">The tools I reach for.</h2>
-            <Skills on={active === 7} groups={Object.entries(profile.skills) as [string, readonly string[]][]} />
-            <div className="n-reading">
-              <b>Writing</b>
-              {medium.articles.map((a) => (
-                <a key={a.url} href={a.url} target="_blank" rel="noopener noreferrer">
-                  {a.title} <Arrow />
-                </a>
-              ))}
-              <b>Courses</b>
-              <span>{COURSES.slice(0, 5).map((c) => c.title).join(" · ")}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* 8 · 18:20 · off call */}
-        <section id="offcall" ref={reg(8)} className="j-ch">
-          <div className="j-panel j-panel--left j-panel--wide n-panel">
-            <p className="j-kicker">18:20 · Off call</p>
+            <p className="j-kicker">17:30 · Off call</p>
             <h2 className="j-h2">When the pager is quiet.</h2>
             <p className="n-copy">Sports, societies, the trails I hike, and what I build for fun.</p>
             <div className="n-off">
@@ -614,6 +595,25 @@ export default function Journey() {
                   </div>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 8 · 18:10 · the rooftop */}
+        <section id="toolbox" ref={reg(8)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">18:10 · The rooftop</p>
+            <h2 className="j-h2">The tools I reach for.</h2>
+            <Skills on={active === 8} groups={Object.entries(profile.skills) as [string, readonly string[]][]} />
+            <div className="n-reading">
+              <b>Writing</b>
+              {medium.articles.map((a) => (
+                <a key={a.url} href={a.url} target="_blank" rel="noopener noreferrer">
+                  {a.title} <Arrow />
+                </a>
+              ))}
+              <b>Courses</b>
+              <span>{COURSES.slice(0, 5).map((c) => c.title).join(" · ")}</span>
             </div>
           </div>
         </section>

@@ -10,7 +10,7 @@ import { journey, LAST } from "./store";
    and lands in the next still. Depth maps make near things move more than far things, so the photos
    behave like footage rather than flat zooms. */
 
-const N = 11;
+const N = 12;
 const name = (i: number) => `K${String(i).padStart(2, "0")}`;
 
 type Cut = { out: [number, number]; in: [number, number]; dip?: number; flash?: number };
@@ -27,7 +27,8 @@ const CUTS: Cut[] = [
   { out: [0.53, 0.7], in: [0.45, 0.83] }, //                K06 the phone           -> K07 the same phone, quiet at dawn
   { out: [0.1, 0.35], in: [0.45, 0.25] }, //                K07 morning window      -> K08 the lab windows
   { out: [0.48, 0.22], in: [0.3, 0.2] }, //                 K08 the trees outside   -> K09 the campus trees
-  { out: [0.55, 0.1], in: [0.3, 0.12] }, //                 K09 the morning sky     -> K10 the sunset sky
+  { out: [0.55, 0.1], in: [0.3, 0.12] }, //                 K09 the morning sky     -> K10 the sunset over the hills
+  { out: [0.3, 0.12], in: [0.3, 0.12] }, //                  K10 the hill sunset     -> K11 the same sunset from the rooftop
 ];
 
 /** Real video for a transition (start frame = still i, end frame = still i+1). Add the number as clips arrive. */
@@ -37,10 +38,10 @@ const CLIPS = new Set<number>([4, 6]); // 01 city -> tower, 04 laptop -> data ce
 const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
-const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.6];
+const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.72, 0.6];
 
-// The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, toolbox, off call, contact.
-const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 10, 10.6];
+// The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, off call, toolbox, contact.
+const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 11, 11.6];
 
 /** Chapter position (journey.t, 0..LAST) -> position along the stills (0..10.x). */
 function stillAt(t: number) {
