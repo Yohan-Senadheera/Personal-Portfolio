@@ -16,9 +16,18 @@ const EXAMPLE: SplitState = {
 
 const EMPTY: SplitState = { cur: "Rs.", people: ["", ""], expenses: [] };
 
+const KEY = "trip-split:last";
+
 function load(): SplitState {
   const h = window.location.hash.slice(1);
-  return (h && decode(h)) || EMPTY;
+  const fromLink = h && decode(h);
+  if (fromLink) return fromLink;
+  try {
+    const saved = localStorage.getItem(KEY);
+    return (saved && decode(saved)) || EMPTY;
+  } catch {
+    return EMPTY;
+  }
 }
 
 export default function TripSplit() {
@@ -36,6 +45,12 @@ export default function TripSplit() {
   useEffect(() => {
     const empty = s.expenses.length === 0 && s.people.every((p) => !p.trim());
     window.history.replaceState(null, "", empty ? window.location.pathname : `${window.location.pathname}#${encode(s)}`);
+    try {
+      if (empty) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, encode(s));
+    } catch {
+      /* private mode: the link still works */
+    }
   }, [s]);
 
   const bal = useMemo(() => balances(people, s.expenses), [people, s.expenses]);
@@ -282,8 +297,9 @@ export default function TripSplit() {
                 <CopyButton text={window.location.href} label="Copy share link" />
               </div>
               <p className="t-hint" style={{ marginTop: 10 }}>
-                The share link holds the whole trip inside it (after the #), so it is never sent to any server. Anyone with
-                the link can open and edit their own copy.
+                Your trip is saved in this browser, so it is still here if you close the tab ("Start over" clears it). The
+                share link holds the whole trip after the #, which is never sent to any server; anyone with the link gets
+                their own copy to view or edit.
               </p>
             </>
           )}
