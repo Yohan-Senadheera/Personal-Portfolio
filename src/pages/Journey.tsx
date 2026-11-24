@@ -642,7 +642,7 @@ export default function Journey() {
               <Ext href={LINKS.medium}>Medium</Ext>
             </div>
             <p className="j-foot">
-              © 2026 Yohan Senadheera · <a href="/classic">classic site</a>
+              © 2026 Yohan Senadheera
             </p>
             </div>
           </div>
