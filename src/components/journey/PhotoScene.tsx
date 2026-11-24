@@ -35,7 +35,7 @@ const CUTS: Cut[] = [
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
 const CLIPS = new Set<number>([4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
 // Key -1 is the opening drone shot (clip 01: city -> lit window), played once, not scrubbed.
-const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
+const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4?v=2" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
 const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.72, 0.6];
@@ -319,8 +319,8 @@ function Photos() {
       } else if (it.phase === 0) {
         showVideo(c0);
         u.vMix.value = 1;
-        // The drone has settled at the window ~1.8 s before the clip ends: start the page turn then, while it still drifts.
-        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 1.8) {
+        // The drone has settled at the window ~1.2 s before the clip ends: start the page turn then, while it still drifts.
+        if (c0.el.ended || c0.el.currentTime >= c0.el.duration - 1.2) {
           it.phase = "turn";
           it.since = state.clock.elapsedTime;
         }
