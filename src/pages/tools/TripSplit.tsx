@@ -139,11 +139,16 @@ export default function TripSplit() {
               type="button"
               className="t-btn t-btn--ghost"
               onClick={() => {
+                if (
+                  s.expenses.length &&
+                  !window.confirm("Start a new trip? This clears the current one. Copy its share link first if you want to keep it.")
+                )
+                  return;
                 setS(EMPTY);
                 setDraft({ what: "", amount: 0, paidBy: 0, split: [0, 1] });
               }}
             >
-              Start over
+              New trip
             </button>
           </div>
 
@@ -297,7 +302,7 @@ export default function TripSplit() {
                 <CopyButton text={window.location.href} label="Copy share link" />
               </div>
               <p className="t-hint" style={{ marginTop: 10 }}>
-                Your trip is saved in this browser, so it is still here if you close the tab ("Start over" clears it). The
+                Your trip is saved in this browser, so it is still here if you close the tab ("New trip" clears it). The
                 share link holds the whole trip after the #, which is never sent to any server; anyone with the link gets
                 their own copy to view or edit.
               </p>
