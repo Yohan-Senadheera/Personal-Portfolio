@@ -3,7 +3,7 @@ import ToolLayout, { TOOLS, usePageMeta } from "./ToolLayout";
 export default function ToolsIndex() {
   usePageMeta(
     "Free SRE and DevOps tools",
-    "Free browser tools for Kubernetes, Prometheus SLOs and TLS certificates, built by Yohan Senadheera. Nothing you paste leaves your browser.",
+    "Free browser tools for Kubernetes, Prometheus SLOs and TLS certificates, plus a Sri Lanka take-home salary calculator. Built by Yohan Senadheera; nothing you enter leaves your browser.",
     "/tools",
   );
   return (
@@ -19,18 +19,23 @@ export default function ToolsIndex() {
           <i /> Nothing you paste is uploaded. Every tool runs entirely on this page.
         </p>
       </div>
-      <div className="t-cards">
-        {TOOLS.map((t) => (
-          <a key={t.slug} className="t-card" href={`/tools/${t.slug}`}>
-            <span className="t-tag" style={{ alignSelf: "flex-start" }}>
-              {t.tag}
-            </span>
-            <h2>{t.name}</h2>
-            <p>{t.blurb}</p>
-            <em>Open {t.name} →</em>
-          </a>
-        ))}
-      </div>
+      {(["SRE & DevOps", "Sri Lanka"] as const).map((g) => (
+        <section key={g} className="t-group">
+          <h2 className="t-group__title">{g === "Sri Lanka" ? "For everyone in Sri Lanka" : "For SRE and DevOps engineers"}</h2>
+          <div className="t-cards">
+            {TOOLS.filter((t) => t.group === g).map((t) => (
+              <a key={t.slug} className="t-card" href={`/tools/${t.slug}`}>
+                <span className="t-tag" style={{ alignSelf: "flex-start" }}>
+                  {t.tag}
+                </span>
+                <h2>{t.name}</h2>
+                <p>{t.blurb}</p>
+                <em>Open {t.name} →</em>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
     </ToolLayout>
   );
 }

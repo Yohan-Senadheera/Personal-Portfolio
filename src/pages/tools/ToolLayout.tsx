@@ -4,6 +4,7 @@ import "./tools.css";
 export const TOOLS = [
   {
     slug: "pod-doctor",
+    group: "SRE & DevOps",
     name: "Pod Doctor",
     tag: "Kubernetes",
     title: "Pod Doctor: why is my Kubernetes pod failing?",
@@ -12,6 +13,7 @@ export const TOOLS = [
   },
   {
     slug: "slo-alerts",
+    group: "SRE & DevOps",
     name: "SLO → Alert Rules",
     tag: "Prometheus",
     title: "SLO to Prometheus burn-rate alerts generator",
@@ -20,11 +22,21 @@ export const TOOLS = [
   },
   {
     slug: "cert-inspector",
+    group: "SRE & DevOps",
     name: "Cert Inspector",
     tag: "TLS / PKI",
     title: "Certificate chain inspector (runs in your browser)",
     blurb:
       "Paste PEM certificates. See expiry, SANs and keys, catch a missing intermediate or wrong order, and get the fixed bundle and openssl commands.",
+  },
+  {
+    slug: "salary-lk",
+    group: "Sri Lanka",
+    name: "Take-home Salary",
+    tag: "Sri Lanka",
+    title: "Sri Lanka take-home salary calculator: EPF, ETF and APIT",
+    blurb:
+      "See your real monthly take-home after EPF and APIT tax, what your employer adds to EPF and ETF, and compare up to three job offers side by side.",
   },
 ] as const;
 
@@ -122,7 +134,7 @@ export default function ToolLayout({
             <h1>{tool.name}</h1>
             <p>{tool.blurb}</p>
             <p className="t-private">
-              <i /> Runs entirely in your browser. Nothing you paste is uploaded or stored.
+              <i /> Runs entirely in your browser. Nothing you enter is uploaded or stored.
             </p>
           </div>
         )}

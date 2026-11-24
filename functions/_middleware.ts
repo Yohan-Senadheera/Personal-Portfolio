@@ -25,6 +25,11 @@ const PAGES: Record<string, { title: string; description: string }> = {
     description:
       "Turn an SLO into an error budget and ready-to-paste multi-window, multi-burn-rate Prometheus alert rules or a PrometheusRule.",
   },
+  "/tools/salary-lk": {
+    title: "Sri Lanka take-home salary calculator: EPF, ETF and APIT | Yohan Senadheera",
+    description:
+      "Your real monthly take-home after EPF and APIT tax, what your employer adds to EPF and ETF, and up to three job offers compared side by side. Uses the IRD's current tax table.",
+  },
   "/tools/cert-inspector": {
     title: "Certificate chain inspector | Yohan Senadheera",
     description:
