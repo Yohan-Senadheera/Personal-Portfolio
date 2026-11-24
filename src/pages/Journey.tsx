@@ -16,24 +16,34 @@ const JourneyCanvas = lazy(() =>
 
 const EMAIL = "yohansenadheera@gmail.com";
 
-const OFF_CALL = [
+type OffCard = { icon: string; title: string; when: string; text: string; places?: readonly string[]; wide?: boolean };
+
+const OFF_CALL: readonly OffCard[] = [
   {
     icon: "🎯",
     title: "Started a sport at Peradeniya",
     when: "Captain · 2023 – 2025",
-    text: "Founded air gun shooting as a university sport, captained the team for two years and led it to the 2024 Inter-University Air Rifle Championship (men's team). Awarded Magam Shooting Sports Colours.",
+    text: "Founded air gun shooting as a university sport, captained it for two years and won the 2024 Inter-University Air Rifle Championship (men's team). Magam Shooting Sports Colours.",
   },
   {
     icon: "🤖",
     title: "P-E-BO, a desk companion robot",
     when: "2025 – 2026",
-    text: "Our team's AI desk companion was a Top 10 finalist for IESL Undergraduate Inventor of the Year, was shown at TECHNO Sri Lanka 2025, and won 3rd place at the I-TO-I innovation awards at ICIIS 2025.",
+    text: "Our team's AI desk companion: IESL Undergraduate Inventor of the Year Top 10, shown at TECHNO Sri Lanka 2025, and 3rd place at I-TO-I, ICIIS 2025.",
+  },
+  {
+    icon: "🥾",
+    title: "Hiking and travel",
+    when: "Senior Member, University Explorers' Club · 2024 – 2026",
+    text: "Hiking and travelling around Sri Lanka. Some of the trails and places I've been to:",
+    places: ["Devil's Staircase", "Madulsima", "Peacock Hill", "Chariot Path", "Meemure", "Gartmore", "and many more"],
+    wide: true,
   },
   {
     icon: "👨‍🏫",
     title: "Teaching 40+ students",
     when: "Nov 2024 – Aug 2025",
-    text: "Teaching assistant for Database Systems and Programming Methodology: taught and mentored students in labs, reviewing their code and designs.",
+    text: "Teaching assistant for Database Systems and Programming Methodology, mentoring students in labs and reviewing their code.",
   },
   {
     icon: "✍️",
@@ -45,15 +55,15 @@ const OFF_CALL = [
     icon: "📡",
     title: "5G for visitors at ENGEX 2025",
     when: "2025",
-    text: "Showed visitors how mobile networks work, from 1G to 5G, using the private 5G testbed we built with SLT-Mobitel.",
+    text: "Showed visitors how mobile networks work, from 1G to 5G, on the private 5G testbed we built with SLT-Mobitel.",
   },
   {
     icon: "🏫",
     title: "Nalanda College, Colombo",
     when: "Before university",
-    text: "9 A's at the O/L (the school's best result in 2017) and 3 A's at the A/L in the maths stream, district rank 242.",
+    text: "9 A's at the O/L (the school's best result in 2017) and 3 A's at the A/L, district rank 242.",
   },
-] as const;
+];
 const LINKS = {
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/Yohan-Senadheera",
@@ -540,10 +550,10 @@ export default function Journey() {
           <div className="j-panel j-panel--left j-panel--wide n-panel">
             <p className="j-kicker">18:20 · Off call</p>
             <h2 className="j-h2">When the pager is quiet.</h2>
-            <p className="n-copy">The things I do away from production, and what they taught me about teams.</p>
+            <p className="n-copy">Sports, societies, the trails I hike, and what I build for fun.</p>
             <div className="n-off">
               {OFF_CALL.map((o) => (
-                <article key={o.title} className="n-off__card">
+                <article key={o.title} className={`n-off__card ${o.wide ? "n-off__card--wide" : ""}`}>
                   <span className="n-off__icon" aria-hidden>
                     {o.icon}
                   </span>
@@ -551,6 +561,13 @@ export default function Journey() {
                     <b>{o.title}</b>
                     <em>{o.when}</em>
                     <p>{o.text}</p>
+                    {o.places && (
+                      <ul className="n-off__places">
+                        {o.places.map((pl) => (
+                          <li key={pl}>{pl}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </article>
               ))}
