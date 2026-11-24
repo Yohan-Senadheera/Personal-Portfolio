@@ -61,7 +61,8 @@ const OFF_CALL: readonly OffCard[] = [
     icon: "🏫",
     title: "Nalanda College, Colombo",
     when: "Before university",
-    text: "9 A's at the O/L (the school's best result in 2017) and 3 A's at the A/L, district rank 242.",
+    text: "9 A's at the O/L (the school's best result in 2017) and 3 A's at the A/L, district rank 242. At school:",
+    places: ["Prefect", "Photography", "Road Safety", "Air gun shooting"],
   },
 ];
 const LINKS = {
@@ -334,6 +335,13 @@ function Ext({ href, children, solid }: { href: string; children: React.ReactNod
 /* ------------------------------------------------------------------ page */
 
 export default function Journey() {
+  const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menu]);
   const sections = useRef<(HTMLElement | null)[]>([]);
   const flash = useRef<HTMLDivElement | null>(null);
   const { active, progress, dark } = useJourneyScroll(sections, flash);
@@ -392,8 +400,41 @@ export default function Journey() {
         <a className="j-btn j-btn--solid j-top__cta" href={`mailto:${EMAIL}`}>
           Hire me
         </a>
+        <button
+          className="j-menu-btn"
+          aria-label={menu ? "Close menu" : "Open menu"}
+          aria-expanded={menu}
+          aria-controls="j-menu"
+          onClick={() => setMenu((m) => !m)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
         <div className="j-top__progress" style={{ transform: `scaleX(${progress})` }} />
       </header>
+      {menu && (
+        <div className="j-menu" id="j-menu" role="dialog" aria-label="Menu" onClick={() => setMenu(false)}>
+          <nav className="j-menu__panel" onClick={(e) => e.stopPropagation()}>
+            {CHAPTERS.map((c, i) => (
+              <button
+                key={c.id}
+                className={active === i ? "is-on" : ""}
+                onClick={() => {
+                  setMenu(false);
+                  goTo(c.id);
+                }}
+              >
+                <em>{String(i + 1).padStart(2, "0")}</em>
+                {c.label}
+              </button>
+            ))}
+            <a className="j-menu__tools" href="/tools">
+              Free tools ↗
+            </a>
+          </nav>
+        </div>
+      )}
 
       <aside className="j-rail" aria-hidden>
         {CHAPTERS.map((c, i) => (
@@ -564,7 +605,9 @@ export default function Journey() {
                     {o.places && (
                       <ul className="n-off__places">
                         {o.places.map((pl) => (
-                          <li key={pl}>{pl}</li>
+                          <li key={pl} className={pl.startsWith("and ") ? "is-more" : ""}>
+                            {pl}
+                          </li>
                         ))}
                       </ul>
                     )}

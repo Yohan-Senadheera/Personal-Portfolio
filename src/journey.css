@@ -3013,7 +3013,7 @@ body:has(.j-root) {
   color: #eef2f8;
   font-size: 13px;
 }
-.n-off__places li:last-child {
+.n-off__places li.is-more {
   border-style: dashed;
   color: rgba(238, 242, 248, 0.7);
 }
@@ -3060,5 +3060,100 @@ body:has(.j-root) {
   }
   .j-top__tools + .j-top__cta {
     margin-left: 0;
+  }
+}
+
+/* ================================================================ menu button (when the chapter bar does not fit) */
+.j-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(6, 8, 13, 0.55);
+  cursor: pointer;
+  flex: none;
+}
+.j-menu-btn span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: #fff;
+}
+.j-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  background: rgba(3, 5, 9, 0.6);
+  backdrop-filter: blur(6px);
+}
+.j-menu__panel {
+  position: absolute;
+  top: 74px;
+  right: 16px;
+  width: min(300px, calc(100vw - 32px));
+  max-height: calc(100svh - 96px);
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(7, 9, 14, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+.j-menu__panel button,
+.j-menu__tools {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: #eef2f8;
+  font: 500 15.5px var(--sans);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.j-menu__panel button em {
+  font: normal 12px var(--mono);
+  color: rgba(255, 255, 255, 0.45);
+}
+.j-menu__panel button:hover,
+.j-menu__panel button.is-on {
+  background: rgba(255, 255, 255, 0.08);
+}
+.j-menu__panel button.is-on em {
+  color: #5ee38f;
+}
+.j-menu__tools {
+  margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 10px 10px;
+  color: #5ee38f;
+  font-weight: 600;
+}
+@media (max-width: 1280px) {
+  .j-menu-btn {
+    display: flex;
+  }
+}
+@media (max-width: 760px) {
+  .j-top__tools {
+    display: none;
+  }
+  .j-top__cta {
+    margin-left: auto !important;
+  }
+  .j-menu-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0 10px;
   }
 }
