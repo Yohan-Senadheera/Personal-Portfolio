@@ -31,12 +31,30 @@ export const TOOLS = [
   },
   {
     slug: "salary-lk",
-    group: "Sri Lanka",
+    group: "Everyday",
     name: "Take-home Salary",
     tag: "Sri Lanka",
     title: "Sri Lanka take-home salary calculator: EPF, ETF and APIT",
     blurb:
       "See your real monthly take-home after EPF and APIT tax, what your employer adds to EPF and ETF, and compare up to three job offers side by side.",
+  },
+  {
+    slug: "loan-rate",
+    group: "Everyday",
+    name: "Loan True Rate",
+    tag: "Money",
+    title: "Flat rate to real interest rate: loan and lease calculator",
+    blurb:
+      "A 12% flat-rate lease is really about 20%. See the real yearly rate of any loan or lease, including fees, and compare offers side by side.",
+  },
+  {
+    slug: "split",
+    group: "Everyday",
+    name: "Trip Splitter",
+    tag: "Friends",
+    title: "Trip expense splitter: who pays whom",
+    blurb:
+      "Add who paid for what on a trip and get the fewest transfers to settle up. No sign-up; share one link or paste the result into WhatsApp.",
   },
 ] as const;
 

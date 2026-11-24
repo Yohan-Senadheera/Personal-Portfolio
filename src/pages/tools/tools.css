@@ -579,3 +579,57 @@
     min-width: 128px;
   }
 }
+
+/* loan + split */
+.t-big {
+  font-size: 40px !important;
+}
+.t-people {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+.t-person {
+  display: flex;
+  gap: 6px;
+}
+.t-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.t-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--t-line);
+  color: var(--t-dim);
+  font-size: 13px;
+  cursor: pointer;
+}
+.t-chip.is-on {
+  border-color: rgba(94, 227, 143, 0.6);
+  color: var(--t-ink);
+  background: rgba(94, 227, 143, 0.1);
+}
+.t-chip input {
+  accent-color: var(--t-green);
+}
+.t-transfer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+.t-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.t-nav {
+  -webkit-mask-image: linear-gradient(to right, #000 90%, transparent);
+  mask-image: linear-gradient(to right, #000 90%, transparent);
+}

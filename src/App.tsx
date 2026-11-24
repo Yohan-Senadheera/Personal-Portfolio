@@ -14,6 +14,8 @@ const PodDoctor = lazy(() => import("./pages/tools/PodDoctor"));
 const SloAlerts = lazy(() => import("./pages/tools/SloAlerts"));
 const CertInspector = lazy(() => import("./pages/tools/CertInspector"));
 const SalaryLk = lazy(() => import("./pages/tools/SalaryLk"));
+const LoanRate = lazy(() => import("./pages/tools/LoanRate"));
+const TripSplit = lazy(() => import("./pages/tools/TripSplit"));
 const toolPage = (el: JSX.Element) => <Suspense fallback={<div style={{ minHeight: "100vh", background: "#05070c" }} />}>{el}</Suspense>;
 
 const queryClient = new QueryClient();
@@ -37,6 +39,8 @@ const App = () => (
           <Route path="/tools/slo-alerts" element={toolPage(<SloAlerts />)} />
           <Route path="/tools/cert-inspector" element={toolPage(<CertInspector />)} />
           <Route path="/tools/salary-lk" element={toolPage(<SalaryLk />)} />
+          <Route path="/tools/loan-rate" element={toolPage(<LoanRate />)} />
+          <Route path="/tools/split" element={toolPage(<TripSplit />)} />
           <Route path="/i-love-you" element={<ILoveYou />} />
           <Route path="/iloveyou" element={<ILoveYou />} />
           <Route path="/love" element={<ILoveYou />} />

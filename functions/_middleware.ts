@@ -12,7 +12,7 @@ const PAGES: Record<string, { title: string; description: string }> = {
   "/tools": {
     title: "Free SRE and DevOps tools | Yohan Senadheera",
     description:
-      "Free browser tools for Kubernetes, Prometheus SLOs and TLS certificates. Nothing you paste leaves your browser.",
+      "Free browser tools for Kubernetes, Prometheus SLOs and TLS certificates, plus everyday tools for salary, loans and trips. Nothing you enter leaves your browser.",
   },
   "/tools/pod-doctor": {
     title: "Pod Doctor: why is my Kubernetes pod failing? | Yohan Senadheera",
@@ -28,6 +28,15 @@ const PAGES: Record<string, { title: string; description: string }> = {
     title: "Sri Lanka take-home salary calculator: EPF, ETF and APIT | Yohan Senadheera",
     description:
       "Your real monthly take-home after EPF and APIT tax, what your employer adds to EPF and ETF, and up to three job offers compared side by side. Uses the IRD's current tax table.",
+  },
+  "/tools/loan-rate": {
+    title: "Flat rate to real interest rate: loan and lease calculator | Yohan Senadheera",
+    description:
+      "A 12% flat-rate lease is really about 20%. See the real yearly rate of any loan or lease, including fees, and compare offers side by side.",
+  },
+  "/tools/split": {
+    title: "Trip expense splitter: who pays whom | Yohan Senadheera",
+    description: "Add who paid for what on a trip and get the fewest transfers to settle up. No sign-up, one share link.",
   },
   "/tools/cert-inspector": {
     title: "Certificate chain inspector | Yohan Senadheera",
