@@ -173,8 +173,9 @@ const smooth = (a: number, b: number, x: number) => {
 
 function Photos() {
   const { size } = useThree();
-  const urls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}.jpg`), []);
-  const durls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}-d.png`), []);
+  // ?v= changes whenever the stills change, so browsers never mix old and new cached photos.
+  const urls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}.jpg?v=2`), []);
+  const durls = useMemo(() => Array.from({ length: N }, (_, i) => `/media/web/${name(i)}-d.png?v=2`), []);
   const tex = useLoader(THREE.TextureLoader, urls);
   const dep = useLoader(THREE.TextureLoader, durls);
 
