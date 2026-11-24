@@ -15,6 +15,45 @@ const JourneyCanvas = lazy(() =>
 );
 
 const EMAIL = "yohansenadheera@gmail.com";
+
+const OFF_CALL = [
+  {
+    icon: "🎯",
+    title: "Started a sport at Peradeniya",
+    when: "Captain · 2023 – 2025",
+    text: "Founded air gun shooting as a university sport, captained the team for two years and led it to the 2024 Inter-University Air Rifle Championship (men's team). Awarded Magam Shooting Sports Colours.",
+  },
+  {
+    icon: "🤖",
+    title: "P-E-BO, a desk companion robot",
+    when: "2025 – 2026",
+    text: "Our team's AI desk companion was a Top 10 finalist for IESL Undergraduate Inventor of the Year, was shown at TECHNO Sri Lanka 2025, and won 3rd place at the I-TO-I innovation awards at ICIIS 2025.",
+  },
+  {
+    icon: "👨‍🏫",
+    title: "Teaching 40+ students",
+    when: "Nov 2024 – Aug 2025",
+    text: "Teaching assistant for Database Systems and Programming Methodology: taught and mentored students in labs, reviewing their code and designs.",
+  },
+  {
+    icon: "✍️",
+    title: "Editor, Hackers' Club",
+    when: "2025 – 2026",
+    text: "Ran technical content and communications for a 200+ member community at the University of Peradeniya.",
+  },
+  {
+    icon: "📡",
+    title: "5G for visitors at ENGEX 2025",
+    when: "2025",
+    text: "Showed visitors how mobile networks work, from 1G to 5G, using the private 5G testbed we built with SLT-Mobitel.",
+  },
+  {
+    icon: "🏫",
+    title: "Nalanda College, Colombo",
+    when: "Before university",
+    text: "9 A's at the O/L (the school's best result in 2017) and 3 A's at the A/L in the maths stream, district rank 242.",
+  },
+] as const;
 const LINKS = {
   linkedin: "https://linkedin.com/in/yohan-senadheera",
   github: "https://github.com/Yohan-Senadheera",
@@ -496,8 +535,31 @@ export default function Journey() {
           </div>
         </section>
 
-        {/* 8 · 18:30 · hand-off */}
-        <section id="contact" ref={reg(8)} className="j-ch j-ch--contact">
+        {/* 8 · 18:20 · off call */}
+        <section id="offcall" ref={reg(8)} className="j-ch">
+          <div className="j-panel j-panel--left j-panel--wide n-panel">
+            <p className="j-kicker">18:20 · Off call</p>
+            <h2 className="j-h2">When the pager is quiet.</h2>
+            <p className="n-copy">The things I do away from production, and what they taught me about teams.</p>
+            <div className="n-off">
+              {OFF_CALL.map((o) => (
+                <article key={o.title} className="n-off__card">
+                  <span className="n-off__icon" aria-hidden>
+                    {o.icon}
+                  </span>
+                  <div>
+                    <b>{o.title}</b>
+                    <em>{o.when}</em>
+                    <p>{o.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 9 · 18:30 · hand-off */}
+        <section id="contact" ref={reg(9)} className="j-ch j-ch--contact">
           <div className="j-contact">
             <div className="n-contact-card">
             <p className="j-status">

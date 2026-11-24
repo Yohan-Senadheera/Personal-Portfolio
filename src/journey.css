@@ -2943,3 +2943,54 @@ body:has(.j-root) {
     margin-right: -4px;
   }
 }
+
+/* ================================================================ off call */
+.n-off {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+.n-off__card {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(7, 9, 14, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.n-off__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 22px;
+}
+.n-off__card b {
+  display: block;
+  font: 700 16.5px/1.3 var(--display, "Sora", sans-serif);
+  color: #fff;
+}
+.n-off__card em {
+  display: block;
+  margin: 2px 0 6px;
+  font: normal 12.5px var(--mono);
+  color: #5ee38f;
+}
+.n-off__card p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(238, 242, 248, 0.82);
+}
+@media (max-width: 760px) {
+  .n-off {
+    grid-template-columns: 1fr;
+  }
+  .n-off__card {
+    padding: 14px;
+  }
+}

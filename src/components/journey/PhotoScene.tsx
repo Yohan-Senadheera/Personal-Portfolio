@@ -39,8 +39,8 @@ const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4" : `/media/web/
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
 const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.6];
 
-// The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, toolbox, contact.
-const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 10.6];
+// The still each chapter holds on: cover, glance, WSO2, PageRewind, open source, projects, experience, toolbox, off call, contact.
+const HOLD = [2, 3, 5, 6, 7, 8, 9, 10, 10, 10.6];
 
 /** Chapter position (journey.t, 0..LAST) -> position along the stills (0..10.x). */
 function stillAt(t: number) {

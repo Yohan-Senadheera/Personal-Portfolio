@@ -46,6 +46,7 @@ export const BEATS = [
   { time: "09:30", where: "The lab", state: "ok", note: "resolved" },
   { time: "16:30", where: "Peradeniya", state: "ok", note: "postmortem" },
   { time: "18:10", where: "The rooftop", state: "ok", note: "all green" },
+  { time: "18:20", where: "Off call", state: "ok", note: "pager quiet" },
   { time: "18:30", where: "Hand-off", state: "ok", note: "resolved" },
 ] as const;
 
