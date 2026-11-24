@@ -335,6 +335,7 @@ function Ext({ href, children, solid }: { href: string; children: React.ReactNod
 /* ------------------------------------------------------------------ page */
 
 export default function Journey() {
+  const [copied, setCopied] = useState(false);
   const [menu, setMenu] = useState(false);
   useEffect(() => {
     if (!menu) return;
@@ -621,29 +622,57 @@ export default function Journey() {
         {/* 9 · 18:30 · hand-off */}
         <section id="contact" ref={reg(9)} className="j-ch j-ch--contact">
           <div className="j-contact">
-            <div className="n-contact-card">
-            <p className="j-status">
-              <i /> 18:30 · Incident resolved · open to SRE, DevOps and platform roles · can start immediately
-            </p>
-            <h2 className="j-title j-title--sm">
-              Let&rsquo;s keep your
-              <br />
-              systems boring.
-            </h2>
-            <a className="j-email" href={`mailto:${EMAIL}`}>
-              {EMAIL}
-            </a>
-            <p className="j-meta">+94 76 802 2347 · Colombo, Sri Lanka</p>
-            <div className="j-actions">
-              <Ext href={LINKS.linkedin} solid>
-                LinkedIn
-              </Ext>
-              <Ext href={LINKS.github}>GitHub</Ext>
-              <Ext href={LINKS.medium}>Medium</Ext>
-            </div>
-            <p className="j-foot">
-              © 2026 Yohan Senadheera
-            </p>
+            <div className="n-contact-card n-cc">
+              <div className="n-cc__head">
+                <img className="n-cc__avatar" src="/me.jpg" alt="Yohan Senadheera" width={64} height={64} loading="lazy" />
+                <div className="n-cc__who">
+                  <b>Yohan Senadheera</b>
+                  <span>Site Reliability &amp; DevOps Engineer</span>
+                </div>
+                <span className="n-cc__badge">
+                  <i /> Available now
+                </span>
+              </div>
+              <h2 className="j-title j-title--sm n-cc__title">
+                Let&rsquo;s keep your
+                <br />
+                <em>systems boring.</em>
+              </h2>
+              <p className="n-cc__sub">18:30 · incident resolved. Open to SRE, DevOps and platform roles, and I can start immediately.</p>
+              <div className="n-cc__email">
+                <a href={`mailto:${EMAIL}`}>
+                  <span aria-hidden>✉</span> {EMAIL}
+                </a>
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigator.clipboard?.writeText(EMAIL).then(() => {
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 1500);
+                    })
+                  }
+                >
+                  {copied ? "Copied ✓" : "Copy"}
+                </button>
+              </div>
+              <div className="n-cc__quick">
+                <a href="tel:+94768022347">📞 +94 76 802 2347</a>
+                <a href="https://wa.me/94768022347" target="_blank" rel="noopener noreferrer">
+                  💬 WhatsApp
+                </a>
+                <span>📍 Colombo, Sri Lanka</span>
+              </div>
+              <div className="j-actions">
+                <Ext href={LINKS.linkedin} solid>
+                  LinkedIn
+                </Ext>
+                <Ext href={LINKS.github}>GitHub</Ext>
+                <Ext href={LINKS.medium}>Medium</Ext>
+                <a className="j-btn n-cc__tools" href="/tools">
+                  Free tools
+                </a>
+              </div>
+              <p className="j-foot">© 2026 Yohan Senadheera</p>
             </div>
           </div>
         </section>
