@@ -3030,3 +3030,35 @@ body:has(.j-root) {
   font-size: 14px;
   line-height: 1.45;
 }
+
+/* keep the top bar on one line on smaller laptops */
+.j-nav button,
+.j-top__cta,
+.j-top__tools,
+.j-logo {
+  white-space: nowrap;
+}
+@media (max-width: 1360px) {
+  .j-top {
+    gap: 14px;
+  }
+  .j-nav {
+    gap: 0;
+  }
+  .j-nav button {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 12.5px;
+  }
+}
+@media (max-width: 1280px) {
+  .j-nav {
+    display: none;
+  }
+  .j-top__tools {
+    margin-left: auto;
+  }
+  .j-top__tools + .j-top__cta {
+    margin-left: 0;
+  }
+}
