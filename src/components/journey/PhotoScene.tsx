@@ -64,6 +64,7 @@ const FRAG = /* glsl */ `
   uniform vec2 anchorA, anchorB;
   uniform float scaleA, scaleB, zoomA, zoomB, mixB, blurA, blurB, dip, flash, time;
   uniform vec2 sway;         // camera offset (mouse + drift)
+  uniform float softA, softB; // background blur (toolbox page), in uv units
 
   vec2 cover(vec2 uv, float focus) {
     // fill the screen with the photo (like background-size: cover), keeping the subject in frame on tall screens
@@ -89,6 +90,26 @@ const FRAG = /* glsl */ `
       c += texture2D(t, clamp(q, 0.001, 0.999)).rgb;
     }
     return c / 6.0;
+  }
+
+  // A soft lens-style blur: 3 rings of taps, rotated per pixel so it reads as smooth bokeh, not streaks.
+  vec3 softShot(sampler2D t, sampler2D d, vec2 base, vec2 anchor, float scale, float zoom, float blur, float r) {
+    if (r <= 0.0001) return shot(t, d, base, anchor, scale, zoom, blur);
+    vec2 a = vec2(anchor.x, 1.0 - anchor.y);
+    vec2 p = a + (base - a) / (scale * zoom);
+    float rot = fract(sin(dot(vUv, vec2(91.7, 37.3))) * 43758.5) * 6.2832;
+    vec3 c = texture2D(t, clamp(p, 0.001, 0.999)).rgb;
+    float n = 1.0;
+    for (int ring = 1; ring <= 3; ring++) {
+      float rr = r * float(ring) / 3.0;
+      for (int k = 0; k < 8; k++) {
+        float ang = rot + float(k) * 0.7854 + float(ring) * 0.39;
+        vec2 o = vec2(cos(ang), sin(ang) * aspect.y) * rr;
+        c += texture2D(t, clamp(p + o, 0.001, 0.999)).rgb;
+        n += 1.0;
+      }
+    }
+    return c / n;
   }
 
   float grain(vec2 uv) { return fract(sin(dot(uv * 1000.0 + time, vec2(12.9898, 78.233))) * 43758.5453); }
@@ -123,14 +144,14 @@ const FRAG = /* glsl */ `
       float r = mixB;
       if (vUv.y < r) {
         vec2 ub = vec2(vUv.x, vUv.y + (1.0 - r));
-        col = shot(tB, dB, cover(ub, focusAB.y), anchorB, scaleB, zoomB, blurB);
+        col = softShot(tB, dB, cover(ub, focusAB.y), anchorB, scaleB, zoomB, blurB, softB);
       } else {
         vec2 ua = vec2(vUv.x, vUv.y - r * 0.18);
-        col = shot(tA, dA, cover(ua, focusAB.x), anchorA, scaleA, zoomA, blurA) * (1.0 - 0.45 * r);
+        col = softShot(tA, dA, cover(ua, focusAB.x), anchorA, scaleA, zoomA, blurA, softA) * (1.0 - 0.45 * r);
         col *= 1.0 - 0.5 * smoothstep(0.07, 0.0, vUv.y - r);   // soft shadow cast by the rising page
       }
     } else {
-      col = shot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA);
+      col = softShot(tA, dA, cover(vUv, focusAB.x), anchorA, scaleA, zoomA, blurA, softA);
     }
     col *= 1.0 - dip;
     col = mix(col, vec3(1.0, 0.97, 0.92), flash);
@@ -197,6 +218,8 @@ function Photos() {
           sway: { value: new THREE.Vector2() },
           tV: { value: null as THREE.Texture | null },
           useV: { value: 0 },
+          softA: { value: 0 },
+          softB: { value: 0 },
           vMix: { value: 1 },
         },
       }),
@@ -355,6 +378,11 @@ function Photos() {
     });
 
     // Resting on a still that a clip arrived at (or leaves from): show the sharp photo instead of the video frame.
+    // Toolbox (still 10.0) shows the rooftop softly blurred; it sharpens as the contact page (10.6) arrives.
+    const SOFT = 0.012;
+    const softAt = (k: number) => (k === N - 1 ? SOFT * THREE.MathUtils.clamp((HOLD[HOLD.length - 1] - s) / (HOLD[HOLD.length - 1] - HOLD[HOLD.length - 2]), 0, 1) : 0);
+    u.softA.value = softAt(i);
+    u.softB.value = i + 1 === N - 1 ? SOFT : 0;
     const settled = p === 0 && (forced !== null || Math.abs(target - s) < 0.002);
     u.tA.value = tex[i];
     u.dA.value = dep[i];
