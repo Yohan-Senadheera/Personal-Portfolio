@@ -35,7 +35,16 @@ const CUTS: Cut[] = [
 // Video only where he is not on screen: 01 city -> tower, 04 screen -> data centre, 05 aisle -> sunrise.
 const CLIPS = new Set<number>([4, 6]); // 01 city -> tower, 04 laptop -> data centre, 05 aisle -> sunrise, 07 night -> dawn
 // Key -1 is the opening drone shot (clip 01: city -> lit window), played once, not scrubbed.
-const clipUrl = (i: number) => (i < 0 ? "/media/web/clips/01.mp4?v=2" : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`);
+// The opening clip is HD for everyone. Only on a very weak signal (2G or data saver) the browser gets a
+// 720p copy (0.75 MB instead of 3.3 MB); if HD still is not ready after 4 s, it switches to that copy too.
+const SMALL_CLIP = "/media/web/clips/01s.mp4?v=1";
+const WEAK = (() => {
+  if (typeof navigator === "undefined") return false;
+  const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  return !!c?.saveData || ["slow-2g", "2g"].includes(c?.effectiveType ?? "");
+})();
+const clipUrl = (i: number) =>
+  i < 0 ? (WEAK ? SMALL_CLIP : "/media/web/clips/01.mp4?v=2") : `/media/web/clips/${String(i + 1).padStart(2, "0")}.mp4`;
 
 // Where the subject sits horizontally, used to crop sensibly on tall (phone) screens.
 const FOCUS_X = [0.5, 0.6, 0.74, 0.65, 0.5, 0.5, 0.55, 0.4, 0.42, 0.5, 0.72, 0.6];
@@ -255,8 +264,9 @@ function Photos() {
   const shown = useRef(2);
   const vmix = useRef(1);
   // The opening flight (clips 1 and 2) plays as normal video, not scrubbed.
-  const intro = useRef<{ phase: "wait" | 0 | "turn" | "reveal" | "done"; since: number; from: number; last: number; moved: number; nudged: number }>({
+  const intro = useRef<{ phase: "wait" | 0 | "turn" | "reveal" | "done"; start: number; since: number; from: number; last: number; moved: number; nudged: number }>({
     phase: "wait",
+    start: -1,
     since: 0,
     from: 1,
     last: -1,
@@ -298,6 +308,10 @@ function Photos() {
         c0?.el.pause();
         shown.current = 2;
       } else if (it.phase === "wait") {
+        // Count the wait from when the photos are ready, not from page load: on a slow connection the
+        // photos alone can take longer than the whole wait.
+        if (it.start < 0) it.start = state.clock.elapsedTime;
+        const waited = state.clock.elapsedTime - it.start;
         const buffered =
           c0.el.readyState >= 4 ||
           (c0.el.buffered.length > 0 && c0.el.buffered.end(c0.el.buffered.length - 1) >= c0.el.duration - 0.3);
@@ -314,7 +328,20 @@ function Photos() {
             it.since = state.clock.elapsedTime;
             it.from = 0;
           });
-        } else if (state.clock.elapsedTime > 5) {
+        } else if (
+          waited > 4 &&
+          !c0.el.src.includes("01s.mp4") &&
+          !(isFinite(c0.el.duration) && c0.el.buffered.length > 0 && c0.el.buffered.end(c0.el.buffered.length - 1) > c0.el.duration * 0.5)
+        ) {
+          // HD is too slow on this connection: switch to the light copy and give it a few more seconds.
+          c0.ok = false;
+          c0.el.addEventListener("loadeddata", () => (c0.ok = true), { once: true });
+          c0.el.src = SMALL_CLIP;
+          c0.el.load();
+        } else if (waited > 10) {
+          // Still nothing: stop the download so the photos get the bandwidth.
+          c0.el.removeAttribute("src");
+          c0.el.load();
           it.phase = "reveal";
           it.since = state.clock.elapsedTime;
           it.from = 0;
