@@ -1,6 +1,6 @@
 # yohan.is-a.dev
 
-The portfolio of **Yohan Senadheera**, Site Reliability and DevOps engineer. One day in Colombo becomes a scroll story: a drone shot over the city, then the work behind it — pull-based CI/CD, certificate automation, open source and PageRewind.
+The portfolio of **Yohan Senadheera**, Site Reliability and DevOps engineer. One day in Colombo becomes a scroll story: a drone shot over the city, then the work behind it - pull-based CI/CD, certificate automation, open source and PageRewind.
 
 **Live:** [yohan.is-a.dev](https://yohan.is-a.dev) · **Classic version:** [yohan.is-a.dev/classic](https://yohan.is-a.dev/classic)
 
