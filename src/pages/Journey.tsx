@@ -337,6 +337,9 @@ export default function Journey() {
             </button>
           ))}
         </nav>
+        <a className="j-btn j-top__tools" href="/tools">
+          Tools
+        </a>
         <a className="j-btn j-btn--solid j-top__cta" href={`mailto:${EMAIL}`}>
           Hire me
         </a>
