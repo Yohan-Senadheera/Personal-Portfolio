@@ -158,7 +158,7 @@ export const profile = {
       type: "Individual Project",
       timeframe: "Nov 2026 – Present",
       description:
-        "On-call engineers lose the first minutes of an incident gathering context. PageRewind is five Java (Spring Boot) microservices that turn alerts into incidents, page the on-call engineer on Telegram or email, and escalate when nobody answers. A transactional outbox, idempotent consumers and quorum queues mean no alert is lost: 100 duplicate alerts become one incident.",
+        "On-call engineers lose the first minutes of an incident gathering context. PageRewind is seven Java (Spring Boot) microservices that turn alerts into incidents, page the on-call engineer on Telegram or email, and escalate when nobody answers. A transactional outbox, idempotent consumers and quorum queues mean no alert is lost and duplicates become one incident. Its flight recorder attaches the last logs of failing pods, even deleted ones, and names the likely cause.",
       tech: [
         "Java 21",
         "Spring Boot",
@@ -173,11 +173,11 @@ export const profile = {
         "GitHub Actions",
       ],
       whatIDid:
-        "Designed and built the services, the messaging layer and the delivery pipeline. Terraform builds a k3s cluster on AWS and Argo CD deploys every change through GitOps. Backed by 160+ tests, a CI end-to-end test of the full stack and 8 architecture decision records.",
-      result: "v0.1.0 released and running live on AWS.",
+        "Designed and built the services, the messaging layer and the delivery pipeline. Terraform builds a k3s cluster on AWS and Argo CD deploys every change through GitOps. Signed images with SBOMs, SLO burn-rate alerts, canary releases that roll back automatically, and S3 backups with a restore test. Backed by 235 test methods, 12 architecture decision records and failure drills with blameless post-mortems.",
+      result: "v0.2.0 released (24 Nov 2026), with a signed Helm chart and images.",
       links: {
         repo: "https://github.com/Yohan-Senadheera/pagerewind",
-        demo: "https://status.pagerewind.dev",
+        demo: "https://yohan-senadheera.github.io/pagerewind/",
       },
       featured: true,
     },

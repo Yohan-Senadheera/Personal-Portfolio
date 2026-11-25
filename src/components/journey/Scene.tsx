@@ -1123,7 +1123,7 @@ const MILESTONES = [
   { label: "2024", sub: "Teaching assistant · 40+ students" },
   { label: "2025", sub: "P-E-BO · ICIIS 3rd place" },
   { label: "2026", sub: "SRE Intern · WSO2" },
-  { label: "Now", sub: "PageRewind live · open to roles" },
+  { label: "Now", sub: "PageRewind v0.2.0 · open to roles" },
 ];
 
 function Stone({ at, h, seed, children, show, tone }: { at: V; h: number; seed: number; children?: ReactNode; show: [number, number]; tone?: "ink" | "green" }) {

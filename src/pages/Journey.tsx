@@ -70,7 +70,7 @@ const LINKS = {
   github: "https://github.com/Yohan-Senadheera",
   medium: "https://medium.com/@yohansenadheera",
   pagerewind: "https://github.com/Yohan-Senadheera/pagerewind",
-  status: "https://status.pagerewind.dev",
+  docs: "https://yohan-senadheera.github.io/pagerewind/",
 };
 
 // The CV no longer lists the bank traineeship or the explorers' club; keep the site in step.
@@ -132,8 +132,8 @@ const GLANCE_LINES = [
   { out: "0    inbound connections · AKS + EKS data planes dial out over mTLS", ok: true },
   { cmd: "gh pr list --author Yohan-Senadheera --state all | wc -l" },
   { out: `${contributions.length}   public contributions · ${MERGED} merged · ${REVIEW} in review`, ok: true },
-  { cmd: "curl -s status.pagerewind.dev" },
-  { out: "PageRewind v0.1.0 · operational · live on AWS", ok: true },
+  { cmd: "gh release view -R yohan-senadheera/pagerewind" },
+  { out: "PageRewind 0.2.0 · Latest · signed images and Helm chart", ok: true },
 ];
 
 /* ---------------- 09:30 · projects as pods */
@@ -520,12 +520,12 @@ export default function Journey() {
             <Page on={active === 3} />
             <p className="n-copy">
               That&rsquo;s <b>PageRewind</b>, my open-source on-call platform: Java (Spring Boot) services with an outbox,
-              idempotent consumers and quorum queues, so no alert is lost and duplicates collapse. Live on AWS (Terraform, k3s,
-              Argo CD).
+              idempotent consumers and quorum queues, so no alert is lost and duplicates collapse. Its flight recorder names the
+              likely cause. Runs on AWS (Terraform, k3s, Argo CD). v0.2.0 is out.
             </p>
             <div className="j-actions">
-              <Ext href={LINKS.status} solid>
-                See it live
+              <Ext href={LINKS.docs} solid>
+                Read the docs
               </Ext>
               <Ext href={LINKS.pagerewind}>Code</Ext>
             </div>

@@ -336,8 +336,8 @@ export function Dashboard({
           </div>
         ))}
       </div>
-      <a className="n-dash__foot" href="https://status.pagerewind.dev" target="_blank" rel="noopener noreferrer">
-        <i /> PageRewind v0.1.0 · operational · live on AWS ↗
+      <a className="n-dash__foot" href="https://github.com/Yohan-Senadheera/pagerewind/releases/tag/v0.2.0" target="_blank" rel="noopener noreferrer">
+        <i /> PageRewind v0.2.0 · released ↗
       </a>
     </div>
   );

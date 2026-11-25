@@ -177,7 +177,7 @@ export const projectBadge: Record<string, string> = {
   "Pull-Based Multi-Cloud CI/CD Platform": "Production-ready",
   "PKI Certificate Automation": "Running in production",
   "Cloud Reliability Platform (SRE Lab)": "Chaos-tested lab",
-  PageRewind: "Live · v0.1.0",
+  PageRewind: "v0.2.0 released",
   "Private 5G Network Implementation": "Industry project",
   "P-E-BO Desk Companion": "Award-winning",
 };
