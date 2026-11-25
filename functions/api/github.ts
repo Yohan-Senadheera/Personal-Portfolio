@@ -1,11 +1,17 @@
-// GitHub profile + last year's contribution calendar, from GitHub's public pages (no token).
-// Cached at the edge for 6 hours, so visitors never hit GitHub's rate limits.
+// GitHub contribution calendar for the last year, read from GitHub's public contributions page (no token,
+// not the rate-limited REST API). Fresh copy cached 6 hours; the last good copy is kept 7 days as a fallback.
 
 declare const caches: { default: { match(r: Request): Promise<Response | undefined>; put(r: Request, res: Response): Promise<void> } };
 
 const USER = "Yohan-Senadheera";
-const TTL = 6 * 60 * 60;
-const UA = { "User-Agent": "yohan.is-a.dev portfolio", Accept: "application/vnd.github+json" };
+const PROFILE = {
+  login: USER,
+  name: "Yohan Senadheera",
+  avatar: "https://avatars.githubusercontent.com/u/150885280?v=4",
+  since: "2023",
+};
+const FRESH = 6 * 60 * 60;
+const STALE = 7 * 24 * 60 * 60;
 
 type Day = { d: string; c: number; l: number };
 
@@ -23,38 +29,28 @@ function parseCalendar(html: string) {
   return { days, total: Number.isFinite(total) ? total : days.reduce((s, x) => s + x.c, 0) };
 }
 
+const json = (body: string, maxAge: number) =>
+  new Response(body, { headers: { "Content-Type": "application/json", "Cache-Control": `public, max-age=${maxAge}` } });
+
 export const onRequestGet = async ({ request }: { request: Request }) => {
-  const key = new Request(new URL("/api/github", request.url).toString());
-  const hit = await caches.default.match(key);
+  const origin = new URL(request.url).origin;
+  const freshKey = new Request(`${origin}/api/github`);
+  const staleKey = new Request(`${origin}/api/github?last-good`);
+
+  const hit = await caches.default.match(freshKey);
   if (hit) return hit;
 
   try {
-    const [p, cal] = await Promise.all([
-      fetch(`https://api.github.com/users/${USER}`, { headers: UA }).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
-      fetch(`https://github.com/users/${USER}/contributions`, { headers: { "User-Agent": UA["User-Agent"] } }).then((r) =>
-        r.ok ? r.text() : Promise.reject(r.status),
-      ),
-    ]);
-    const { days, total } = parseCalendar(cal as string);
-    const u = p as Record<string, unknown>;
-    const body = {
-      login: u.login,
-      name: u.name,
-      bio: u.bio,
-      avatar: u.avatar_url,
-      repos: u.public_repos,
-      followers: u.followers,
-      since: String(u.created_at ?? "").slice(0, 4),
-      total,
-      days,
-      updated: new Date().toISOString(),
-    };
-    const res = new Response(JSON.stringify(body), {
-      headers: { "Content-Type": "application/json", "Cache-Control": `public, max-age=${TTL}` },
-    });
-    if (days.length > 300) await caches.default.put(key, res.clone());
-    return res;
+    const r = await fetch(`https://github.com/users/${USER}/contributions`, { headers: { "User-Agent": "yohan.is-a.dev portfolio" } });
+    if (!r.ok) throw new Error(String(r.status));
+    const { days, total } = parseCalendar(await r.text());
+    if (days.length < 300) throw new Error("calendar not found");
+    const body = JSON.stringify({ ...PROFILE, total, days, updated: new Date().toISOString() });
+    await Promise.all([caches.default.put(freshKey, json(body, FRESH)), caches.default.put(staleKey, json(body, STALE))]);
+    return json(body, FRESH);
   } catch {
+    const old = await caches.default.match(staleKey);
+    if (old) return new Response(old.body, { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=600" } });
     return new Response(JSON.stringify({ error: "github unavailable" }), {
       status: 502,
       headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },

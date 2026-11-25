@@ -5,8 +5,6 @@ type Data = {
   login: string;
   name: string;
   avatar: string;
-  repos: number;
-  followers: number;
   since: string;
   total: number;
   days: Day[];
@@ -23,8 +21,10 @@ export function GitHubCard() {
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/github")
-      .then((r) => (r.ok ? r.json() : null))
+    const get = () => fetch("/api/github").then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+    // One retry: GitHub occasionally fails a request.
+    get()
+      .catch(() => new Promise((ok) => setTimeout(ok, 1500)).then(get))
       .then((d) => alive && d && Array.isArray(d.days) && d.days.length && setData(d))
       .catch(() => {});
     return () => {
@@ -57,7 +57,7 @@ export function GitHubCard() {
         <div>
           <b>{data.name}</b>
           <span>
-            @{data.login} · {data.repos} repos · on GitHub since {data.since}
+            @{data.login} · on GitHub since {data.since}
           </span>
         </div>
         <em>GitHub ↗</em>
