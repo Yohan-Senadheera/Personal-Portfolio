@@ -3379,11 +3379,41 @@ body:has(.j-root) {
 .n-gh__foot b {
   color: #12151b;
 }
-.n-gh {
-  max-width: 560px;
-}
 /* With the GitHub card shown, the PR list gives up the same height (it scrolls on its own). */
 .n-gh + .n-prs {
-  max-height: calc(56vh - 180px);
+  max-height: calc(56vh - 160px);
   min-height: 150px;
+}
+/* Wide screens: name and total on the left, graph on the right, same width as the PR list. */
+@media (min-width: 900px) {
+  .n-gh {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    grid-template-areas: "head graph" "foot graph";
+    column-gap: 14px;
+    align-items: center;
+  }
+  .n-gh__head {
+    grid-area: head;
+    grid-template-columns: 36px minmax(0, 1fr);
+    align-self: end;
+  }
+  .n-gh__head span {
+    white-space: normal;
+  }
+  .n-gh__head em {
+    display: none;
+  }
+  .n-gh__graph {
+    grid-area: graph;
+    margin-top: 0;
+  }
+  .n-gh__foot {
+    grid-area: foot;
+    align-self: start;
+    margin-top: 6px;
+  }
+  .n-gh + .n-prs {
+    max-height: calc(56vh - 120px);
+  }
 }
