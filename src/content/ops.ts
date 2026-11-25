@@ -20,7 +20,7 @@ export const metrics = [
   {
     value: "18",
     label: "public contributions",
-    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 3 PRs (1 merged and backported) + 2 issues in Argo Workflows, the Kubernetes Python client (1 merged), Prometheus, OpenChoreo and OpenAPI Generator (7 in review)",
+    note: "5 PRs to WSO2's public Terraform libraries (3 merged), 3 PRs (1 merged and backported) + 2 issues in Argo Workflows, OpenChoreo (3 merged), the Kubernetes Python client (1 merged), Prometheus and OpenAPI Generator (4 in review)",
   },
   {
     value: "4",
@@ -133,21 +133,21 @@ export const contributions: Contribution[] = [
     repo: "openchoreo/community-modules",
     ref: "#909",
     title: "OTel collector: add extra volumes and mounts",
-    status: "review",
+    status: "merged",
     url: "https://github.com/openchoreo/community-modules/pull/909",
   },
   {
     repo: "openchoreo/community-modules",
     ref: "#910",
     title: "Prometheus: add remote write tlsConfig",
-    status: "review",
+    status: "merged",
     url: "https://github.com/openchoreo/community-modules/pull/910",
   },
   {
     repo: "openchoreo/community-modules",
     ref: "#911",
     title: "Fluent Bit: add TLS options",
-    status: "review",
+    status: "merged",
     url: "https://github.com/openchoreo/community-modules/pull/911",
   },
   {

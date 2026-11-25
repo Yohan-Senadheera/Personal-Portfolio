@@ -538,8 +538,8 @@ export default function Journey() {
             <p className="j-kicker">03:20 · The fix</p>
             <h2 className="j-h2">Fix it at the source.</h2>
             <p className="n-copy">
-              {merged} merged, {review} in review, {issues} issues, upstream in Argo, Kubernetes, Prometheus, OpenAPI Generator
-              and WSO2.
+              {merged} merged, {review} in review, {issues} issues, upstream in Argo, Kubernetes, OpenChoreo, Prometheus,
+              OpenAPI Generator and WSO2.
             </p>
             <PRFeed on={active === 4} items={contributions.map((c) => ({ ...c, label: statusLabel[c.status] }))} />
           </div>
