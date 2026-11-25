@@ -7,6 +7,7 @@ import { contributions, statusLabel } from "@/content/ops";
 import { profile } from "@/content/profile";
 import { medium } from "@/content/fun";
 import { Clock, Dashboard, Diagram, Page, PRFeed, Skills } from "@/components/journey/Night";
+import { GitHubCard } from "@/components/journey/GitHubCard";
 import { monthValue, PodBoard, Rotation, type Marker, type Pod, type Shift } from "@/components/journey/Interactive";
 import "@/journey.css";
 
@@ -541,6 +542,7 @@ export default function Journey() {
               {merged} merged, {review} in review, {issues} issues, upstream in Argo, Kubernetes, OpenChoreo, Prometheus,
               OpenAPI Generator and WSO2.
             </p>
+            <GitHubCard />
             <PRFeed on={active === 4} items={contributions.map((c) => ({ ...c, label: statusLabel[c.status] }))} />
           </div>
         </section>

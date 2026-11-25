@@ -3322,3 +3322,68 @@ body:has(.j-root) {
     padding: 0 12px;
   }
 }
+
+/* ---------------- GitHub card (live, from /api/github) */
+.n-gh {
+  display: block;
+  margin: 10px 0 4px;
+  padding: 10px 12px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #12151b;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.n-gh:hover {
+  transform: translateY(-2px);
+}
+.n-gh__head {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+.n-gh__head img {
+  border-radius: 50%;
+  display: block;
+}
+.n-gh__head b {
+  display: block;
+  font-size: 14px;
+}
+.n-gh__head span {
+  display: block;
+  font: 500 11.5px var(--mono);
+  color: #57606a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.n-gh__head em {
+  font: 700 11px var(--mono);
+  font-style: normal;
+  color: #8250df;
+}
+.n-gh__graph {
+  margin-top: 8px;
+}
+.n-gh__m {
+  font: 500 8px var(--mono);
+  fill: #57606a;
+}
+.n-gh__foot {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #57606a;
+}
+.n-gh__foot b {
+  color: #12151b;
+}
+.n-gh {
+  max-width: 560px;
+}
+/* With the GitHub card shown, the PR list gives up the same height (it scrolls on its own). */
+.n-gh + .n-prs {
+  max-height: calc(56vh - 180px);
+  min-height: 150px;
+}
